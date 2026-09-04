@@ -22,10 +22,11 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
 
     <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
-        <!-- Assessment Views Injected Here -->
+        <!-- Assessment Injected Here -->
     </div>
 
     <script>
+        const EXAM_KEY = "abdomen_pelvis";
         const EXAM_SUBJECT = "Anatomy";
         const EXAM_TOPIC = "Abdomen & Pelvis Mock";
         const TOTAL_TIME_SECONDS = 300; 
@@ -72,6 +73,7 @@
         let timeLeft = TOTAL_TIME_SECONDS; 
         let isSubmitted = false; 
         let timerInterval;
+        let examStartTime = 0;
         const appDiv = document.getElementById('app');
 
         const icons = {
@@ -82,18 +84,84 @@
             x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`
         };
 
+        function getActiveStateKey(id) {
+            return `tlt_active_exam_${EXAM_KEY}_${id}`;
+        }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = {
+                candidateID,
+                candidateDept,
+                questions,
+                currentQ,
+                answers,
+                examStartTime,
+                totalTime: TOTAL_TIME_SECONDS
+            };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) {
+                localStorage.removeItem(getActiveStateKey(candidateID));
+            }
+        }
+
         function initApp() {
-            renderLogin();
             const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
             if (rawSession) {
                 try {
                     const session = JSON.parse(rawSession);
-                    const idField = document.getElementById('cand-id');
-                    if (idField && session.id) {
-                        idField.value = session.id;
-                        validateInput();
-                    }
+                    sessionID = session.id || "";
                 } catch(e) {}
+            }
+
+            // Check if there is an ongoing active exam for this session
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            // Resume exam seamlessly
+                            candidateID = state.candidateID;
+                            candidateDept = state.candidateDept;
+                            questions = state.questions;
+                            currentQ = state.currentQ || 0;
+                            answers = state.answers || {};
+                            timeLeft = remaining;
+                            examStartTime = state.examStartTime;
+
+                            startTimer();
+                            renderExam();
+                            return;
+                        } else {
+                            // Expired while away
+                            candidateID = state.candidateID;
+                            candidateDept = state.candidateDept;
+                            questions = state.questions;
+                            answers = state.answers || {};
+                            timeLeft = 0;
+                            clearActiveState();
+                            submitQuiz();
+                            return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) {
+                    idField.value = sessionID;
+                    validateInput();
+                }
             }
         }
 
@@ -126,18 +194,30 @@
                 return { ...q, options: opts }; 
             });
 
-            timerInterval = setInterval(() => {
-                if(timeLeft > 0 && !isSubmitted) { 
-                    timeLeft--; 
-                    const display = document.getElementById('timer-display');
-                    if(display) { 
-                        display.innerText = formatTime(timeLeft); 
-                        if(timeLeft < 120) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
-                    }
-                } else if (timeLeft <= 0 && !isSubmitted) submitQuiz();
-            }, 1000);
-
+            examStartTime = Date.now();
+            timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState();
+            startTimer();
             renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 120) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
         }
 
         function renderLogin() {
@@ -191,7 +271,7 @@
                         <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
                         <div class="text-xs mt-1 font-mono text-slate-400">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(timeLeft)}</span></div>
+                    <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
                 </div>
                 <div class="h-1 w-full bg-slate-950"><div class="h-full bg-blue-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
                 <div class="p-6 md:p-8 flex-1 flex flex-col">
@@ -204,9 +284,13 @@
         async function submitQuiz() {
             isSubmitted = true; 
             clearInterval(timerInterval);
+            clearActiveState();
+
             appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
             
-            const timeSpentSeconds = TOTAL_TIME_SECONDS - timeLeft; 
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
             let score = 0;
             questions.forEach((q, index) => { if (answers[index] === q.c) score++; });
             const percentage = Math.round((score / questions.length) * 100); 
@@ -226,12 +310,11 @@
                 time: timeStr
             };
 
-            // STORE RECORD TIED DIRECTLY TO STUDENT ID
             try {
                 const storageKey = 'tlt_score_history_' + candidateID;
                 const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
                 existingHistory.unshift(newRecord);
-                if(existingHistory.length > 10) existingHistory.pop();
+                if (existingHistory.length > 10) existingHistory.pop();
                 localStorage.setItem(storageKey, JSON.stringify(existingHistory));
             } catch(e) {}
 
@@ -315,9 +398,27 @@
             const s = (seconds % 60).toString().padStart(2, '0'); 
             return `${m}:${s}`; 
         }
-        window.selectOption = function(idx) { if(isSubmitted) return; answers[currentQ] = questions[currentQ].options[idx]; renderExam(); }
-        window.changeQ = function(delta) { if(isSubmitted) return; const newQ = currentQ + delta; if(newQ >= 0 && newQ < questions.length) { currentQ = newQ; renderExam(); } }
-        window.jumpToQ = function(idx) { if(isSubmitted) return; currentQ = idx; renderExam(); }
+        window.selectOption = function(idx) { 
+            if (isSubmitted) return; 
+            answers[currentQ] = questions[currentQ].options[idx]; 
+            saveActiveState();
+            renderExam(); 
+        }
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; 
+                saveActiveState();
+                renderExam(); 
+            } 
+        }
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; 
+            saveActiveState();
+            renderExam(); 
+        }
         initApp();
     </script>
 </body>
