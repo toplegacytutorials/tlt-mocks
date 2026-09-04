@@ -95,6 +95,14 @@
                     <a href="renal.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
                 </div>
 
+                <!-- CELL PHYSIOLOGY CARD -->
+                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="physiology cell physiology membrane potential transport pumps action potential">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
+                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">PHYSIOLOGY - CELL PHYSIOLOGY</h3>
+                    <p class="text-slate-400 text-sm mb-6">15 Questions • 10 mins • Transport & Potentials</p>
+                    <a href="cell_physio.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
+                </div>
+
                 <!-- MATHS 1 CARD -->
                 <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="mathematics" data-title="maths test run mathematics algebra calculus">
                     <span class="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-900/30 px-2 py-1 rounded border border-purple-800/30">Mathematics</span>
@@ -256,6 +264,7 @@
                     const id = JSON.parse(rawSession).id;
                     localStorage.removeItem(`tlt_active_exam_abdomen_pelvis_${id}`);
                     localStorage.removeItem(`tlt_active_exam_renal_clearance_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_cell_physiology_${id}`);
                     localStorage.removeItem(`tlt_active_exam_maths_test_run_${id}`);
                 } catch(e) {}
             }
