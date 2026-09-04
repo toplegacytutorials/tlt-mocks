@@ -250,6 +250,15 @@
         }
 
         function logout() {
+            const rawSession = localStorage.getItem('tlt_session');
+            if (rawSession) {
+                try {
+                    const id = JSON.parse(rawSession).id;
+                    localStorage.removeItem(`tlt_active_exam_abdomen_pelvis_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_renal_clearance_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_maths_test_run_${id}`);
+                } catch(e) {}
+            }
             localStorage.removeItem('tlt_session');
             document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
