@@ -37,49 +37,49 @@
                 q: "Solve for x: 3x - 7 = 14",
                 c: "7",
                 i: ["5", "6", "8"],
-                r: "3x = 14 + 7 = 21, so x = 21 / 3 = 7."
+                r: "3x = 14 + 7 = 21, which gives x = 21 / 3 = 7."
             },
             {
-                q: "What is the derivative of f(x) = 4x³ - 5x + 9 with respect to x?",
+                q: "What is the first derivative of f(x) = 4x³ - 5x + 9 with respect to x?",
                 c: "12x² - 5",
                 i: ["12x²", "12x² - 5x", "7x² - 5"],
-                r: "Using the power rule: d/dx(4x³) = 12x², d/dx(-5x) = -5, and the derivative of a constant is 0. Result is 12x² - 5."
+                r: "By the power rule: d/dx(4x³) = 12x², d/dx(-5x) = -5, and d/dx(9) = 0. The derivative is 12x² - 5."
             },
             {
                 q: "Evaluate the definite integral: ∫ from 0 to 2 of (3x²) dx",
                 c: "8",
                 i: ["6", "12", "16"],
-                r: "The antiderivative of 3x² is x³. Evaluating from 0 to 2 gives 2³ - 0³ = 8."
+                r: "The antiderivative of 3x² is x³. Evaluating from 0 to 2 yields [2³ - 0³] = 8."
             },
             {
                 q: "What are the roots of the quadratic equation x² - 5x + 6 = 0?",
                 c: "x = 2 and x = 3",
                 i: ["x = -2 and x = -3", "x = 1 and x = 6", "x = -1 and x = 6"],
-                r: "Factoring yields (x - 2)(x - 3) = 0, giving roots x = 2 and x = 3."
+                r: "Factoring the equation gives (x - 2)(x - 3) = 0, so the roots are x = 2 and x = 3."
             },
             {
                 q: "If log₁₀(x) = 3, what is the value of x?",
                 c: "1000",
                 i: ["30", "100", "10000"],
-                r: "Converting logarithmic to exponential form gives x = 10³ = 1000."
+                r: "In exponential form: x = 10³ = 1000."
             },
             {
-                q: "What is the slope of the line perpendicular to the line y = -2x + 5?",
+                q: "What is the slope of a line perpendicular to y = -2x + 5?",
                 c: "1/2",
                 i: ["-1/2", "2", "-2"],
-                r: "Perpendicular slopes are negative reciprocals: m₂ = -1 / (-2) = 1/2."
+                r: "Perpendicular lines have slopes that are negative reciprocals: m₂ = -1 / (-2) = 1/2."
             },
             {
-                q: "A bag contains 4 red balls and 6 blue balls. What is the probability of drawing one red ball at random?",
+                q: "A box contains 4 red balls and 6 blue balls. What is the probability of selecting a red ball at random?",
                 c: "2/5",
                 i: ["3/5", "1/4", "4/6"],
                 r: "Total balls = 4 + 6 = 10. Probability = 4/10 = 2/5."
             },
             {
-                q: "If sin(θ) = 3/5 in a right-angled triangle where θ is acute, what is cos(θ)?",
+                q: "If sin(θ) = 3/5 for an acute angle θ, what is the exact value of cos(θ)?",
                 c: "4/5",
                 i: ["3/4", "5/4", "1/2"],
-                r: "Using the Pythagorean identity cos²(θ) = 1 - sin²(θ) = 1 - 9/25 = 16/25, so cos(θ) = 4/5."
+                r: "From cos²(θ) = 1 - sin²(θ) = 1 - (9/25) = 16/25, taking the positive root gives cos(θ) = 4/5."
             },
             {
                 q: "Find the 10th term of the arithmetic progression: 2, 5, 8, 11, ...",
@@ -91,7 +91,7 @@
                 q: "Evaluate the limit as x approaches 0 of (sin(x) / x)",
                 c: "1",
                 i: ["0", "Infinity", "Undefined"],
-                r: "By standard calculus identity (or L'Hôpital's rule: cos(0)/1), the limit of sin(x)/x as x -> 0 is 1."
+                r: "By standard trigonometric limit identities (or L'Hôpital's rule), lim(x→0) sin(x)/x = 1."
             }
         ];
 
@@ -341,7 +341,6 @@
                 const storageKey = 'tlt_score_history_' + candidateID;
                 const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
                 existingHistory.unshift(newRecord);
-                if (existingHistory.length > 10) existingHistory.pop();
                 localStorage.setItem(storageKey, JSON.stringify(existingHistory));
             } catch(e) {}
 

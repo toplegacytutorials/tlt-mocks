@@ -118,7 +118,6 @@
                 } catch(e) {}
             }
 
-            // Check if there is an ongoing active exam for this session
             if (sessionID) {
                 const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
                 if (activeStateRaw) {
@@ -128,7 +127,6 @@
                         const remaining = state.totalTime - elapsed;
 
                         if (remaining > 0) {
-                            // Resume exam seamlessly
                             candidateID = state.candidateID;
                             candidateDept = state.candidateDept;
                             questions = state.questions;
@@ -141,7 +139,6 @@
                             renderExam();
                             return;
                         } else {
-                            // Expired while away
                             candidateID = state.candidateID;
                             candidateDept = state.candidateDept;
                             questions = state.questions;
@@ -314,7 +311,6 @@
                 const storageKey = 'tlt_score_history_' + candidateID;
                 const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
                 existingHistory.unshift(newRecord);
-                if (existingHistory.length > 10) existingHistory.pop();
                 localStorage.setItem(storageKey, JSON.stringify(existingHistory));
             } catch(e) {}
 
