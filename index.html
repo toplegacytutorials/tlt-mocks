@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP LEGACY TUTORIALS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <!-- LOGIN SECTION -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 p-8">
+            <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 mx-auto border border-blue-800/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" /></svg>
+            </div>
+            <h1 class="text-2xl font-bold text-center mb-2 text-white">TOP LEGACY TUTORIALS</h1>
+            <p class="text-slate-400 text-center mb-6 text-sm">Enter your authorized Student ID to access mock exams.</p>
+            
+            <input type="text" id="student-id" oninput="checkId()" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none uppercase font-mono mb-2 text-white placeholder:text-slate-600" placeholder="E.G. TLT2605900">
+            <p id="error-msg" class="text-xs text-red-400 font-medium mb-4 opacity-0 transition-opacity">Unauthorized ID.</p>
+            
+            <button id="login-btn" disabled onclick="login()" class="w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Verify & Enter ></button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboard-section" class="hidden">
+        <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-10 shadow-md flex-wrap gap-4">
+            <div>
+                <h1 class="font-bold text-xl tracking-tight text-white">TOP LEGACY TUTORIALS</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Authorized Mock Portal</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="display-id" class="text-sm font-bold bg-slate-950 px-3 py-1 rounded-full border border-slate-800 font-mono text-blue-400"></span>
+                <button onclick="logout()" class="text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg transition-colors">Logout</button>
+            </div>
+        </header>
+
+        <main class="max-w-5xl mx-auto p-6 mt-4">
+
+            <!-- SCORE HISTORY SECTION (SHOWS LAST 2 + VIEW ALL) -->
+            <div id="analytics-container" class="mb-8 hidden">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" /></svg>
+                        Recent Activity
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <button id="view-all-btn" onclick="openHistoryModal()" class="text-[11px] text-blue-400 hover:text-blue-300 font-semibold transition-colors">View All History</button>
+                        <span class="text-slate-700">|</span>
+                        <button onclick="clearHistory()" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors">Clear</button>
+                    </div>
+                </div>
+                <div id="history-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+            
+            <!-- CONTROLS: SEARCH & FILTER TABS -->
+            <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-8 border-t border-slate-800/80 pt-6">
+                <div class="relative flex-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3.5 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <input type="text" id="search-bar" oninput="filterExams()" placeholder="Search exams by title or topic..." class="w-full pl-11 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+                </div>
+                <div class="flex gap-2 overflow-x-auto pb-1 md:pb-0 custom-scroll">
+                    <button onclick="filterTab('all', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-blue-600 text-white transition-all flex-shrink-0">All</button>
+                    <button onclick="filterTab('anatomy', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Anatomy</button>
+                    <button onclick="filterTab('physiology', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Physiology</button>
+                </div>
+            </div>
+
+            <!-- EXAM CARDS GRID CONTAINER -->
+            <div id="exam-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- ABDOMEN CARD -->
+                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="anatomy" data-title="abdomen pelvis mock anatomy">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-2 py-1 rounded border border-blue-800/30">Anatomy</span>
+                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">Abdomen & Pelvis Mock</h3>
+                    <p class="text-slate-400 text-sm mb-6">5 Questions • 5 mins • High-Yield Steeplechase</p>
+                    <a href="abdomen.html" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
+                </div>
+
+                <!-- RENAL CARD -->
+                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="renal clearance mock physiology">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
+                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">Renal Clearance Mock</h3>
+                    <p class="text-slate-400 text-sm mb-6">5 Questions • 5 mins • GFR & Clearances</p>
+                    <a href="renal.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
+                </div>
+
+            </div>
+
+            <div id="no-results" class="hidden text-center py-16">
+                <p class="text-slate-500 text-sm">No matching assessments found.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FULL HISTORY MODAL DIALOG -->
+    <div id="history-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base">Complete Attempt History</h3>
+                <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+            </div>
+            <div id="modal-history-list" class="p-6 overflow-y-auto space-y-3 custom-scroll flex-1">
+                <!-- Injected via JS -->
+            </div>
+            <div class="px-6 py-3 bg-slate-950/50 border-t border-slate-800 flex justify-end">
+                <button onclick="closeHistoryModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'all';
+        const SESSION_DURATION_MS = 4 * 60 * 60 * 1000; // 4-hour active session
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const rawSession = localStorage.getItem('tlt_session');
+            if (rawSession) {
+                try {
+                    const session = JSON.parse(rawSession);
+                    if (Date.now() - session.timestamp < SESSION_DURATION_MS) {
+                        showDashboard(session.id);
+                        return;
+                    }
+                } catch(e) {}
+                localStorage.removeItem('tlt_session');
+            }
+        });
+
+        function checkId() {
+            const input = document.getElementById('student-id').value.trim();
+            const btn = document.getElementById('login-btn');
+            const error = document.getElementById('error-msg');
+            const isValid = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(input);
+
+            if (input !== "" && !isValid) error.classList.remove('opacity-0');
+            else error.classList.add('opacity-0');
+
+            if(isValid) {
+                btn.disabled = false;
+                btn.className = "w-full py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]";
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all";
+            }
+        }
+
+        function loadAnalytics(studentId) {
+            const historyGrid = document.getElementById('history-grid');
+            const analyticsContainer = document.getElementById('analytics-container');
+            const viewAllBtn = document.getElementById('view-all-btn');
+            historyGrid.innerHTML = '';
+            
+            // Scope lookup specifically to the student's ID
+            const rawHistory = localStorage.getItem('tlt_score_history_' + studentId);
+            const history = rawHistory ? JSON.parse(rawHistory) : [];
+
+            if (history.length > 0) {
+                analyticsContainer.classList.remove('hidden');
+                
+                if (history.length > 2) {
+                    viewAllBtn.classList.remove('hidden');
+                } else {
+                    viewAllBtn.classList.add('hidden');
+                }
+
+                const topTwo = history.slice(0, 2);
+                topTwo.forEach(item => {
+                    const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
+                    historyGrid.innerHTML += `
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-md">
+                            <div class="flex justify-between items-center text-[11px] text-slate-500 mb-1">
+                                <span>${item.date}</span>
+                                <span>${item.time || ''}</span>
+                            </div>
+                            <h4 class="font-bold text-white text-sm mb-2 truncate">${item.examTitle}</h4>
+                            <div class="flex items-end justify-between">
+                                <span class="text-2xl font-black ${scoreColor}">${item.percent}%</span>
+                                <span class="text-xs font-mono text-slate-400">${item.score}/${item.total} pts</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                analyticsContainer.classList.add('hidden');
+            }
+        }
+
+        function openHistoryModal() {
+            const modal = document.getElementById('history-modal');
+            const list = document.getElementById('modal-history-list');
+            const currentId = document.getElementById('display-id').innerText;
+            list.innerHTML = '';
+
+            const rawHistory = localStorage.getItem('tlt_score_history_' + currentId);
+            const history = rawHistory ? JSON.parse(rawHistory) : [];
+
+            history.forEach(item => {
+                const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
+                list.innerHTML += `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">${item.subject || 'Exam'}</span>
+                            <h4 class="font-semibold text-white text-sm">${item.examTitle}</h4>
+                            <p class="text-[11px] text-slate-500 mt-0.5">${item.date} • ${item.time || ''}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xl font-bold ${scoreColor}">${item.percent}%</span>
+                            <p class="text-[11px] font-mono text-slate-400">${item.score}/${item.total} pts</p>
+                        </div>
+                    </div>
+                `;
+            });
+            modal.classList.remove('hidden');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('history-modal').classList.add('hidden');
+        }
+
+        function clearHistory() {
+            const currentId = document.getElementById('display-id').innerText;
+            localStorage.removeItem('tlt_score_history_' + currentId);
+            loadAnalytics(currentId);
+        }
+
+        function login() {
+            const id = document.getElementById('student-id').value.trim().toUpperCase();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: id, timestamp: Date.now() }));
+            showDashboard(id);
+        }
+
+        function showDashboard(id) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            document.getElementById('display-id').innerText = id;
+            loadAnalytics(id);
+        }
+
+        function logout() {
+            localStorage.removeItem('tlt_session');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('student-id').value = '';
+            document.getElementById('login-btn').disabled = true;
+            document.getElementById('login-btn').className = "w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all";
+        }
+
+        function filterTab(category, btnElement) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.className = "filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0";
+            });
+            btnElement.className = "filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-blue-600 text-white transition-all flex-shrink-0";
+            applyFilters();
+        }
+
+        function filterExams() { applyFilters(); }
+
+        function applyFilters() {
+            const query = document.getElementById('search-bar').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.exam-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                const titleText = card.getAttribute('data-title');
+                const matchesCategory = (currentFilter === 'all' || category === currentFilter);
+                const matchesSearch = titleText.includes(query);
+
+                if (matchesCategory && matchesSearch) { card.classList.remove('hidden'); visibleCount++; } 
+                else { card.classList.add('hidden'); }
+            });
+
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) noResults.classList.remove('hidden');
+            else noResults.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
