@@ -131,7 +131,8 @@
         });
 
         function checkId() {
-            const input = document.getElementById('student-id').value.trim();
+            // UPDATED: Added .toUpperCase() to force capitalization regardless of keyboard input
+            const input = document.getElementById('student-id').value.trim().toUpperCase();
             const btn = document.getElementById('login-btn');
             const error = document.getElementById('error-msg');
             const isValid = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(input);
