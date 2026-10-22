@@ -73,6 +73,7 @@
                 <div class="flex gap-2 overflow-x-auto pb-1 md:pb-0 custom-scroll">
                     <button onclick="filterTab('all', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-blue-600 text-white transition-all flex-shrink-0">All</button>
                     <button onclick="filterTab('anatomy', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Anatomy</button>
+                    <button onclick="filterTab('physiology', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Physiology</button>
                 </div>
             </div>
 
@@ -85,6 +86,14 @@
                     <h3 class="font-bold text-lg mt-3 mb-1 text-white">ANATOMY - INTRO TO UPPER LIMB</h3>
                     <p class="text-slate-400 text-sm mb-6">45 Questions • 30 mins • Overview & Osteology</p>
                     <a href="intro_upperlimb.html" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
+                </div>
+
+                <!-- CELL AND ITS FUNCTIONS CARD -->
+                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="physiology the cell and its functions protoplasm cell membrane organelles cytoskeleton endocytosis">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
+                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">PHYSIOLOGY - THE CELL AND ITS FUNCTIONS</h3>
+                    <p class="text-slate-400 text-sm mb-6">50 Questions • 30 mins • Protoplasm & Organelles</p>
+                    <a href="cell_and_function.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
                 </div>
 
             </div>
@@ -131,7 +140,6 @@
         });
 
         function checkId() {
-            // UPDATED: Added .toUpperCase() to force capitalization regardless of keyboard input
             const input = document.getElementById('student-id').value.trim().toUpperCase();
             const btn = document.getElementById('login-btn');
             const error = document.getElementById('error-msg');
@@ -240,6 +248,7 @@
                 try {
                     const id = JSON.parse(rawSession).id;
                     localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
                 } catch(e) {}
             }
             localStorage.removeItem('tlt_session');
