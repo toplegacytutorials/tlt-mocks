@@ -104,6 +104,14 @@
                     <a href="cell_and_function.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
                 </div>
 
+                <!-- GENETIC CONTROL CARD -->
+                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="physiology genetic control dna rna transcription translation apoptosis cancer mitosis">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
+                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">PHYSIOLOGY - GENETIC CONTROL</h3>
+                    <p class="text-slate-400 text-sm mb-6">45 Questions • 30 mins • DNA, RNA & Mitosis</p>
+                    <a href="introphysio_geneticcontrol.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
+                </div>
+
             </div>
 
             <div id="no-results" class="hidden text-center py-16">
@@ -258,6 +266,7 @@
                     localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
                     localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
                 } catch(e) {}
             }
             localStorage.removeItem('tlt_session');

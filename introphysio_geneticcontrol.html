@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHYSIOLOGY - GENETIC CONTROL | TLT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 80%; max-height: 190px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 3.8; }
+        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
+        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; border: 2px solid #020617; }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
+        <!-- Assessment Injected Here -->
+    </div>
+
+    <script>
+        const EXAM_KEY = "introphysio_geneticcontrol";
+        const EXAM_SUBJECT = "Physiology";
+        const EXAM_TOPIC = "PHYSIOLOGY - GENETIC CONTROL";
+        const TOTAL_TIME_SECONDS = 1800; // 30 minutes
+        const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+
+        const rawQuestions = [
+            {
+                q: "A geneticist isolates a human cell's nucleus and maps its complete set of protein-coding genes. Approximately how many distinct functional proteins can the cell produce from its baseline 20,000 to 25,000 genes due to varied RNA processing?",
+                c: "At least 100,000",
+                i: ["Approximately 25,000", "Exactly 46,000", "Fewer than 10,000", "Over 1,000,000"],
+                r: "Human cells contain 20,000 to 25,000 protein-coding genes, which undergo varied RNA processing to produce at least 100,000 different functional proteins."
+            },
+            {
+                q: "All of the following molecules are foundational building blocks required to form the acidic nucleotides of a DNA sequence EXCEPT:",
+                c: "Ribose",
+                i: ["Phosphoric acid", "Deoxyribose", "Adenine", "Cytosine"],
+                r: "DNA components include Phosphoric acid, a pentose sugar (deoxyribose), and 4 nitrogenous bases. Ribose is specific to RNA."
+            },
+            {
+                q: "During the structural assembly of the DNA double helix, the complementary bases must match precisely. According to fundamental base pairing rules, Guanine (G) is uniquely permitted to hydrogen-bond with which specific base?",
+                c: "Cytosine (C)",
+                i: ["Adenine (A)", "Thymine (T)", "Uracil (U)", "Deoxyribose"],
+                r: "A purine ALWAYS bonds with a pyrimidine. Guanine (G) bonds only with Cytosine (C)."
+            },
+            {
+                q: "In the spatial arrangement of the DNA double helix, the alternating phosphoric acid and deoxyribose molecules form a backbone. Exactly how many nucleotide pairs are contained within one full helical turn of this structure?",
+                c: "10",
+                i: ["5", "23", "46", "80"],
+                r: "Alternating phosphoric acid and deoxyribose molecules form the backbone, with 10 nucleotide pairs per full helical turn."
+            },
+            {
+                q: "During transcription within the nucleus, an elongating nucleic acid chain utilizes a pentose sugar containing an extra hydroxyl ion. Which unique nitrogenous base will completely replace thymine in this newly synthesized strand?",
+                c: "Uracil",
+                i: ["Adenine", "Guanine", "Cytosine", "Adenylic acid"],
+                r: "RNA uses the sugar ribose (which contains an extra hydroxyl ion instead of deoxyribose) and the pyrimidine uracil completely replaces thymine."
+            },
+            {
+                q: "To successfully extend a growing RNA chain, the enzyme RNA polymerase must 'activate' incoming RNA nucleotides. It achieves this by utilizing cellular ATP to covalently add how many extra phosphate radicals to each nucleotide?",
+                c: "Two",
+                i: ["One", "Three", "Four", "Five"],
+                r: "The enzyme RNA polymerase uses cellular ATP to add two extra phosphate radicals to each RNA nucleotide, forming high-energy triphosphates."
+            },
+            {
+                q: "During the initiation of transcription, RNA polymerase binds to the promoter sequence and unzips a localized section of the DNA double helix. Approximately how much of the helix is unzipped by the enzyme at any one time?",
+                c: "Two turns of the DNA helix",
+                i: ["One-half turn of the DNA helix", "Ten full turns of the DNA helix", "The entire length of the chromosome", "A single nucleotide pair"],
+                r: "RNA polymerase binds to the DNA promoter sequence, unzips approximately two turns of the DNA helix, and matches complementary bases."
+            },
+            {
+                q: "A cellular biologist identifies a specific noncoding RNA molecule responsible for directing the splicing of introns out of pre-mRNA. Which structural RNA molecule performs this function?",
+                c: "Small nuclear RNA (snRNA)",
+                i: ["Transfer RNA (tRNA)", "MicroRNA (miRNA)", "Small interfering RNA (siRNA)", "Ribosomal RNA (rRNA)"],
+                r: "Pre-mRNA contains both introns (removed via splicing directed by small nuclear RNA, snRNA) and exons."
+            },
+            {
+                q: "A translation error is suspected due to a malfunctioning sequence on an mRNA transcript. Which of the following specific codon sequences acts as the universal start codon for mRNA translation?",
+                c: "AUG",
+                i: ["UAA", "UAG", "UGA", "TATAAA"],
+                r: "mRNA carries complementary codons. AUG is the start codon. UAA, UAG, and UGA are stop codons."
+            },
+            {
+                q: "In the spatial organization of a tRNA molecule, one end contains the anticodon triplet. The opposite end is specifically structured to bind a corresponding amino acid. Which specific compound is located at this amino-acid-binding end?",
+                c: "Adenylic acid",
+                i: ["Uridylic acid", "Deoxyguanylic acid", "Phosphoric acid", "Deoxythymidylic acid"],
+                r: "One end contains an 'anticodon' triplet... the opposite end (containing adenylic acid) binds specifically to the corresponding amino acid."
+            },
+            {
+                q: "A histological section reveals a large accumulation of newly transcribed RNA within the nucleolus. This specific type of RNA will eventually be exported through nuclear pores to constitute 60% of which cellular structure?",
+                c: "Ribosomes",
+                i: ["Spliceosomes", "Polyribosomes", "Chromosomal insulators", "Apoptosomes"],
+                r: "rRNA constitutes 60% of the ribosome structure... it accumulates in the nucleolus, and is exported through nuclear pores."
+            },
+            {
+                q: "A laboratory synthesizes a noncoding RNA fragment of 22 nucleotides designed to repress translation. In the cytoplasm, this pre-miRNA must be processed into an RNA-induced silencing complex (RISC). Which specific enzyme directly facilitates this final processing step?",
+                c: "Dicer enzyme",
+                i: ["RNA polymerase 2", "Peptidyl transferase", "DNA ligase", "Topoisomerase"],
+                r: "miRNAs are processed by the dicer enzyme in the cytoplasm into an RNA-induced silencing complex (RISC)."
+            },
+            {
+                q: "In an experimental gene therapy trial, researchers design a synthetic double-stranded RNA molecule to completely bypass nuclear processing and directly activate RISC to silence a pathological gene. Which class of RNA is being utilized?",
+                c: "siRNA",
+                i: ["snRNA", "miRNA", "tRNA", "pre-mRNA"],
+                r: "siRNA is a synthetic double-stranded RNA designed to bypass nuclear processing and directly activate RISC."
+            },
+            {
+                q: "An actively translating cell is observed under an electron microscope. A single mRNA strand is seen being read simultaneously by a clustered group of 3 to 10 ribosomes. What is the specific anatomical term for this active cluster?",
+                c: "Polyribosomes",
+                i: ["Nucleosomes", "Apoptosomes", "Spliceosomes", "Centrosomes"],
+                r: "A single mRNA strand can be read simultaneously by clusters of 3 to 10 ribosomes, termed Polyribosomes (Polysomes)."
+            },
+            {
+                q: "During the synthesis of a secretory protein, the extrusion of the polypeptide directly into the endoplasmic reticulum (ER) matrix is initiated by which specific cellular event?",
+                c: "An initial amino acid sequence attaching the ribosome to ER receptors",
+                i: ["The binding of the transcription factor IID complex to the TATA box", "An allosteric conformational change in peptidyl transferase", "The cleavage of two phosphate radicals from an activated nucleotide", "The fusion of a Golgi vesicle with the outer cell membrane"],
+                r: "For secretory proteins, specific initial amino acid sequences attach the ribosome to ER receptors, extruding the polypeptide directly into the ER matrix."
+            },
+            {
+                q: "During the highly energetic process of translation, exactly how many high-energy phosphate bonds are consumed for every single amino acid added to the growing polypeptide chain?",
+                c: "Four",
+                i: ["One", "Two", "Three", "Ten"],
+                r: "Each added amino acid consumes four high-energy phosphate bonds."
+            },
+            {
+                q: "During biochemical assembly on the ribosome, a peptide bond is established between two adjacent amino acids. This interaction removes a hydroxyl radical from a carboxyl group and a hydrogen ion from an amino group, directly yielding which byproduct?",
+                c: "Water (H₂O)",
+                i: ["Carbon dioxide (CO₂)", "Adenosine Monophosphate (AMP)", "Cyclic AMP (cAMP)", "Hydrogen peroxide (H₂O₂)"],
+                r: "A hydroxyl radical is removed from the carboxyl group... and a hydrogen ion from the amino group... This produces water (H₂O) and forms the peptide bond."
+            },
+            {
+                q: "Which specific enzyme, located within the ribosomal complex, catalyzes the formation of the peptide bonds during protein synthesis?",
+                c: "Peptidyl transferase",
+                i: ["RNA polymerase", "DNA helicase", "Dicer enzyme", "Topoisomerase"],
+                r: "Peptidyl transferase establishes peptide bonds."
+            },
+            {
+                q: "At the basal promoter region of a eukaryotic gene, the specific TATA box sequence (TATAAA) is essential for initiating transcription. This sequence directly binds RNA polymerase 2 and which other critical protein complex?",
+                c: "Transcription factor IID complex",
+                i: ["RNA-induced silencing complex (RISC)", "Apoptosis Inhibiting Factor (AIF)", "Cytochrome C", "Topoisomerase"],
+                r: "The Basal Promoter: In eukaryotes, features a TATA box sequence (TATAAA) that binds the transcription factor IID complex and RNA polymerase 2."
+            },
+            {
+                q: "Certain regulatory sequences can be located far upstream, downstream, or even on different chromosomes from the gene they control. They function by binding transcription factors that loop around to interact directly with the basal promoter. These sequences are known as:",
+                c: "Enhancers",
+                i: ["Chromosomal insulators", "TATA boxes", "Introns", "Okazaki fragments"],
+                r: "Enhancers: Located far upstream, downstream, or on different chromosomes. They bind transcription factors to loop and interact with the basal promoter."
+            },
+            {
+                q: "To prevent transcriptional cross-influence between neighboring genetic segments, specific genetic boundaries are established. Which structures physically separate these genes, and are often modulated by mechanisms like DNA methylation?",
+                c: "Chromosomal insulators",
+                i: ["Enhancers", "Telomeres", "Nucleosomes", "Spliceosomes"],
+                r: "Chromosomal Insulators: Separate specific genes to prevent transcriptional cross-influence (modulated by mechanisms like DNA methylation)."
+            },
+            {
+                q: "For transcription to occur, DNA packaging must be locally altered to expose the underlying genes. Regulatory proteins achieve this by decondensing DNA from which specific electropositive core structures?",
+                c: "Histones",
+                i: ["Centromeres", "Telomeres", "Asters", "Centrioles"],
+                r: "DNA Packaging: Histones must be locally decondensed by regulatory proteins to expose genes for RNA formation."
+            },
+            {
+                q: "A cell accumulates excess products from a specific metabolic pathway. Through direct negative feedback, these products trigger allosteric conformational changes that halt the synthetic sequence. Which specific enzyme in the sequence is typically inactivated by this mechanism?",
+                c: "The first enzyme in the sequence",
+                i: ["The final enzyme in the sequence", "Peptidyl transferase", "DNA ligase", "RNA polymerase"],
+                r: "Cellular products exert direct negative feedback by causing allosteric conformational changes that inactivate the first enzyme in their synthetic sequence."
+            },
+            {
+                q: "During a period of severe cellular starvation, depleted intracellular ATP leads to a sharp increase in cAMP levels. This secondary messenger will directly act as an activator for which specific enzyme to split glycogen and restore ATP?",
+                c: "Phosphorylase",
+                i: ["Peptidyl transferase", "DNA helicase", "Exonuclease", "Caspase"],
+                r: "Depleted cellular ATP leads to increased cAMP → acts as an activator for phosphorylase → splits glycogen for ATP restoration."
+            },
+            {
+                q: "To ensure an equal availability of nucleotide precursors for nucleic acid synthesis, the formation of purines exerts a highly specific feedback control mechanism. How does excess purine formation affect related enzymatic pathways?",
+                c: "It inhibits further purine enzymes while activating pyrimidine enzymes",
+                i: ["It activates both purine and pyrimidine enzymes", "It inhibits both purine and pyrimidine enzymes", "It degrades RNA polymerase", "It selectively represses the basal promoter for all transcription"],
+                r: "Purine formation inhibits further purine enzymes while activating pyrimidine enzymes (and vice versa) to ensure equal availability."
+            },
+            {
+                q: "A mammalian cell rapidly divides with a total life cycle spanning 24 hours. Approximately how much of this cycle is actively occupied by the physical process of mitosis?",
+                c: "30 minutes",
+                i: ["5 to 10 hours", "10 to 30 hours", "5 minutes", "12 hours"],
+                r: "The cycle spans 10–30 hours in rapidly dividing mammalian cells. Mitosis occupies only ~30 minutes; the rest is interphase."
+            },
+            {
+                q: "During the initiation phase of DNA replication, which specific enzyme is responsible for physically unzipping the double strand to create the replication fork?",
+                c: "DNA helicase",
+                i: ["DNA polymerase", "DNA ligase", "Topoisomerase", "Exonuclease"],
+                r: "DNA helicase: Unzips the double strand (replication fork)."
+            },
+            {
+                q: "Within the active replication fork, DNA polymerase elongates the new nucleotide strand strictly in which specific directional arrangement?",
+                c: "5' to 3' direction",
+                i: ["3' to 5' direction", "N-terminal to C-terminal direction", "C-terminal to N-terminal direction", "Lateral to medial direction"],
+                r: "DNA polymerase: Elongates the new strand in the 5' to 3' direction."
+            },
+            {
+                q: "During the discontinuous synthesis of the lagging strand in DNA replication, which specific enzyme is required to covalently splice the Okazaki fragments together?",
+                c: "DNA ligase",
+                i: ["Topoisomerase", "Exonuclease", "DNA helicase", "RNA polymerase"],
+                r: "The lagging strand is synthesized discontinuously as Okazaki fragments, spliced together by DNA ligase."
+            },
+            {
+                q: "As the replication fork progresses, the DNA double helix is subjected to severe torsional stress. Which enzyme transiently breaks phosphodiester bonds ahead of the fork to prevent the helix from overwinding?",
+                c: "Topoisomerase",
+                i: ["DNA helicase", "DNA ligase", "Exonuclease", "Dicer enzyme"],
+                r: "Topoisomerase: Transiently breaks phosphodiester bonds to prevent helix overwinding."
+            },
+            {
+                q: "DNA replication is a highly accurate semiconservative process. By exact definition, what occurs if an uncorrected mistake is permanently incorporated into the DNA sequence during this replication phase?",
+                c: "A mutation",
+                i: ["Apoptosis", "Opsonization", "Translation", "Transcription"],
+                r: "A mistake made during this replication process is the exact definition of a mutation."
+            },
+            {
+                q: "A researcher stains a human cell prior to replication and counts the total number of individual chromosomes present in the nucleus. What is the standard diploid number observed?",
+                c: "46 chromosomes",
+                i: ["23 chromosomes", "92 chromosomes", "10 chromosomes", "21 chromosomes"],
+                r: "Human cells possess 46 chromosomes (23 pairs)."
+            },
+            {
+                q: "During the formation of the mitotic apparatus, polymerizing microtubules forcefully separate the centrosomes to opposite cellular poles. The centrosome itself is structurally composed of what specific arrangement?",
+                c: "Two right-angled centrioles",
+                i: ["An electropositive histone core", "A cloverleaf-shaped strand of 80 nucleotides", "A protective sequence of repetitive nucleotide caps", "A TATA box sequence"],
+                r: "The centrosome (two right-angled centrioles) replicates and is pushed to opposite cellular poles."
+            },
+            {
+                q: "A cell is viewed mid-mitosis. The aster microtubule spines have just fragmented the nuclear envelope and anchored securely to the chromatid centromeres. Which specific mitotic stage is this?",
+                c: "Prometaphase",
+                i: ["Prophase", "Metaphase", "Anaphase", "Telophase"],
+                r: "Prometaphase: Aster microtubule spines fragment the nuclear envelope and anchor to the chromatid centromeres."
+            },
+            {
+                q: "During which precise stage of mitosis do actin-based molecular motors slide the interdigitating aster spines, forcibly pushing the poles apart and aligning the chromatids tightly along the equatorial plate?",
+                c: "Metaphase",
+                i: ["Prophase", "Prometaphase", "Anaphase", "Telophase"],
+                r: "Metaphase: Actin-based molecular motors slide the interdigitating aster spines, pushing poles apart and aligning chromatids tightly along the equatorial plate."
+            },
+            {
+                q: "Following the decoupling of chromatid pairs at the centromere, 46 daughter chromosomes are forcefully pulled toward opposite asters. This cellular event characterizes which mitotic phase?",
+                c: "Anaphase",
+                i: ["Metaphase", "Prometaphase", "Telophase", "Prophase"],
+                r: "Anaphase: Chromatid pairs decouple at the centromere; the 46 daughter chromosomes are forcefully pulled to opposite asters."
+            },
+            {
+                q: "To successfully divide a proliferating cell into two distinct entities (cytokinesis), a contractile ring physically pinches the cell membrane. This ring is composed primarily of which two structural proteins?",
+                c: "Actin and myosin",
+                i: ["Tubulin and dynein", "Clathrin and spectrin", "Collagen and elastin", "Histones and caspases"],
+                r: "Telophase: ... an actin/myosin contractile ring pinches the cell in two (cytokinesis)."
+            },
+            {
+                q: "During each cellular division, approximately 30 to 200 base pairs are inevitably lost from the protective nucleotide caps on the chromatid ends due to RNA primer placement. What is the anatomical term for these caps?",
+                c: "Telomeres",
+                i: ["Centromeres", "Nucleosomes", "Exons", "Promoters"],
+                r: "Telomeres: Protective, repetitive nucleotide caps on chromatid ends. With each division, 30–200 base pairs are lost."
+            },
+            {
+                q: "A developmental biologist studies embryonic tissues differentiating into specialized organs. According to high-yield cellular principles, this cellular differentiation is driven fundamentally by which genetic mechanism?",
+                c: "Selective repression of different gene promoters",
+                i: ["Permanent deletion of non-essential genes from the nucleus", "Random mutation of the basal promoter", "Shortening of the protective telomere caps", "Complete destruction of the mitotic apparatus"],
+                r: "Differentiation results NOT from a loss of genes, but from selective repression of different gene promoters (highly condensed DNA segments permanently cease uncoiling)."
+            },
+            {
+                q: "All of the following cellular events are characteristic features of the genetically programmed suicide process known as apoptosis EXCEPT:",
+                c: "Cell swelling, bursting, and secondary inflammation",
+                i: ["Dismantling of the cellular cytoskeleton", "Condensation of nuclear chromatin", "Membrane alterations signaling rapid phagocytosis", "Initiation by a family of proteases called caspases"],
+                r: "Apoptosis is distinct from pathological necrosis (which involves cell swelling, bursting, and secondary inflammation)."
+            },
+            {
+                q: "In the intrinsic pathway of apoptosis, severe DNA damage triggers proapoptotic BCL-2 proteins. As a direct result, the mitochondria release Cytochrome C and which other crucial molecule into the cytosol?",
+                c: "SMAC/diablo",
+                i: ["Tumor Necrosis Factor-alpha (TNF-a)", "Fas ligand", "Caspase-9", "Apoptosis Inhibiting Factor (AIF)"],
+                r: "Intrinsic Pathway: DNA damage/oxidants activate proapoptotic BCL-2 proteins → mitochondria release Cytochrome C and SMAC/diablo."
+            },
+            {
+                q: "Once released from the mitochondria during intrinsic apoptosis, SMAC/diablo aggressively binds and inactivates a specific protein, permitting the apoptosome to fully activate the caspase cascade. Which protein is inactivated by SMAC?",
+                c: "Apoptosis Inhibiting Factor (AIF)",
+                i: ["Cytochrome C", "Proapoptotic BCL-2", "Transcription factor IID", "RNA polymerase"],
+                r: "SMAC inactivates Apoptosis Inhibiting Factor (AIF), forming an apoptosome that fully activates the caspase cascade."
+            },
+            {
+                q: "The extrinsic pathway of apoptosis bypasses the mitochondria and is triggered directly by external death-receptor ligands. Which of the following is an established ligand for this specific extrinsic pathway?",
+                c: "Fas ligand",
+                i: ["Cytochrome C", "SMAC/diablo", "Cyclic AMP (cAMP)", "Transcription factor IID"],
+                r: "Extrinsic Pathway: External death-receptor ligands (TNF-a, Fas ligand, TRAIL) trigger the extrinsic caspase pathway."
+            },
+            {
+                q: "A patient suffering from acquired immunodeficiency lacks the normal ability to allow lymphocytes to aggressively seek out and destroy mutant cells. Statistically, this immunosuppression multiplies the probability of cancer development by what factor?",
+                c: "Up to fivefold",
+                i: ["Exactly twofold", "By ten percent", "Up to fiftyfold", "It does not increase the probability"],
+                r: "Immunosuppression multiplies cancer probability up to fivefold (prevents lymphocyte destruction of mutant cells)."
+            },
+            {
+                q: "A patient with an RNA oncovirus infection (such as HIV) is evaluated for secondary malignancies. The viral pathogenesis involves inserting transcribed DNA directly into the host genome. Which specific enzyme facilitates this critical step?",
+                c: "Reverse transcriptase",
+                i: ["DNA polymerase", "RNA polymerase", "DNA ligase", "Dicer enzyme"],
+                r: "RNA oncoviruses utilize the enzyme reverse transcriptase to insert transcribed DNA directly into the host genome."
+            }
+        ];
+
+        let candidateID = ""; 
+        let candidateDept = ""; 
+        let questions = []; 
+        let currentQ = 0; 
+        let answers = {}; 
+        let timeLeft = TOTAL_TIME_SECONDS; 
+        let isSubmitted = false; 
+        let timerInterval;
+        let examStartTime = 0;
+        const appDiv = document.getElementById('app');
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isSubmitted && candidateID && timeLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        const icons = {
+            user: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`
+        };
+
+        function getActiveStateKey(id) {
+            return `tlt_active_exam_${EXAM_KEY}_${id}`;
+        }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = {
+                candidateID,
+                candidateDept,
+                questions,
+                currentQ,
+                answers,
+                examStartTime,
+                totalTime: TOTAL_TIME_SECONDS
+            };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) {
+                localStorage.removeItem(getActiveStateKey(candidateID));
+            }
+        }
+
+        function initApp() {
+            const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
+            if (rawSession) {
+                try {
+                    const session = JSON.parse(rawSession);
+                    sessionID = session.id || "";
+                } catch(e) {}
+            }
+
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            candidateID = state.candidateID;
+                            candidateDept = state.candidateDept;
+                            questions = state.questions;
+                            currentQ = state.currentQ || 0;
+                            answers = state.answers || {};
+                            timeLeft = remaining;
+                            examStartTime = state.examStartTime;
+
+                            startTimer();
+                            renderExam();
+                            return;
+                        } else {
+                            candidateID = state.candidateID;
+                            candidateDept = state.candidateDept;
+                            questions = state.questions;
+                            answers = state.answers || {};
+                            timeLeft = 0;
+                            clearActiveState();
+                            submitQuiz();
+                            return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) {
+                    idField.value = sessionID;
+                    validateInput();
+                }
+            }
+        }
+
+        function validateInput() {
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
+            const dInput = document.getElementById('cand-dept').value.trim();
+            const btn = document.getElementById('start-btn');
+            const errorMsg = document.getElementById('id-error');
+            const isValidId = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(idInput);
+            
+            if (idInput !== "" && !isValidId) errorMsg.classList.remove('opacity-0');
+            else errorMsg.classList.add('opacity-0');
+
+            if (isValidId && dInput) { 
+                btn.disabled = false; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]"; 
+            } else { 
+                btn.disabled = true; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all"; 
+            }
+        }
+
+        function startExam() {
+            candidateID = document.getElementById('cand-id').value.trim().toUpperCase(); 
+            candidateDept = document.getElementById('cand-dept').value.trim();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: candidateID, timestamp: Date.now() }));
+
+            questions = rawQuestions.sort(() => Math.random() - 0.5).map(q => { 
+                const opts = [q.c, ...q.i].sort(() => Math.random() - 0.5); 
+                return { ...q, options: opts }; 
+            });
+
+            examStartTime = Date.now();
+            timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState();
+            startTimer();
+            renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function renderLogin() {
+            const timeInMinutes = Math.floor(TOTAL_TIME_SECONDS / 60);
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-8 md:p-12">
+                    <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-800/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-3 py-1 rounded border border-blue-800/30 mb-3">${EXAM_SUBJECT}</span>
+                    <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
+                    <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions</strong>.</p>
+                    <div class="w-full max-w-md space-y-4">
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
+                    </div>
+                </div>`;
+        }
+
+        function renderExam() {
+            let savedScroll = 0;
+            const existingGrid = document.getElementById('q-nav-grid');
+            if (existingGrid) savedScroll = existingGrid.scrollLeft;
+
+            const q = questions[currentQ]; 
+            const hasAnsweredAll = Object.keys(answers).length === questions.length; 
+            const progressPct = (Object.keys(answers).length / questions.length) * 100;
+            
+            let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
+            questions.forEach((_, idx) => {
+                const isAns = answers[idx] !== undefined; 
+                const isCurr = idx === currentQ;
+                let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
+                if (isCurr && isAns) btnClass += "bg-blue-600 text-white shadow-md shadow-blue-500/30";
+                else if (isCurr) btnClass += "border-2 border-blue-500 text-blue-400 bg-blue-950/50";
+                else if (isAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
+                else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
+                gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
+            }); 
+            gridHTML += `</div>`;
+
+            let optionsHTML = `<div class="space-y-3 mt-6">`;
+            q.options.forEach((opt, idx) => {
+                const isSelected = answers[currentQ] === opt;
+                optionsHTML += `<button onclick="selectOption(${idx})" class="option-btn w-full text-left p-4 rounded-xl border-2 ${isSelected ? 'border-blue-500 bg-blue-950/40' : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900'}">
+                    <div class="flex items-start gap-4"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${isSelected ? 'border-blue-500 bg-blue-600' : 'border-slate-700'}">${isSelected ? '<div class="w-2.5 h-2.5 rounded-full bg-white"></div>' : ''}</div><span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span></div></button>`;
+            }); 
+            optionsHTML += `</div>`;
+
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white px-6 py-4 flex justify-between items-center flex-wrap gap-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-[11px] font-bold text-blue-400 uppercase tracking-widest">${EXAM_SUBJECT}</span>
+                        <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
+                        <div class="text-xs mt-1 font-mono text-slate-400">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                </div>
+                <div class="h-1 w-full bg-slate-950"><div class="h-full bg-blue-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    ${gridHTML}
+                    <div class="flex-1"><div class="flex items-start gap-4 mb-2"><span class="text-4xl font-black text-slate-700">${currentQ + 1}</span><h2 class="text-xl md:text-2xl font-semibold text-white leading-snug mt-1">${q.q}</h2></div>${optionsHTML}</div>
+                    <div class="mt-10 flex justify-between items-center"><button onclick="changeQ(-1)" class="px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed" ${currentQ === 0 ? 'disabled' : ''}>← Previous</button>${hasAnsweredAll || currentQ === questions.length - 1 ? `<button onclick="submitQuiz()" class="px-8 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900/30 transition-all active:scale-95">Submit Exam</button>` : `<button onclick="changeQ(1)" class="px-8 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-md active:scale-95">Next →</button>`}</div>
+                </div>`;
+
+            const newGrid = document.getElementById('q-nav-grid');
+            if (newGrid) {
+                newGrid.scrollLeft = savedScroll;
+                const activeBtn = document.getElementById(`q-btn-${currentQ}`);
+                if (activeBtn) {
+                    const gridRect = newGrid.getBoundingClientRect();
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    if (btnRect.left < gridRect.left || btnRect.right > gridRect.right) {
+                        activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }
+            }
+        }
+
+        async function submitQuiz() {
+            isSubmitted = true; 
+            clearInterval(timerInterval);
+            clearActiveState();
+
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
+            
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.c) score++; });
+            const percentage = Math.round((score / questions.length) * 100); 
+            let emailStatus = "";
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const newRecord = { 
+                examTitle: EXAM_TOPIC, 
+                subject: EXAM_SUBJECT,
+                score: score, 
+                total: questions.length, 
+                percent: percentage, 
+                date: dateStr,
+                time: timeStr
+            };
+
+            try {
+                const storageKey = 'tlt_score_history_' + candidateID;
+                const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                existingHistory.unshift(newRecord);
+                localStorage.setItem(storageKey, JSON.stringify(existingHistory));
+            } catch(e) {}
+
+            if (WEB3FORMS_ACCESS_KEY) {
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ 
+                            access_key: WEB3FORMS_ACCESS_KEY, 
+                            name: candidateID, 
+                            email: "system@mockexam.com", 
+                            subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, 
+                            from_name: "Mock Exam Portal", 
+                            Subject: EXAM_SUBJECT,
+                            Topic: EXAM_TOPIC, 
+                            Candidate_ID: candidateID, 
+                            Department: candidateDept, 
+                            Score: `${score} out of ${questions.length} (${percentage}%)`, 
+                            Time_Spent: formatTime(timeSpentSeconds) 
+                        }) 
+                    });
+                    if (response.status === 200) { 
+                        emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; 
+                    } else { throw new Error("Failed"); }
+                } catch (e) { 
+                    emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; 
+                }
+            } 
+            renderResults(score, percentage, emailStatus, dateStr, timeStr);
+        }
+
+        function renderResults(score, percentage, emailStatus, dateStr, timeStr) {
+            const strokeColor = percentage >= 70 ? '#22c55e' : percentage >= 50 ? '#f59e0b' : '#ef4444';
+            let resultsHTML = `
+                <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
+                    <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-blue-900/40 text-blue-400 border border-blue-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
+                    <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
+                        <span class="text-blue-400 font-bold">${candidateID}</span>
+                        <span class="text-slate-600">•</span>
+                        <span class="text-slate-300 font-sans">${candidateDept}</span>
+                        <span class="text-slate-600">•</span>
+                        <span>${dateStr} ${timeStr}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 text-center border-b border-slate-800">
+                    <div class="relative w-40 h-40 mx-auto mb-2">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke="${strokeColor}" stroke-dasharray="${percentage}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="21" class="percentage">${percentage}%</text>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white mb-2">${score} / ${questions.length} Correct</h2>
+                    <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider font-semibold">${percentage >= 70 ? 'Distinction Standard' : percentage >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
+
+                    <div class="flex justify-center">
+                        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-900/30 active:scale-95">Return to Dashboard</a>
+                    </div>
+                    ${emailStatus}
+                </div>
+
+                <div class="p-6 md:p-10 bg-slate-950 flex-1">
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">Question Analysis</h3>
+                    <div class="space-y-6">`;
+            
+            questions.forEach((q, index) => {
+                const userAns = answers[index]; 
+                const isCorrect = userAns === q.c;
+                const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
+                resultsHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/40"><span class="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
+            }); 
+            resultsHTML += `</div></div>`; 
+            appDiv.innerHTML = resultsHTML;
+        }
+
+        function formatTime(seconds) { 
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const s = (seconds % 60).toString().padStart(2, '0'); 
+            return `${m}:${s}`; 
+        }
+        window.selectOption = function(idx) { 
+            if (isSubmitted) return; 
+            answers[currentQ] = questions[currentQ].options[idx]; 
+            saveActiveState();
+            renderExam(); 
+        }
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; 
+                saveActiveState();
+                renderExam(); 
+            } 
+        }
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; 
+            saveActiveState();
+            renderExam(); 
+        }
+        initApp();
+    </script>
+</body>
+</html>
