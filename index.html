@@ -96,7 +96,7 @@
                 <h3 class="font-bold text-white text-base">Complete Attempt History</h3>
                 <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
             </div>
-            <div id="modal-history-list" class="p-6 overflow-y-auto space-y-3 custom-scroll flex-1">
+            <div id="modal-history-list" class="p-6 overflow-y-auto custom-scroll flex-1 space-y-6">
                 <!-- Injected via JS -->
             </div>
             <div class="px-6 py-3 bg-slate-950/50 border-t border-slate-800 flex justify-end">
@@ -107,39 +107,38 @@
 
     <script>
         // --- EXAM DATABASE ---
-        // Note: If an exam has no 'topic', it will display directly under the sub-discipline.
         const exams = [
             // ANATOMY (Has Topics)
             { 
                 id: 'intro_upperlimb', title: 'ANATOMY - INTRO TO UPPER LIMB', desc: '45 Questions • 30 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
-                file: 'intro_upperlimb.html', badge: 'blue' 
+                file: 'intro_upperlimb.html', color: 'blue' 
             },
             { 
                 id: 'osteo_upperlimb', title: 'ANATOMY - OSTEOLOGY OF UPPER LIMB', desc: '60 Questions • 40 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
-                file: 'osteo_upperlimb.html', badge: 'blue' 
+                file: 'osteo_upperlimb.html', color: 'blue' 
             },
             { 
                 id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
-                file: 'intro_lowerlimb.html', badge: 'blue' 
+                file: 'intro_lowerlimb.html', color: 'blue' 
             },
             
-            // PHYSIOLOGY (No Topics - ends at Sub-discipline)
+            // PHYSIOLOGY (No Topics)
             { 
                 id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL & FUNCTIONS', desc: '50 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'General & Introductory Physiology', 
-                file: 'cell_and_function.html', badge: 'emerald' 
+                file: 'cell_and_function.html', color: 'emerald' 
             },
             { 
                 id: 'introphysio_geneticcontrol', title: 'PHYSIOLOGY - GENETIC CONTROL', desc: '45 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'General & Introductory Physiology', 
-                file: 'introphysio_geneticcontrol.html', badge: 'emerald' 
+                file: 'introphysio_geneticcontrol.html', color: 'emerald' 
             }
         ];
 
-        let currentPath = ['Home']; // Navigation state
+        let currentPath = ['Home']; 
         let isSearching = false;
         const SESSION_DURATION_MS = 4 * 60 * 60 * 1000;
 
@@ -195,7 +194,6 @@
             if (rawSession) {
                 try {
                     const id = JSON.parse(rawSession).id;
-                    // Clear all active exam states
                     localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
                     localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
@@ -210,7 +208,6 @@
             document.getElementById('login-btn').disabled = true;
             document.getElementById('login-btn').className = "w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all";
             
-            // Reset navigation
             currentPath = ['Home'];
             isSearching = false;
             document.getElementById('search-bar').value = '';
@@ -274,7 +271,6 @@
             const query = document.getElementById('search-bar').value.toLowerCase().trim();
 
             if (isSearching && query) {
-                // SEARCH MODE
                 const filtered = exams.filter(e => 
                     e.title.toLowerCase().includes(query) || 
                     (e.topic && e.topic.toLowerCase().includes(query)) || 
@@ -284,47 +280,41 @@
                 filtered.forEach(e => { html += createExamCard(e); count++; });
             
             } else {
-                // BREADCRUMB MODE
                 let filtered = exams;
 
-                // Filter by the current path
                 if (currentPath.length > 1) filtered = filtered.filter(e => e.subject === currentPath[1]);
                 if (currentPath.length > 2) filtered = filtered.filter(e => e.sub === currentPath[2]);
                 if (currentPath.length > 3) filtered = filtered.filter(e => e.topic === currentPath[3]);
 
                 if (currentPath.length === 1) {
-                    // Show Subjects
                     const subjects = [...new Set(exams.map(e => e.subject))];
                     subjects.forEach(sub => {
                         const countExams = exams.filter(e => e.subject === sub).length;
-                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', sub]);
+                        const subjectColor = exams.find(e => e.subject === sub).color;
+                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', sub], subjectColor);
                         count++;
                     });
                 } else if (currentPath.length === 2) {
-                    // Show Sub-Disciplines
                     const subs = [...new Set(filtered.map(e => e.sub))];
                     subs.forEach(sub => {
                         const countExams = filtered.filter(e => e.sub === sub).length;
-                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', currentPath[1], sub]);
+                        const subjectColor = exams.find(e => e.subject === currentPath[1]).color;
+                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', currentPath[1], sub], subjectColor);
                         count++;
                     });
                 } else if (currentPath.length === 3) {
-                    // Check if there are topics
                     const topics = [...new Set(filtered.map(e => e.topic).filter(Boolean))];
-                    
                     if (topics.length > 0) {
-                        // Render Topics
                         topics.forEach(top => {
                             const countExams = filtered.filter(e => e.topic === top).length;
-                            html += createFolderCard(top, `${countExams} Assessments available`, ['Home', currentPath[1], currentPath[2], top]);
+                            const subjectColor = exams.find(e => e.subject === currentPath[1]).color;
+                            html += createFolderCard(top, `${countExams} Assessments available`, ['Home', currentPath[1], currentPath[2], top], subjectColor);
                             count++;
                         });
                     } else {
-                        // No topics exist, render exams directly
                         filtered.forEach(e => { html += createExamCard(e); count++; });
                     }
                 } else if (currentPath.length === 4) {
-                    // Show Exams (Under a Topic)
                     filtered.forEach(e => { html += createExamCard(e); count++; });
                 }
             }
@@ -337,34 +327,50 @@
             }
         }
 
-        function createFolderCard(title, subtitle, path) {
+        function createFolderCard(title, subtitle, path, color = 'blue') {
             const pathString = JSON.stringify(path).replace(/"/g, '&quot;');
+            
+            // Color configurations
+            let iconBg, iconColor, hoverBorder, hoverText, groupHoverText;
+            if (color === 'emerald') {
+                iconBg = 'bg-emerald-900/20 border-emerald-800/50';
+                iconColor = 'text-emerald-400';
+                hoverBorder = 'hover:border-emerald-500/50';
+                hoverText = 'group-hover:text-emerald-400';
+                groupHoverText = 'group-hover:text-emerald-400';
+            } else {
+                iconBg = 'bg-blue-900/20 border-blue-800/50';
+                iconColor = 'text-blue-400';
+                hoverBorder = 'hover:border-blue-500/50';
+                hoverText = 'group-hover:text-blue-400';
+                groupHoverText = 'group-hover:text-blue-400';
+            }
+
             return `
-                <div onclick="navigateTo(${pathString})" class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-blue-500 cursor-pointer transition-all group active:scale-[0.98]">
+                <div onclick="navigateTo(${pathString})" class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden ${hoverBorder} cursor-pointer transition-all group active:scale-[0.98]">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-500 group-hover:text-blue-400 transition-colors">
+                        <div class="w-10 h-10 rounded-lg ${iconBg} border flex items-center justify-center ${iconColor} ${hoverText} transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-600 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-600 ${groupHoverText} transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </div>
-                    <h3 class="font-bold text-lg mb-1 text-white group-hover:text-blue-400 transition-colors">${title}</h3>
+                    <h3 class="font-bold text-lg mb-1 text-white ${groupHoverText} transition-colors">${title}</h3>
                     <p class="text-slate-400 text-sm">${subtitle}</p>
                 </div>
             `;
         }
 
         function createExamCard(e) {
-            const colorClasses = e.badge === 'blue' 
-                ? 'text-blue-400 bg-blue-900/30 border-blue-800/30 hover:bg-blue-500 shadow-blue-900/25' 
-                : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30 hover:bg-emerald-500 shadow-emerald-900/25';
-            const badgeClass = e.badge === 'blue' ? 'text-blue-400 bg-blue-900/30 border-blue-800/30' : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30';
+            const isBlue = e.color === 'blue';
+            const badgeClass = isBlue ? 'text-blue-400 bg-blue-900/30 border-blue-800/30' : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30';
+            const btnClass = isBlue ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/25' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/25';
 
             return `
-                <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden flex flex-col h-full">
+                <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden flex flex-col h-full hover:border-slate-700 transition-colors">
                     <span class="text-xs font-bold uppercase tracking-wider ${badgeClass} px-2 py-1 rounded border w-max mb-3">${e.subject}</span>
                     <h3 class="font-bold text-lg mb-1 text-white flex-1">${e.title}</h3>
                     <p class="text-slate-400 text-sm mb-6">${e.desc}</p>
-                    <a href="${e.file}" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
+                    <a href="${e.file}" class="block w-full text-center text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg ${btnClass}">Start Exam</a>
                 </div>
             `;
         }
@@ -414,22 +420,52 @@
             const rawHistory = localStorage.getItem('tlt_score_history_' + currentId);
             const history = rawHistory ? JSON.parse(rawHistory) : [];
 
+            if (history.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 text-center py-4">No history yet.</p>';
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            // Group History by Subject
+            const groupedHistory = {};
             history.forEach(item => {
-                const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
-                list.innerHTML += `
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
-                        <div>
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">${item.subject || 'Exam'}</span>
-                            <h4 class="font-semibold text-white text-sm">${item.examTitle}</h4>
-                            <p class="text-[11px] text-slate-500 mt-0.5">${item.date} • ${item.time || ''}</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xl font-bold ${scoreColor}">${item.percent}%</span>
-                            <p class="text-[11px] font-mono text-slate-400">${item.score}/${item.total} pts</p>
-                        </div>
-                    </div>
-                `;
+                const subj = item.subject || 'Other';
+                if (!groupedHistory[subj]) groupedHistory[subj] = [];
+                groupedHistory[subj].push(item);
             });
+
+            // Render grouped
+            for (const [subjectName, items] of Object.entries(groupedHistory)) {
+                const isBlue = subjectName === 'Anatomy';
+                const headerColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
+                const borderColor = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
+
+                let groupHTML = `
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold uppercase tracking-widest ${headerColor} mb-3 border-b ${borderColor} pb-2">${subjectName}</h4>
+                        <div class="space-y-3">
+                `;
+
+                items.forEach(item => {
+                    const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
+                    groupHTML += `
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <h5 class="font-semibold text-white text-sm">${item.examTitle}</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">${item.date} • ${item.time || ''}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xl font-bold ${scoreColor}">${item.percent}%</span>
+                                <p class="text-[11px] font-mono text-slate-400">${item.score}/${item.total} pts</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                groupHTML += `</div></div>`;
+                list.innerHTML += groupHTML;
+            }
+
             modal.classList.remove('hidden');
         }
 
