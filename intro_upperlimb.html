@@ -33,276 +33,51 @@
         const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
 
         const rawQuestions = [
-            {
-                q: "Which characteristic primarily defines the upper limb as the organ of manual activities?",
-                c: "High mobility",
-                i: ["Weight-bearing capacity", "High stability", "Rigid articulations"],
-                r: "The upper limb is the organ of manual activities, characterized primarily by its high mobility."
-            },
-            {
-                q: "What are the four main regions of the upper limb?",
-                c: "Shoulder, Arm, Forearm, Hand",
-                i: ["Pectoral Girdle, Brachium, Carpus, Phalanges", "Shoulder, Elbow, Wrist, Hand", "Arm, Cubital Fossa, Forearm, Palm"],
-                r: "The upper limb is divided into four main regions: Shoulder, Arm (Brachium), Forearm (Antebrachium), and Hand (Manus)."
-            },
-            {
-                q: "The region located specifically between the shoulder and the elbow is known as what?",
-                c: "Arm (Brachium)",
-                i: ["Forearm (Antebrachium)", "Pectoral Girdle", "Manus"],
-                r: "The Arm (Brachium) is located between the shoulder and the elbow."
-            },
-            {
-                q: "The antebrachium is the anatomical term for which part of the upper limb?",
-                c: "Forearm",
-                i: ["Arm", "Hand", "Shoulder"],
-                r: "The Forearm (Antebrachium) is located between the elbow and the wrist."
-            },
-            {
-                q: "What is the primary functional difference between the upper and lower limbs?",
-                c: "The upper limb is built for prehension/manipulation, whereas the lower limb is built for weight-bearing.",
-                i: ["The upper limb is built for stability, whereas the lower limb is built for mobility.", "The upper limb lacks an opposable joint, whereas the lower limb possesses one.", "The upper limb is primarily for locomotion, whereas the lower limb is for prehension."],
-                r: "The upper limb is built for prehension/manipulation (grasping, holding), whereas the lower limb is built for weight-bearing and locomotion."
-            },
-            {
-                q: "Which limb prioritizes stability over mobility?",
-                c: "Lower limb",
-                i: ["Upper limb", "Both prioritize stability equally", "Neither, both prioritize mobility"],
-                r: "The lower limb prioritizes stability for bearing weight, whereas the upper limb prioritizes mobility over stability."
-            },
-            {
-                q: "Which unique grip capability is a characteristic of the human upper limb that is not applicable to the lower limb?",
-                c: "Precision grip",
-                i: ["Power grip", "Hook grip", "Cylindrical grip"],
-                r: "The upper limb is capable of the precision grip, a unique characteristic of humans; this is not applicable to the lower limb."
-            },
-            {
-                q: "Which bones constitute the pectoral girdle?",
-                c: "Clavicle and Scapula",
-                i: ["Humerus and Scapula", "Sternum and Clavicle", "Radius and Ulna"],
-                r: "The Pectoral Girdle is made up of the Clavicle (collar bone) and Scapula (shoulder blade)."
-            },
-            {
-                q: "With which bone does the humerus articulate at the glenohumeral joint?",
-                c: "Scapula",
-                i: ["Clavicle", "Radius", "Ulna"],
-                r: "The Arm contains the Humerus, which articulates with the scapula at the glenohumeral joint."
-            },
-            {
-                q: "Which bone is the medial bone of the forearm?",
-                c: "Ulna",
-                i: ["Radius", "Humerus", "Scaphoid"],
-                r: "The Ulna is the medial bone closer to the body, which has its primary articulation with the humerus at the elbow."
-            },
-            {
-                q: "Which forearm bone has its primary articulation with the carpal bones at the wrist?",
-                c: "Radius",
-                i: ["Ulna", "Humerus", "Metacarpal"],
-                r: "The Radius is the lateral bone further from the body, which has its primary articulation with the carpal bones at the wrist."
-            },
-            {
-                q: "How many carpal bones are found in the hand?",
-                c: "8",
-                i: ["5", "14", "7"],
-                r: "The Hand consists of 8 Carpals organized into two rows."
-            },
-            {
-                q: "How many phalanges are present in the thumb?",
-                c: "2",
-                i: ["3", "1", "4"],
-                r: "There are 14 Phalanges in the hand, with two in the thumb and three in each finger."
-            },
-            {
-                q: "How many metacarpal bones form the palm?",
-                c: "5",
-                i: ["8", "14", "3"],
-                r: "The Hand consists of 5 Metacarpals that form the palm."
-            },
-            {
-                q: "Through which bone are forces received by the hand primarily transmitted at the wrist joint?",
-                c: "Radius",
-                i: ["Ulna", "Humerus", "Scapula"],
-                r: "Forces received by the hand are primarily transmitted through the Radius at the wrist joint."
-            },
-            {
-                q: "Which structure transfers force from the radius to the ulna?",
-                c: "Interosseous Membrane",
-                i: ["Annular Ligament", "Articular Disc of the wrist", "Radioulnar joint capsule"],
-                r: "The force passes from the radius to the Ulna via the strong Interosseous Membrane."
-            },
-            {
-                q: "Why is the interosseous membrane essential for force transmission from the wrist to the ulna?",
-                c: "Because the ulna does not articulate directly with the carpal bones at the wrist.",
-                i: ["Because the radius does not articulate with the humerus at the elbow.", "Because the ulna is entirely fused with the radius.", "Because the carpal bones are avascular."],
-                r: "This transfer mechanism is absolutely necessary because the Ulna does not articulate directly with the carpal bones at the wrist."
-            },
-            {
-                q: "Which muscles originate outside the hand and produce stronger movements like grasping?",
-                c: "Extrinsic Muscles",
-                i: ["Intrinsic Muscles", "Thenar Muscles", "Lumbricals"],
-                r: "Extrinsic Muscles originate outside the hand (mostly in the forearm) and have long tendons extending into the hand. They produce larger, stronger movements like grasping and pinching."
-            },
-            {
-                q: "Intrinsic hand muscles are responsible for which type of movements?",
-                c: "Shorter, more delicate, and weaker movements",
-                i: ["Larger, stronger movements like grasping", "Flexion of the elbow", "Force transmission to the forearm"],
-                r: "Intrinsic Muscles are confined within the hand and produce shorter, more delicate, and weaker movements, such as typing or finger positioning."
-            },
-            {
-                q: "What action by forearm extensors is essential to enable finger flexors to act powerfully when making a fist?",
-                c: "Extension of the wrist",
-                i: ["Flexion of the elbow", "Pronation of the forearm", "Supination of the forearm"],
-                r: "Extension (or 'cocking') of the wrist by forearm extensors is essential to enable the finger flexors to act powerfully when making a fist."
-            },
-            {
-                q: "Which anterior forearm muscle is exceptionally innervated entirely by the Ulnar Nerve?",
-                c: "Flexor Carpi Ulnaris",
-                i: ["Flexor Digitorum Superficialis", "Pronator Teres", "Flexor Carpi Radialis"],
-                r: "Most anterior forearm muscles are supplied by the Median Nerve, but the Flexor Carpi Ulnaris (FCU) is the exception—it is fully innervated by the Ulnar Nerve."
-            },
-            {
-                q: "From which ventral rami do the major nerves of the upper limb originate?",
-                c: "C5-T1",
-                i: ["C3-C7", "C8-T4", "T1-T5"],
-                r: "The major nerves of the upper limb originate from ventral rami C5-T1."
-            },
-            {
-                q: "Which nerve supplies the Deltoid and Teres Minor muscles?",
-                c: "Axillary Nerve",
-                i: ["Radial Nerve", "Musculocutaneous Nerve", "Suprascapular Nerve"],
-                r: "The Axillary nerve (C5, C6) supplies the Deltoid and Teres Minor (Motor)."
-            },
-            {
-                q: "The Axillary nerve provides sensory innervation to which specific area?",
-                c: "Superior lateral aspect of the arm ('Regimental Badge area')",
-                i: ["Lateral aspect of the forearm", "Medial 1.5 digits", "Posterior forearm"],
-                r: "The Axillary nerve provides sensory innervation to the superior lateral aspect of the arm, known as the 'Regimental Badge area'."
-            },
-            {
-                q: "Which nerve supplies the Biceps Brachii, Brachialis, and Coracobrachialis?",
-                c: "Musculocutaneous Nerve",
-                i: ["Radial Nerve", "Median Nerve", "Ulnar Nerve"],
-                r: "The Musculocutaneous nerve (C5-C7) supplies the anterior arm (Biceps Brachii, Brachialis, Coracobrachialis)."
-            },
-            {
-                q: "Which nerve provides sensory innervation to the lateral aspect of the forearm?",
-                c: "Musculocutaneous Nerve",
-                i: ["Radial Nerve", "Median Nerve", "Axillary Nerve"],
-                r: "The Musculocutaneous nerve provides sensory innervation to the lateral aspect of the forearm."
-            },
-            {
-                q: "Which nerve supplies the Thenar muscles and the lateral 2 Lumbricals?",
-                c: "Median Nerve",
-                i: ["Ulnar Nerve", "Radial Nerve", "Musculocutaneous Nerve"],
-                r: "The Median nerve supplies the anterior forearm flexors/pronators, the Thenar muscles, and the lateral 2 Lumbricals in the hand."
-            },
-            {
-                q: "What is the sensory distribution area of the Median Nerve in the hand?",
-                c: "Lateral 3½ digits and the associated palm",
-                i: ["Medial 1½ digits and medial border of the hand", "Dorsal lateral hand", "Entire palmar surface of all 5 digits"],
-                r: "The sensory area of the Median nerve is the lateral 3½ digits and the associated palm."
-            },
-            {
-                q: "Which nerve supplies the Medial ½ of the Flexor Digitorum Profundus (FDP)?",
-                c: "Ulnar Nerve",
-                i: ["Median Nerve", "Radial Nerve", "Musculocutaneous Nerve"],
-                r: "The Ulnar nerve supplies the FCU, medial ½ of the FDP, and most intrinsic hand muscles."
-            },
-            {
-                q: "What is the sensory distribution area of the Ulnar Nerve?",
-                c: "Medial 1½ digits and medial border of the hand",
-                i: ["Lateral 3½ digits", "Posterior arm and forearm", "Lateral aspect of the forearm"],
-                r: "The sensory area of the Ulnar nerve is the medial 1½ digits and medial border of the hand."
-            },
-            {
-                q: "Which nerve supplies all posterior compartment extensors and supinators of the arm and forearm?",
-                c: "Radial Nerve",
-                i: ["Axillary Nerve", "Musculocutaneous Nerve", "Ulnar Nerve"],
-                r: "The Radial nerve supplies all posterior compartment extensors and supinators of the arm (Triceps) and forearm."
-            },
-            {
-                q: "At which anatomical landmark does the Subclavian Artery become the Axillary Artery?",
-                c: "Lateral border of the 1st rib",
-                i: ["Inferior border of the Teres Major", "Superior border of the Clavicle", "Cubital Fossa"],
-                r: "The Axillary Artery starts at the lateral border of the 1st rib."
-            },
-            {
-                q: "At which landmark does the Axillary Artery become the Brachial Artery?",
-                c: "Inferior border of the Teres Major muscle",
-                i: ["Lateral border of the 1st rib", "Neck of the radius", "Coracoid process"],
-                r: "The Brachial Artery starts at the inferior border of the Teres Major muscle."
-            },
-            {
-                q: "Into which two arteries does the Brachial Artery terminate in the elbow region?",
-                c: "Radial and Ulnar arteries",
-                i: ["Cephalic and Basilic arteries", "Deep Brachial and Superficial Brachial arteries", "Anterior and Posterior Interosseous arteries"],
-                r: "In the elbow region, the Brachial artery terminates into the Radial (lateral) and Ulnar (medial) arteries."
-            },
-            {
-                q: "The radial and ulnar arteries anastomose in the palm to form what structures?",
-                c: "Superficial and Deep Palmar Arches",
-                i: ["Carpal Networks", "Digital Arterial Arches", "Metacarpal Anastomoses"],
-                r: "The radial and ulnar arteries anastomose in the palm to form the Superficial and Deep Palmar Arches."
-            },
-            {
-                q: "Which superficial vein runs on the lateral side of the upper limb?",
-                c: "Cephalic Vein",
-                i: ["Basilic Vein", "Median Cubital Vein", "Brachial Vein"],
-                r: "Key superficial vessels include the Cephalic Vein (lateral side) and the Basilic Vein (medial side)."
-            },
-            {
-                q: "Which prominent vein connects the cephalic and basilic veins in the cubital fossa?",
-                c: "Median Cubital Vein",
-                i: ["Brachial Vein", "Axillary Vein", "Deep Palmar Vein"],
-                r: "The Median Cubital Vein connects the cephalic and basilic veins in the cubital fossa and is the most common site for venipuncture."
-            },
-            {
-                q: "Deep veins that accompany the major arteries are known by what term?",
-                c: "Venae comitantes",
-                i: ["Superficial veins", "Communicating veins", "Anastomotic networks"],
-                r: "Deep Veins are paired veins known as venae comitantes that accompany the major arteries."
-            },
-            {
-                q: "Where do nearly all lymphatics from the upper limb, pectoral region, and breast converge?",
-                c: "Axillary Lymph Nodes",
-                i: ["Cervical Lymph Nodes", "Inguinal Lymph Nodes", "Parasternal Lymph Nodes"],
-                r: "Nearly all lymph from the upper limb, pectoral region, and breast converges at the Axillary Lymph Nodes, making them the main receiving station."
-            },
-            {
-                q: "A fracture of the scaphoid carries a high risk of what complication?",
-                c: "Avascular Necrosis",
-                i: ["Osteoporosis", "Compartment Syndrome", "Nerve entrapment"],
-                r: "Fracture of the Scaphoid carries a high risk of Avascular Necrosis (osteonecrosis) in the proximal fragment."
-            },
-            {
-                q: "Why does the proximal fragment of a scaphoid fracture frequently undergo osteonecrosis?",
-                c: "It has a poor, retrograde blood supply",
-                i: ["It is highly exposed to external friction", "It is heavily innervated but lacks cartilage", "It articulates directly with the ulna"],
-                r: "It carries a high risk of Avascular Necrosis because of its poor, retrograde blood supply."
-            },
-            {
-                q: "What specific injury is referred to as a Boxer's Fracture?",
-                c: "Fracture of the neck of the 5th Metacarpal",
-                i: ["Fracture of the base of the 1st Metacarpal", "Fracture of the scaphoid bone", "Dislocation of the lunate"],
-                r: "A Boxer's Fracture specifically refers to a fracture of the neck of the 5th Metacarpal, which is the most common metacarpal fracture."
-            },
-            {
-                q: "What is a Bennett's Fracture?",
-                c: "An oblique fracture at the base of the 1st Metacarpal extending into the joint",
-                i: ["A fracture of the neck of the 5th Metacarpal", "A transverse fracture of the radius", "A spiral fracture of the humerus"],
-                r: "Bennett's Fracture is an oblique fracture occurring at the base of the 1st Metacarpal (thumb) that extends directly into the joint."
-            },
-            {
-                q: "Where is the ulnar nerve highly exposed and often referred to as the 'funny bone'?",
-                c: "Posterior to the Medial Epicondyle of the Humerus",
-                i: ["Anterior to the Lateral Epicondyle of the Humerus", "Within the Carpal Tunnel", "Superior to the Olecranon process"],
-                r: "The Ulnar nerve is highly exposed where it passes posterior to the Medial Epicondyle of the Humerus (often referred to as the 'funny bone')."
-            },
-            {
-                q: "According to Hilton's Law, which nerves supply the Glenohumeral joint?",
-                c: "Suprascapular, Axillary, and Lateral Pectoral Nerves",
-                i: ["Median, Ulnar, and Radial Nerves", "Musculocutaneous and Radial Nerves", "Medial Pectoral and Thoracodorsal Nerves"],
-                r: "Hilton's Law Example: The Glenohumeral joint's innervation is provided by the Suprascapular, Axillary, and Lateral Pectoral Nerves."
-            }
+            { q: "Which characteristic primarily defines the upper limb as the organ of manual activities?", c: "High mobility", i: ["Weight-bearing capacity", "High stability", "Rigid articulations"], r: "The upper limb is the organ of manual activities, characterized primarily by its high mobility." },
+            { q: "What are the four main regions of the upper limb?", c: "Shoulder, Arm, Forearm, Hand", i: ["Pectoral Girdle, Brachium, Carpus, Phalanges", "Shoulder, Elbow, Wrist, Hand", "Arm, Cubital Fossa, Forearm, Palm"], r: "The upper limb is divided into four main regions: Shoulder, Arm (Brachium), Forearm (Antebrachium), and Hand (Manus)." },
+            { q: "The region located specifically between the shoulder and the elbow is known as what?", c: "Arm (Brachium)", i: ["Forearm (Antebrachium)", "Pectoral Girdle", "Manus"], r: "The Arm (Brachium) is located between the shoulder and the elbow." },
+            { q: "The antebrachium is the anatomical term for which part of the upper limb?", c: "Forearm", i: ["Arm", "Hand", "Shoulder"], r: "The Forearm (Antebrachium) is located between the elbow and the wrist." },
+            { q: "What is the primary functional difference between the upper and lower limbs?", c: "The upper limb is built for prehension/manipulation, whereas the lower limb is built for weight-bearing.", i: ["The upper limb is built for stability, whereas the lower limb is built for mobility.", "The upper limb lacks an opposable joint, whereas the lower limb possesses one.", "The upper limb is primarily for locomotion, whereas the lower limb is for prehension."], r: "The upper limb is built for prehension/manipulation (grasping, holding), whereas the lower limb is built for weight-bearing and locomotion." },
+            { q: "Which limb prioritizes stability over mobility?", c: "Lower limb", i: ["Upper limb", "Both prioritize stability equally", "Neither, both prioritize mobility"], r: "The lower limb prioritizes stability for bearing weight, whereas the upper limb prioritizes mobility over stability." },
+            { q: "Which unique grip capability is a characteristic of the human upper limb that is not applicable to the lower limb?", c: "Precision grip", i: ["Power grip", "Hook grip", "Cylindrical grip"], r: "The upper limb is capable of the precision grip, a unique characteristic of humans; this is not applicable to the lower limb." },
+            { q: "Which bones constitute the pectoral girdle?", c: "Clavicle and Scapula", i: ["Humerus and Scapula", "Sternum and Clavicle", "Radius and Ulna"], r: "The Pectoral Girdle is made up of the Clavicle (collar bone) and Scapula (shoulder blade)." },
+            { q: "With which bone does the humerus articulate at the glenohumeral joint?", c: "Scapula", i: ["Clavicle", "Radius", "Ulna"], r: "The Arm contains the Humerus, which articulates with the scapula at the glenohumeral joint." },
+            { q: "Which bone is the medial bone of the forearm?", c: "Ulna", i: ["Radius", "Humerus", "Scaphoid"], r: "The Ulna is the medial bone closer to the body, which has its primary articulation with the humerus at the elbow." },
+            { q: "Which forearm bone has its primary articulation with the carpal bones at the wrist?", c: "Radius", i: ["Ulna", "Humerus", "Metacarpal"], r: "The Radius is the lateral bone further from the body, which has its primary articulation with the carpal bones at the wrist." },
+            { q: "How many carpal bones are found in the hand?", c: "8", i: ["5", "14", "7"], r: "The Hand consists of 8 Carpals organized into two rows." },
+            { q: "How many phalanges are present in the thumb?", c: "2", i: ["3", "1", "4"], r: "There are 14 Phalanges in the hand, with two in the thumb and three in each finger." },
+            { q: "How many metacarpal bones form the palm?", c: "5", i: ["8", "14", "3"], r: "The Hand consists of 5 Metacarpals that form the palm." },
+            { q: "Through which bone are forces received by the hand primarily transmitted at the wrist joint?", c: "Radius", i: ["Ulna", "Humerus", "Scapula"], r: "Forces received by the hand are primarily transmitted through the Radius at the wrist joint." },
+            { q: "Which structure transfers force from the radius to the ulna?", c: "Interosseous Membrane", i: ["Annular Ligament", "Articular Disc of the wrist", "Radioulnar joint capsule"], r: "The force passes from the radius to the Ulna via the strong Interosseous Membrane." },
+            { q: "Why is the interosseous membrane essential for force transmission from the wrist to the ulna?", c: "Because the ulna does not articulate directly with the carpal bones at the wrist.", i: ["Because the radius does not articulate with the humerus at the elbow.", "Because the ulna is entirely fused with the radius.", "Because the carpal bones are avascular."], r: "This transfer mechanism is absolutely necessary because the Ulna does not articulate directly with the carpal bones at the wrist." },
+            { q: "Which muscles originate outside the hand and produce stronger movements like grasping?", c: "Extrinsic Muscles", i: ["Intrinsic Muscles", "Thenar Muscles", "Lumbricals"], r: "Extrinsic Muscles originate outside the hand (mostly in the forearm) and have long tendons extending into the hand. They produce larger, stronger movements like grasping and pinching." },
+            { q: "Intrinsic hand muscles are responsible for which type of movements?", c: "Shorter, more delicate, and weaker movements", i: ["Larger, stronger movements like grasping", "Flexion of the elbow", "Force transmission to the forearm"], r: "Intrinsic Muscles are confined within the hand and produce shorter, more delicate, and weaker movements, such as typing or finger positioning." },
+            { q: "What action by forearm extensors is essential to enable finger flexors to act powerfully when making a fist?", c: "Extension of the wrist", i: ["Flexion of the elbow", "Pronation of the forearm", "Supination of the forearm"], r: "Extension (or 'cocking') of the wrist by forearm extensors is essential to enable the finger flexors to act powerfully when making a fist." },
+            { q: "Which anterior forearm muscle is exceptionally innervated entirely by the Ulnar Nerve?", c: "Flexor Carpi Ulnaris", i: ["Flexor Digitorum Superficialis", "Pronator Teres", "Flexor Carpi Radialis"], r: "Most anterior forearm muscles are supplied by the Median Nerve, but the Flexor Carpi Ulnaris (FCU) is the exception—it is fully innervated by the Ulnar Nerve." },
+            { q: "From which ventral rami do the major nerves of the upper limb originate?", c: "C5-T1", i: ["C3-C7", "C8-T4", "T1-T5"], r: "The major nerves of the upper limb originate from ventral rami C5-T1." },
+            { q: "Which nerve supplies the Deltoid and Teres Minor muscles?", c: "Axillary Nerve", i: ["Radial Nerve", "Musculocutaneous Nerve", "Suprascapular Nerve"], r: "The Axillary nerve (C5, C6) supplies the Deltoid and Teres Minor (Motor)." },
+            { q: "The Axillary nerve provides sensory innervation to which specific area?", c: "Superior lateral aspect of the arm ('Regimental Badge area')", i: ["Lateral aspect of the forearm", "Medial 1.5 digits", "Posterior forearm"], r: "The Axillary nerve provides sensory innervation to the superior lateral aspect of the arm, known as the 'Regimental Badge area'." },
+            { q: "Which nerve supplies the Biceps Brachii, Brachialis, and Coracobrachialis?", c: "Musculocutaneous Nerve", i: ["Radial Nerve", "Median Nerve", "Ulnar Nerve"], r: "The Musculocutaneous nerve (C5-C7) supplies the anterior arm (Biceps Brachii, Brachialis, Coracobrachialis)." },
+            { q: "Which nerve provides sensory innervation to the lateral aspect of the forearm?", c: "Musculocutaneous Nerve", i: ["Radial Nerve", "Median Nerve", "Axillary Nerve"], r: "The Musculocutaneous nerve provides sensory innervation to the lateral aspect of the forearm." },
+            { q: "Which nerve supplies the Thenar muscles and the lateral 2 Lumbricals?", c: "Median Nerve", i: ["Ulnar Nerve", "Radial Nerve", "Musculocutaneous Nerve"], r: "The Median nerve supplies the anterior forearm flexors/pronators, the Thenar muscles, and the lateral 2 Lumbricals in the hand." },
+            { q: "What is the sensory distribution area of the Median Nerve in the hand?", c: "Lateral 3½ digits and the associated palm", i: ["Medial 1½ digits and medial border of the hand", "Dorsal lateral hand", "Entire palmar surface of all 5 digits"], r: "The sensory area of the Median nerve is the lateral 3½ digits and the associated palm." },
+            { q: "Which nerve supplies the Medial ½ of the Flexor Digitorum Profundus (FDP)?", c: "Ulnar Nerve", i: ["Median Nerve", "Radial Nerve", "Musculocutaneous Nerve"], r: "The Ulnar nerve supplies the FCU, medial ½ of the FDP, and most intrinsic hand muscles." },
+            { q: "What is the sensory distribution area of the Ulnar Nerve?", c: "Medial 1½ digits and medial border of the hand", i: ["Lateral 3½ digits", "Posterior arm and forearm", "Lateral aspect of the forearm"], r: "The sensory area of the Ulnar nerve is the medial 1½ digits and medial border of the hand." },
+            { q: "Which nerve supplies all posterior compartment extensors and supinators of the arm and forearm?", c: "Radial Nerve", i: ["Axillary Nerve", "Musculocutaneous Nerve", "Ulnar Nerve"], r: "The Radial nerve supplies all posterior compartment extensors and supinators of the arm (Triceps) and forearm." },
+            { q: "At which anatomical landmark does the Subclavian Artery become the Axillary Artery?", c: "Lateral border of the 1st rib", i: ["Inferior border of the Teres Major", "Superior border of the Clavicle", "Cubital Fossa"], r: "The Axillary Artery starts at the lateral border of the 1st rib." },
+            { q: "At which landmark does the Axillary Artery become the Brachial Artery?", c: "Inferior border of the Teres Major muscle", i: ["Lateral border of the 1st rib", "Neck of the radius", "Coracoid process"], r: "The Brachial Artery starts at the inferior border of the Teres Major muscle." },
+            { q: "Into which two arteries does the Brachial Artery terminate in the elbow region?", c: "Radial and Ulnar arteries", i: ["Cephalic and Basilic arteries", "Deep Brachial and Superficial Brachial arteries", "Anterior and Posterior Interosseous arteries"], r: "In the elbow region, the Brachial artery terminates into the Radial (lateral) and Ulnar (medial) arteries." },
+            { q: "The radial and ulnar arteries anastomose in the palm to form what structures?", c: "Superficial and Deep Palmar Arches", i: ["Carpal Networks", "Digital Arterial Arches", "Metacarpal Anastomoses"], r: "The radial and ulnar arteries anastomose in the palm to form the Superficial and Deep Palmar Arches." },
+            { q: "Which superficial vein runs on the lateral side of the upper limb?", c: "Cephalic Vein", i: ["Basilic Vein", "Median Cubital Vein", "Brachial Vein"], r: "Key superficial vessels include the Cephalic Vein (lateral side) and the Basilic Vein (medial side)." },
+            { q: "Which prominent vein connects the cephalic and basilic veins in the cubital fossa?", c: "Median Cubital Vein", i: ["Brachial Vein", "Axillary Vein", "Deep Palmar Vein"], r: "The Median Cubital Vein connects the cephalic and basilic veins in the cubital fossa and is the most common site for venipuncture." },
+            { q: "Deep veins that accompany the major arteries are known by what term?", c: "Venae comitantes", i: ["Superficial veins", "Communicating veins", "Anastomotic networks"], r: "Deep Veins are paired veins known as venae comitantes that accompany the major arteries." },
+            { q: "Where do nearly all lymphatics from the upper limb, pectoral region, and breast converge?", c: "Axillary Lymph Nodes", i: ["Cervical Lymph Nodes", "Inguinal Lymph Nodes", "Parasternal Lymph Nodes"], r: "Nearly all lymph from the upper limb, pectoral region, and breast converges at the Axillary Lymph Nodes, making them the main receiving station." },
+            { q: "A fracture of the scaphoid carries a high risk of what complication?", c: "Avascular Necrosis", i: ["Osteoporosis", "Compartment Syndrome", "Nerve entrapment"], r: "Fracture of the Scaphoid carries a high risk of Avascular Necrosis (osteonecrosis) in the proximal fragment." },
+            { q: "Why does the proximal fragment of a scaphoid fracture frequently undergo osteonecrosis?", c: "It has a poor, retrograde blood supply", i: ["It is highly exposed to external friction", "It is heavily innervated but lacks cartilage", "It articulates directly with the ulna"], r: "It carries a high risk of Avascular Necrosis because of its poor, retrograde blood supply." },
+            { q: "What specific injury is referred to as a Boxer's Fracture?", c: "Fracture of the neck of the 5th Metacarpal", i: ["Fracture of the base of the 1st Metacarpal", "Fracture of the scaphoid bone", "Dislocation of the lunate"], r: "A Boxer's Fracture specifically refers to a fracture of the neck of the 5th Metacarpal, which is the most common metacarpal fracture." },
+            { q: "What is a Bennett's Fracture?", c: "An oblique fracture at the base of the 1st Metacarpal extending into the joint", i: ["A fracture of the neck of the 5th Metacarpal", "A transverse fracture of the radius", "A spiral fracture of the humerus"], r: "Bennett's Fracture is an oblique fracture occurring at the base of the 1st Metacarpal (thumb) that extends directly into the joint." },
+            { q: "Where is the ulnar nerve highly exposed and often referred to as the 'funny bone'?", c: "Posterior to the Medial Epicondyle of the Humerus", i: ["Anterior to the Lateral Epicondyle of the Humerus", "Within the Carpal Tunnel", "Superior to the Olecranon process"], r: "The Ulnar nerve is highly exposed where it passes posterior to the Medial Epicondyle of the Humerus (often referred to as the 'funny bone')." },
+            { q: "According to Hilton's Law, which nerves supply the Glenohumeral joint?", c: "Suprascapular, Axillary, and Lateral Pectoral Nerves", i: ["Median, Ulnar, and Radial Nerves", "Musculocutaneous and Radial Nerves", "Medial Pectoral and Thoracodorsal Nerves"], r: "Hilton's Law Example: The Glenohumeral joint's innervation is provided by the Suprascapular, Axillary, and Lateral Pectoral Nerves." }
         ];
 
         let candidateID = ""; 
@@ -310,6 +85,7 @@
         let questions = []; 
         let currentQ = 0; 
         let answers = {}; 
+        let flagged = {};
         let timeLeft = TOTAL_TIME_SECONDS; 
         let isSubmitted = false; 
         let timerInterval;
@@ -328,42 +104,29 @@
             book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
             clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
             check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
-            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+            flag: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>`,
+            flagSolid: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>`
         };
 
-        function getActiveStateKey(id) {
-            return `tlt_active_exam_${EXAM_KEY}_${id}`;
-        }
+        const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+        function getActiveStateKey(id) { return `tlt_active_exam_${EXAM_KEY}_${id}`; }
 
         function saveActiveState() {
             if (!candidateID || isSubmitted) return;
-            const state = {
-                candidateID,
-                candidateDept,
-                questions,
-                currentQ,
-                answers,
-                examStartTime,
-                totalTime: TOTAL_TIME_SECONDS
-            };
+            const state = { candidateID, candidateDept, questions, currentQ, answers, flagged, examStartTime, totalTime: TOTAL_TIME_SECONDS };
             localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
         }
 
         function clearActiveState() {
-            if (candidateID) {
-                localStorage.removeItem(getActiveStateKey(candidateID));
-            }
+            if (candidateID) localStorage.removeItem(getActiveStateKey(candidateID));
         }
 
         function initApp() {
             const rawSession = localStorage.getItem('tlt_session');
             let sessionID = "";
-            if (rawSession) {
-                try {
-                    const session = JSON.parse(rawSession);
-                    sessionID = session.id || "";
-                } catch(e) {}
-            }
+            if (rawSession) { try { sessionID = JSON.parse(rawSession).id || ""; } catch(e) {} }
 
             if (sessionID) {
                 const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
@@ -374,26 +137,16 @@
                         const remaining = state.totalTime - elapsed;
 
                         if (remaining > 0) {
-                            candidateID = state.candidateID;
-                            candidateDept = state.candidateDept;
-                            questions = state.questions;
-                            currentQ = state.currentQ || 0;
-                            answers = state.answers || {};
-                            timeLeft = remaining;
-                            examStartTime = state.examStartTime;
-
-                            startTimer();
-                            renderExam();
-                            return;
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; currentQ = state.currentQ || 0;
+                            answers = state.answers || {}; flagged = state.flagged || {};
+                            timeLeft = remaining; examStartTime = state.examStartTime;
+                            startTimer(); renderExam(); return;
                         } else {
-                            candidateID = state.candidateID;
-                            candidateDept = state.candidateDept;
-                            questions = state.questions;
-                            answers = state.answers || {};
-                            timeLeft = 0;
-                            clearActiveState();
-                            submitQuiz();
-                            return;
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; answers = state.answers || {}; 
+                            flagged = state.flagged || {}; timeLeft = 0;
+                            clearActiveState(); submitQuiz(); return;
                         }
                     } catch(e) {}
                 }
@@ -402,15 +155,12 @@
             renderLogin();
             if (sessionID) {
                 const idField = document.getElementById('cand-id');
-                if (idField) {
-                    idField.value = sessionID;
-                    validateInput();
-                }
+                if (idField) { idField.value = sessionID; validateInput(); }
             }
         }
 
         function validateInput() {
-            const idInput = document.getElementById('cand-id').value.trim();
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
             const dInput = document.getElementById('cand-dept').value.trim();
             const btn = document.getElementById('start-btn');
             const errorMsg = document.getElementById('id-error');
@@ -438,11 +188,8 @@
                 return { ...q, options: opts }; 
             });
 
-            examStartTime = Date.now();
-            timeLeft = TOTAL_TIME_SECONDS;
-            saveActiveState();
-            startTimer();
-            renderExam();
+            examStartTime = Date.now(); timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState(); startTimer(); renderExam();
         }
 
         function startTimer() {
@@ -458,8 +205,7 @@
                         if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
                     }
                 } else if (timeLeft <= 0 && !isSubmitted) {
-                    clearInterval(timerInterval);
-                    submitQuiz();
+                    clearInterval(timerInterval); submitQuiz();
                 }
             }, 1000);
         }
@@ -475,9 +221,11 @@
                     <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
                     <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions</strong>.</p>
                     <div class="w-full max-w-md space-y-4">
-                        <div class="relative">${icons.user}<input type="text" id="cand-id" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
-                        <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
-                        <button id="start-btn" disabled onclick="startExam()" class="w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
                     </div>
                 </div>`;
         }
@@ -490,14 +238,17 @@
             const q = questions[currentQ]; 
             const hasAnsweredAll = Object.keys(answers).length === questions.length; 
             const progressPct = (Object.keys(answers).length / questions.length) * 100;
+            const isFlagged = flagged[currentQ] || false;
             
             let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
             questions.forEach((_, idx) => {
                 const isAns = answers[idx] !== undefined; 
                 const isCurr = idx === currentQ;
+                const isF = flagged[idx];
                 let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
                 if (isCurr && isAns) btnClass += "bg-blue-600 text-white shadow-md shadow-blue-500/30";
                 else if (isCurr) btnClass += "border-2 border-blue-500 text-blue-400 bg-blue-950/50";
+                else if (isF) btnClass += "bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 hover:bg-yellow-900";
                 else if (isAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
                 else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
                 gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
@@ -508,7 +259,11 @@
             q.options.forEach((opt, idx) => {
                 const isSelected = answers[currentQ] === opt;
                 optionsHTML += `<button onclick="selectOption(${idx})" class="option-btn w-full text-left p-4 rounded-xl border-2 ${isSelected ? 'border-blue-500 bg-blue-950/40' : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900'}">
-                    <div class="flex items-start gap-4"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${isSelected ? 'border-blue-500 bg-blue-600' : 'border-slate-700'}">${isSelected ? '<div class="w-2.5 h-2.5 rounded-full bg-white"></div>' : ''}</div><span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span></div></button>`;
+                    <div class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 font-bold text-xs ${isSelected ? 'border-blue-500 bg-blue-600 text-white' : 'border-slate-700 text-slate-500'}">${optionLetters[idx]}</div>
+                        <span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span>
+                    </div>
+                </button>`;
             }); 
             optionsHTML += `</div>`;
 
@@ -519,7 +274,12 @@
                         <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
                         <div class="text-xs mt-1 font-mono text-slate-400">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleFlag()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFlagged ? 'bg-yellow-900/40 border-yellow-700/50 text-yellow-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'} transition-colors text-xs font-semibold">
+                            ${isFlagged ? icons.flagSolid : icons.flag} ${isFlagged ? 'Flagged' : 'Flag for Review'}
+                        </button>
+                        <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    </div>
                 </div>
                 <div class="h-1 w-full bg-slate-950"><div class="h-full bg-blue-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
                 <div class="p-6 md:p-8 flex-1 flex flex-col">
@@ -543,9 +303,7 @@
         }
 
         async function submitQuiz() {
-            isSubmitted = true; 
-            clearInterval(timerInterval);
-            clearActiveState();
+            isSubmitted = true; clearInterval(timerInterval); clearActiveState();
 
             appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
             
@@ -561,15 +319,7 @@
             const dateStr = now.toLocaleDateString();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
-            const newRecord = { 
-                examTitle: EXAM_TOPIC, 
-                subject: EXAM_SUBJECT,
-                score: score, 
-                total: questions.length, 
-                percent: percentage, 
-                date: dateStr,
-                time: timeStr
-            };
+            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr };
 
             try {
                 const storageKey = 'tlt_score_history_' + candidateID;
@@ -581,44 +331,26 @@
             if (WEB3FORMS_ACCESS_KEY) {
                 try {
                     const response = await fetch('https://api.web3forms.com/submit', { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
-                        body: JSON.stringify({ 
-                            access_key: WEB3FORMS_ACCESS_KEY, 
-                            name: candidateID, 
-                            email: "system@mockexam.com", 
-                            subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, 
-                            from_name: "Mock Exam Portal", 
-                            Subject: EXAM_SUBJECT,
-                            Topic: EXAM_TOPIC, 
-                            Candidate_ID: candidateID, 
-                            Department: candidateDept, 
-                            Score: `${score} out of ${questions.length} (${percentage}%)`, 
-                            Time_Spent: formatTime(timeSpentSeconds) 
-                        }) 
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, name: candidateID, email: "system@mockexam.com", subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, from_name: "Mock Exam Portal", Subject: EXAM_SUBJECT, Topic: EXAM_TOPIC, Candidate_ID: candidateID, Department: candidateDept, Score: `${score} out of ${questions.length} (${percentage}%)`, Time_Spent: formatTime(timeSpentSeconds) }) 
                     });
-                    if (response.status === 200) { 
-                        emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; 
-                    } else { throw new Error("Failed"); }
-                } catch (e) { 
-                    emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; 
-                }
+                    if (response.status === 200) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; } else { throw new Error("Failed"); }
+                } catch (e) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; }
             } 
             renderResults(score, percentage, emailStatus, dateStr, timeStr);
         }
 
+        let currentResultFilter = 'all';
+
         function renderResults(score, percentage, emailStatus, dateStr, timeStr) {
             const strokeColor = percentage >= 70 ? '#22c55e' : percentage >= 50 ? '#f59e0b' : '#ef4444';
-            let resultsHTML = `
+            
+            appDiv.innerHTML = `
                 <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
                     <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-blue-900/40 text-blue-400 border border-blue-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
                     <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
                     <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
-                        <span class="text-blue-400 font-bold">${candidateID}</span>
-                        <span class="text-slate-600">•</span>
-                        <span class="text-slate-300 font-sans">${candidateDept}</span>
-                        <span class="text-slate-600">•</span>
-                        <span>${dateStr} ${timeStr}</span>
+                        <span class="text-blue-400 font-bold">${candidateID}</span> <span class="text-slate-600">•</span> <span class="text-slate-300 font-sans">${candidateDept}</span> <span class="text-slate-600">•</span> <span>${dateStr} ${timeStr}</span>
                     </div>
                 </div>
 
@@ -632,7 +364,6 @@
                     </div>
                     <h2 class="text-2xl font-black text-white mb-2">${score} / ${questions.length} Correct</h2>
                     <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider font-semibold">${percentage >= 70 ? 'Distinction Standard' : percentage >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
-
                     <div class="flex justify-center">
                         <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-900/30 active:scale-95">Return to Dashboard</a>
                     </div>
@@ -640,17 +371,57 @@
                 </div>
 
                 <div class="p-6 md:p-10 bg-slate-950 flex-1">
-                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">Question Analysis</h3>
-                    <div class="space-y-6">`;
-            
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="text-lg font-bold text-white">Question Analysis</h3>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800 overflow-x-auto custom-scroll w-full md:w-auto">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap">All</button>
+                            <button onclick="setResultFilter('correct')" id="filter-btn-correct" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Correct</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Incorrect</button>
+                            <button onclick="setResultFilter('answered')" id="filter-btn-answered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Answered</button>
+                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Unanswered</button>
+                        </div>
+                    </div>
+                    <div id="results-container" class="space-y-6"></div>
+                </div>
+            `;
+            currentResultFilter = 'all';
+            renderResultQuestions();
+        }
+
+        function setResultFilter(filter) {
+            currentResultFilter = filter;
+            ['all', 'correct', 'incorrect', 'answered', 'unanswered'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap";
+            });
+            renderResultQuestions();
+        }
+
+        function renderResultQuestions() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            let count = 0;
+
             questions.forEach((q, index) => {
                 const userAns = answers[index]; 
                 const isCorrect = userAns === q.c;
+                const isAnswered = userAns !== undefined;
+                
+                if (currentResultFilter === 'correct' && !isCorrect) return;
+                if (currentResultFilter === 'incorrect' && (isCorrect || !isAnswered)) return;
+                if (currentResultFilter === 'answered' && !isAnswered) return;
+                if (currentResultFilter === 'unanswered' && isAnswered) return;
+
+                count++;
                 const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
-                resultsHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/40"><span class="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
-            }); 
-            resultsHTML += `</div></div>`; 
-            appDiv.innerHTML = resultsHTML;
+                
+                container.innerHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/40"><span class="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
+            });
+
+            if (count === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-8">No questions match this filter.</p>`;
+            }
         }
 
         function formatTime(seconds) { 
@@ -658,27 +429,29 @@
             const s = (seconds % 60).toString().padStart(2, '0'); 
             return `${m}:${s}`; 
         }
+
         window.selectOption = function(idx) { 
             if (isSubmitted) return; 
             answers[currentQ] = questions[currentQ].options[idx]; 
-            saveActiveState();
-            renderExam(); 
+            saveActiveState(); renderExam(); 
         }
         window.changeQ = function(delta) { 
             if (isSubmitted) return; 
             const newQ = currentQ + delta; 
             if (newQ >= 0 && newQ < questions.length) { 
-                currentQ = newQ; 
-                saveActiveState();
-                renderExam(); 
+                currentQ = newQ; saveActiveState(); renderExam(); 
             } 
         }
         window.jumpToQ = function(idx) { 
             if (isSubmitted) return; 
-            currentQ = idx; 
-            saveActiveState();
-            renderExam(); 
+            currentQ = idx; saveActiveState(); renderExam(); 
         }
+        window.toggleFlag = function() {
+            if (isSubmitted) return;
+            flagged[currentQ] = !flagged[currentQ];
+            saveActiveState(); renderExam();
+        }
+
         initApp();
     </script>
 </body>
