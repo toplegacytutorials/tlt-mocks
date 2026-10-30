@@ -392,8 +392,13 @@
                 history.slice(0, 2).forEach(item => {
                     const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
                     
-                    const examData = exams.find(x => x.title === item.examTitle);
-                    const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : '';
+                    // Fuzzy match for older saved titles
+                    const examData = exams.find(x => 
+                        item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
+                        x.title.toLowerCase().includes(item.examTitle.toLowerCase())
+                    );
+                    
+                    const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : 'General';
 
                     historyGrid.innerHTML += `
                         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-md">
@@ -431,12 +436,14 @@
             }
 
             // --- DEEP GROUPING LOGIC ---
-            // Structure: Subject -> Sub-Discipline -> Topic -> Exam Title -> [Attempts]
             const grouped = {};
 
             history.forEach(item => {
-                // Find the exam metadata to get sub and topic
-                const examData = exams.find(x => x.title === item.examTitle);
+                // Fuzzy match to fix older records missing the exact string
+                const examData = exams.find(x => 
+                    item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
+                    x.title.toLowerCase().includes(item.examTitle.toLowerCase())
+                );
                 
                 const subj = item.subject || examData?.subject || 'Other';
                 const sub = examData?.sub || 'General';
@@ -463,16 +470,21 @@
                 `;
 
                 for (const [subName, topics] of Object.entries(subs)) {
-                    groupHTML += `
-                        <div class="mb-5 ml-2">
-                            <h5 class="text-[13px] font-bold text-slate-200 uppercase tracking-wide mb-2 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
-                                ${subName}
-                            </h5>
-                    `;
+                    // Hide the folder icon/text if it defaulted to "General"
+                    if (subName !== 'General') {
+                        groupHTML += `
+                            <div class="mb-5 ml-2">
+                                <h5 class="text-[13px] font-bold text-slate-200 uppercase tracking-wide mb-2 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                                    ${subName}
+                                </h5>
+                        `;
+                    } else {
+                        groupHTML += `<div class="mb-5 ml-2">`;
+                    }
 
                     for (const [topicName, titles] of Object.entries(topics)) {
-                        // Only show Topic header if it's not "General" (i.e. Physiology has no topic)
+                        // Hide the topic header if it defaulted to "General"
                         if (topicName !== 'General') {
                             groupHTML += `
                                 <div class="ml-6 mb-3">
