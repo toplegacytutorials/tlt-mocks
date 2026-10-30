@@ -13,9 +13,9 @@
         .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
         @keyframes progress { 0% { stroke-dasharray: 0 100; } }
         .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
-        .custom-scroll::-webkit-scrollbar { height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; border: 2px solid #020617; }
         .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
@@ -31,9 +31,10 @@
         const EXAM_TOPIC = "ANATOMY - INTRO TO LOWER LIMB";
         const TOTAL_TIME_SECONDS = 1800; // 30 minutes
         const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+        const SUPABASE_URL = "https://ksrwydkxfxtaurgebsw.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_1zftOHVUoxY6RGRPdYeZzg_Nq6MDzAv";
 
         const rawQuestions = [
-            // MODULE 1: OVERVIEW & REGIONS
             { q: "A patient presents with a severe tear of the triceps surae muscle following a sports injury. In which specific region of the lower limb is this prominent muscular bulge located?", c: "Leg region", i: ["Gluteal region", "Thigh region", "Ankle region", "Foot region"], r: "The calf (L. sura), which is the prominent bulge on the posterior aspect of the leg, is formed mainly by the triceps surae muscle." },
             { q: "During a surgical procedure involving the posterolateral hip, the surgeon uses the intergluteal cleft as a medial boundary. What structure serves as the inferior boundary of the buttock?", c: "Gluteal fold", i: ["Iliac crest", "Inguinal ligament", "Sacrotuberous ligament", "Ischial tuberosity"], r: "The boundaries of the buttock are: Superior (Iliac crest), Medial (Intergluteal cleft), Inferior (Gluteal fold)." },
             { q: "A student identifies a region of the lower limb that extends from the hip to the knee and contains the largest and strongest bone in the body. Which anatomical region is being examined?", c: "Thigh or Femoral Region", i: ["Gluteal Region", "Leg Region", "Talocrural Region", "Foot Region"], r: "The thigh or femoral region extends from the hip to the knee, containing the femur (the largest and strongest bone)." },
@@ -44,8 +45,6 @@
             { q: "Which of the following correctly describes the anatomical junction of the leg and the foot?", c: "It features the medial and lateral malleoli and articulates with the talus", i: ["It is separated anteriorly by the inguinal ligament", "It contains the patella and the femoral condyles", "It is defined posteriorly by the gluteal fold", "It consists of 14 phalanges and 5 metatarsals"], r: "The ankle or talocrural region is the junction between the leg and the foot, featuring the medial and lateral malleoli. Articulation occurs between the talus bone and the malleoli." },
             { q: "The hamstring (L. poples) is a term used to describe which specific anatomical area?", c: "The lower aspect of the back of the thigh and the back of the knee", i: ["The anterior aspect of the thigh", "The lateral aspect of the gluteal region", "The medial aspect of the leg", "The dorsal surface of the foot"], r: "Hamstring (L. poples) refers to the lower aspect of the back of the thigh and the back of the knee." },
             { q: "During a clinical examination, a physician palpates the non-weight-bearing bone of the leg. Which statement correctly identifies this bone?", c: "The fibula, which is lateral and slender", i: ["The tibia, which is medial and thick", "The talus, which acts as the keystone", "The calcaneus, which forms the heel", "The patella, which is a sesamoid bone"], r: "The leg region contains the weight-bearing tibia (medial and thick) and the non-weight-bearing fibula (lateral and slender)." },
-
-            // MODULE 2: BIOMECHANICS & WEIGHT TRANSMISSION
             { q: "In a patient with severe osteoporosis, the pathway of body weight transmission is critical. Weight transfers from the vertebral column to the femurs via which correct sequence?", c: "Sacroiliac joints ➔ pelvic girdle ➔ hip joints ➔ femurs", i: ["Hip joints ➔ pelvic girdle ➔ sacroiliac joints ➔ femurs", "Pelvic girdle ➔ sacroiliac joints ➔ hip joints ➔ femurs", "Sacroiliac joints ➔ hip joints ➔ pelvic girdle ➔ femurs", "Hip joints ➔ sacroiliac joints ➔ pelvic girdle ➔ femurs"], r: "The pathway is: vertebral column ➔ sacroiliac joints ➔ pelvic girdle ➔ hip joints ➔ femurs." },
             { q: "During standing, the body's line of gravity plays a crucial role in balance. How does this line relate to the hip, knee, and ankle joints?", c: "Posterior to the hip joint, anterior to the knee and ankle joints", i: ["Anterior to the hip joint, posterior to the knee and ankle joints", "Anterior to the hip and knee joints, posterior to the ankle joint", "Posterior to the hip and knee joints, anterior to the ankle joint", "Directly through the center of the hip, knee, and ankle joints"], r: "The body's line of gravity falls posterior to the hip joint and anterior to the knee and ankle joints." },
             { q: "A patient suffers a fracture of the talus, severely impacting the structural integrity of the foot. Which critical biomechanical role does the talus play in weight distribution?", c: "It acts as the keystone of the arch", i: ["It acts as the primary weight-bearing heel bone", "It forms the lateral malleolus", "It serves as the insertion point for the triceps surae", "It provides the main sesamoid support for the 1st metatarsal"], r: "Weight is passed from the tibia ➔ talus (which acts as the keystone of the arch) ➔ and is then distributed to the heel and forefoot arches." },
@@ -56,8 +55,6 @@
             { q: "Which of the following accurately describes the six anterior pillars that bear weight in the foot?", c: "The heads of the four lateral metatarsals and the two sesamoids under the 1st metatarsal head", i: ["The heads of all five metatarsals and the calcaneus", "The medial and lateral malleoli and the four lateral metatarsals", "The navicular, cuboid, and three cuneiforms", "The calcaneus and the heads of the medial three metatarsals"], r: "The six anterior pillars consist of the heads of the four lateral metatarsals + the two sesamoids under the 1st metatarsal head." },
             { q: "In efficient bipedal standing, what is the primary anatomical advantage of the oblique orientation of the human femur?", c: "It brings the knees directly beneath the trunk", i: ["It increases the length of the limb for running", "It allows for a wider pelvic inlet", "It reduces the weight-bearing load on the tibia", "It facilitates a prehensile foot posture"], r: "Human femurs are oblique (directed inferomedially) for efficient bipedal standing, bringing the knees directly beneath the trunk." },
             { q: "A patient with a calcaneal fracture experiences altered weight-bearing. Which portion of the foot's weight-bearing mechanism is directly compromised?", c: "The posterior weight-bearing point", i: ["The keystone of the arch", "The anterior pillars", "The medial longitudinal arch", "The transverse arch"], r: "Weight is ultimately borne by the calcaneus (posteriorly) and six anterior pillars." },
-
-            // MODULE 3: NEUROVASCULAR SUPPLY
             { q: "A patient presents with weakness in the medial thigh muscles. A lesion is suspected in the nerve that primarily supplies this compartment. Which nerve is most likely affected?", c: "Obturator nerve", i: ["Femoral nerve", "Sciatic nerve", "Tibial nerve", "Common peroneal nerve"], r: "The Obturator nerve supplies the medial thigh muscles." },
             { q: "During a high-energy trauma, the largest nerve in the body is injured, affecting the posterior thigh. This nerve is a branch of which plexus, and what does it split into?", c: "Sacral plexus; splits into tibial and common peroneal nerves", i: ["Lumbar plexus; splits into femoral and obturator nerves", "Sacral plexus; splits into tibial and sural nerves", "Lumbar plexus; splits into deep and superficial peroneal nerves", "Sacral plexus; splits into medial and lateral plantar nerves"], r: "The Sciatic nerve is the largest nerve in the body; supplies the posterior thigh and splits into the tibial and common peroneal nerves." },
             { q: "A clinician is assessing a patient's arterial supply to the anterior leg. The common peroneal nerve splits into deep and superficial branches. Which compartment does the deep branch supply?", c: "Anterior leg", i: ["Lateral leg", "Posterior leg", "Medial thigh", "Anterior thigh"], r: "The common peroneal nerve splits into deep (supplies anterior leg) and superficial (supplies lateral leg) branches." },
@@ -71,8 +68,6 @@
             { q: "The common peroneal nerve splits into two main branches. Which compartment of the leg is supplied by the superficial branch?", c: "Lateral leg", i: ["Anterior leg", "Posterior leg", "Medial leg", "Deep posterior leg"], r: "The common peroneal nerve splits into deep (supplies anterior leg) and superficial (supplies lateral leg) branches." },
             { q: "A terminal branch of the tibial nerve is found in the sole of the foot. What are these two terminal branches called?", c: "Medial and lateral plantar nerves", i: ["Deep and superficial peroneal nerves", "Sural and saphenous nerves", "Dorsal and plantar digital nerves", "Femoral and obturator nerves"], r: "Medial and lateral plantar nerves: Terminal branches of the tibial nerve located in the sole of the foot." },
             { q: "During a procedure in the popliteal fossa, the surgeon identifies the continuation of the femoral artery. This structure is the:", c: "Popliteal artery", i: ["Anterior tibial artery", "Posterior tibial artery", "Profunda femoris artery", "Dorsalis pedis artery"], r: "Popliteal artery: Continuation of the femoral artery in the popliteal fossa." },
-
-            // MODULE 4: VEINS, LYMPHATICS & CLINICAL CORRELATIONS
             { q: "A patient presents with a painful, pale, pulseless lower limb. A diagnosis of acute arterial occlusion is made. Which of the following is NOT one of the classic 5 P's of this condition?", c: "Pruitis", i: ["Pallor", "Paresthesia", "Paralysis", "Pulselessness"], r: "Acute arterial occlusion presents classically with the 5 P's: Pain, Pallor, Paresthesia, Paralysis, and Pulselessness." },
             { q: "A patient complains of leg pain during exertion that is relieved by rest. This clinical presentation is characteristic of which condition?", c: "Chronic arterial occlusive disease (intermittent claudication)", i: ["Acute arterial occlusion", "Deep vein thrombosis", "Varicose veins", "Lymphatic obstruction"], r: "Chronic arterial occlusive disease often presents as intermittent claudication (pain in the leg muscles during exertion, which is relieved by rest)." },
             { q: "A physician is examining a patient with distended superficial veins in the lower limb. This condition is most likely caused by:", c: "Incompetence of the valves in the superficial or perforating veins", i: ["Thrombosis of the deep veins", "Increased arterial pressure", "Obstruction of the lymph nodes", "A defect in the musculovenous pump"], r: "Varicose veins are caused by incompetence of the valves in the superficial or perforating veins, which leads to backflow and distension of the superficial veins." },
@@ -312,7 +307,7 @@
         async function submitQuiz() {
             isSubmitted = true; clearInterval(timerInterval); clearActiveState();
 
-            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & syncing to cloud...</p></div>`;
             
             const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
             const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
@@ -326,14 +321,37 @@
             const dateStr = now.toLocaleDateString();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
-            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr };
-
+            // --- CLOUD SAVE (SUPABASE) ---
             try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/exam_history`, {
+                    method: 'POST',
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`,
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        student_id: candidateID,
+                        exam_title: EXAM_TOPIC,
+                        subject: EXAM_SUBJECT,
+                        score: score,
+                        total: questions.length,
+                        percent: percentage,
+                        date: dateStr,
+                        time: timeStr
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Failed to sync to cloud");
+                
+            } catch(e) {
+                console.error("Cloud sync failed:", e);
                 const storageKey = 'tlt_score_history_' + candidateID;
                 const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
-                existingHistory.unshift(newRecord);
+                existingHistory.unshift({ examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr });
                 localStorage.setItem(storageKey, JSON.stringify(existingHistory));
-            } catch(e) {}
+            }
 
             if (WEB3FORMS_ACCESS_KEY) {
                 try {
@@ -415,7 +433,6 @@
                 const isCorrect = userAns === q.c;
                 const isAnswered = userAns !== undefined;
                 
-                // Filtering Logic
                 if (currentResultFilter === 'correct' && !isCorrect) return;
                 if (currentResultFilter === 'incorrect' && (isCorrect || !isAnswered)) return;
                 if (currentResultFilter === 'answered' && !isAnswered) return;
