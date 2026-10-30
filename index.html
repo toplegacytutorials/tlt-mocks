@@ -106,22 +106,33 @@
     </div>
 
     <script>
-        // --- SUPABASE CONFIGURATION ---
-        const SUPABASE_URL = "https://ksrwydkxfxtaurgebsw.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_1zftOHVUoxY6RGRPdYeZzg_Nq6MDzAv";
-        
-        const getHeaders = {
-            "apikey": SUPABASE_KEY,
-            "Authorization": `Bearer ${SUPABASE_KEY}`
-        };
-
         // --- EXAM DATABASE ---
         const exams = [
-            { id: 'intro_upperlimb', title: 'ANATOMY - INTRO TO UPPER LIMB', desc: '45 Questions • 30 mins', subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', file: 'intro_upperlimb.html', color: 'blue' },
-            { id: 'osteo_upperlimb', title: 'ANATOMY - OSTEOLOGY OF UPPER LIMB', desc: '60 Questions • 40 mins', subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', file: 'osteo_upperlimb.html', color: 'blue' },
-            { id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', file: 'intro_lowerlimb.html', color: 'blue' },
-            { id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL & FUNCTIONS', desc: '50 Questions • 30 mins', subject: 'Physiology', sub: 'General & Introductory Physiology', file: 'cell_and_function.html', color: 'emerald' },
-            { id: 'introphysio_geneticcontrol', title: 'PHYSIOLOGY - GENETIC CONTROL', desc: '45 Questions • 30 mins', subject: 'Physiology', sub: 'General & Introductory Physiology', file: 'introphysio_geneticcontrol.html', color: 'emerald' }
+            { 
+                id: 'intro_upperlimb', title: 'ANATOMY - INTRO TO UPPER LIMB', desc: '45 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'intro_upperlimb.html', color: 'blue' 
+            },
+            { 
+                id: 'osteo_upperlimb', title: 'ANATOMY - OSTEOLOGY OF UPPER LIMB', desc: '60 Questions • 40 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'osteo_upperlimb.html', color: 'blue' 
+            },
+            { 
+                id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
+                file: 'intro_lowerlimb.html', color: 'blue' 
+            },
+            { 
+                id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL & FUNCTIONS', desc: '50 Questions • 30 mins', 
+                subject: 'Physiology', sub: 'General & Introductory Physiology', 
+                file: 'cell_and_function.html', color: 'emerald' 
+            },
+            { 
+                id: 'introphysio_geneticcontrol', title: 'PHYSIOLOGY - GENETIC CONTROL', desc: '45 Questions • 30 mins', 
+                subject: 'Physiology', sub: 'General & Introductory Physiology', 
+                file: 'introphysio_geneticcontrol.html', color: 'emerald' 
+            }
         ];
 
         let currentPath = ['Home']; 
@@ -176,6 +187,17 @@
         }
 
         function logout() {
+            const rawSession = localStorage.getItem('tlt_session');
+            if (rawSession) {
+                try {
+                    const id = JSON.parse(rawSession).id;
+                    localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_intro_lowerlimb_${id}`);
+                } catch(e) {}
+            }
             localStorage.removeItem('tlt_session');
             document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
@@ -186,7 +208,6 @@
             currentPath = ['Home'];
             isSearching = false;
             document.getElementById('search-bar').value = '';
-            document.getElementById('analytics-container').classList.add('hidden');
         }
 
         // --- BREADCRUMB & NAVIGATION LOGIC ---
@@ -305,8 +326,8 @@
 
         function createFolderCard(title, subtitle, path, color = 'blue') {
             const pathString = JSON.stringify(path).replace(/"/g, '&quot;');
-            let iconBg, iconColor, hoverBorder, groupHoverText;
             
+            let iconBg, iconColor, hoverBorder, groupHoverText;
             if (color === 'emerald') {
                 iconBg = 'bg-emerald-900/20 border-emerald-800/50';
                 iconColor = 'text-emerald-400';
@@ -353,138 +374,160 @@
             `;
         }
 
-        // --- ANALYTICS (CLOUD SYNC) ---
-        async function loadAnalytics(studentId) {
+        // --- ANALYTICS ---
+        function loadAnalytics(studentId) {
             const historyGrid = document.getElementById('history-grid');
             const analyticsContainer = document.getElementById('analytics-container');
             const viewAllBtn = document.getElementById('view-all-btn');
-            historyGrid.innerHTML = '<div class="col-span-full text-center text-slate-500 text-sm py-4 animate-pulse">Syncing history from cloud...</div>';
+            historyGrid.innerHTML = '';
             
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/exam_history?student_id=eq.${studentId}&order=id.desc&limit=2`, { headers: getHeaders });
-                const history = await response.json();
+            const rawHistory = localStorage.getItem('tlt_score_history_' + studentId);
+            const history = rawHistory ? JSON.parse(rawHistory) : [];
 
-                historyGrid.innerHTML = '';
-                
-                if (history && history.length > 0) {
-                    analyticsContainer.classList.remove('hidden');
+            if (history.length > 0) {
+                analyticsContainer.classList.remove('hidden');
+                if (history.length > 2) viewAllBtn.classList.remove('hidden');
+                else viewAllBtn.classList.add('hidden');
+
+                history.slice(0, 2).forEach(item => {
+                    const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
                     
-                    if (history.length >= 2) viewAllBtn.classList.remove('hidden');
-                    else viewAllBtn.classList.add('hidden');
+                    // Fuzzy match for older saved titles
+                    const examData = exams.find(x => 
+                        item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
+                        x.title.toLowerCase().includes(item.examTitle.toLowerCase())
+                    );
+                    
+                    const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : 'General';
 
-                    history.forEach(item => {
-                        const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
-                        const examData = exams.find(x => x.title.toLowerCase() === item.exam_title.toLowerCase());
-                        const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : '';
-
-                        historyGrid.innerHTML += `
-                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-md">
-                                <div class="flex justify-between items-center text-[11px] text-slate-500 mb-1">
-                                    <span>${item.date}</span>
-                                    <span>${item.time || ''}</span>
-                                </div>
-                                <h4 class="font-bold text-white text-sm truncate">${item.exam_title}</h4>
-                                <p class="text-[10px] font-medium text-slate-500 uppercase tracking-wider mb-2">${pathText}</p>
-                                <div class="flex items-end justify-between">
-                                    <span class="text-2xl font-black ${scoreColor}">${item.percent}%</span>
-                                    <span class="text-xs font-mono text-slate-400">${item.score}/${item.total} pts</span>
-                                </div>
+                    historyGrid.innerHTML += `
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-md">
+                            <div class="flex justify-between items-center text-[11px] text-slate-500 mb-1">
+                                <span>${item.date}</span>
+                                <span>${item.time || ''}</span>
                             </div>
-                        `;
-                    });
-                } else {
-                    analyticsContainer.classList.add('hidden');
-                }
-            } catch (error) {
-                historyGrid.innerHTML = '<div class="col-span-full text-center text-red-400 text-sm py-4">Failed to load history. Check connection.</div>';
+                            <h4 class="font-bold text-white text-sm truncate">${item.examTitle}</h4>
+                            <p class="text-[10px] font-medium text-slate-500 uppercase tracking-wider mb-2">${pathText}</p>
+                            <div class="flex items-end justify-between">
+                                <span class="text-2xl font-black ${scoreColor}">${item.percent}%</span>
+                                <span class="text-xs font-mono text-slate-400">${item.score}/${item.total} pts</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                analyticsContainer.classList.add('hidden');
             }
         }
 
-        async function openHistoryModal() {
+        function openHistoryModal() {
             const modal = document.getElementById('history-modal');
             const list = document.getElementById('modal-history-list');
             const currentId = document.getElementById('display-id').innerText;
-            list.innerHTML = '<div class="text-center py-8"><div class="w-8 h-8 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mx-auto mb-2"></div><p class="text-slate-500 text-sm">Fetching complete history...</p></div>';
-            modal.classList.remove('hidden');
+            list.innerHTML = '';
 
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/exam_history?student_id=eq.${currentId}&order=id.desc`, { headers: getHeaders });
-                const history = await response.json();
+            const rawHistory = localStorage.getItem('tlt_score_history_' + currentId);
+            const history = rawHistory ? JSON.parse(rawHistory) : [];
 
-                list.innerHTML = '';
+            if (history.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 text-center py-4">No history yet.</p>';
+                modal.classList.remove('hidden');
+                return;
+            }
 
-                if (!history || history.length === 0) {
-                    list.innerHTML = '<p class="text-slate-500 text-center py-4">No history yet.</p>';
-                    return;
-                }
+            // --- DEEP GROUPING LOGIC ---
+            const grouped = {};
 
-                const grouped = {};
-                history.forEach(item => {
-                    const examData = exams.find(x => x.title.toLowerCase() === item.exam_title.toLowerCase());
-                    const subj = item.subject || examData?.subject || 'Other';
-                    const sub = examData?.sub || 'General';
-                    const topic = examData?.topic || 'General';
-                    const title = item.exam_title || 'Unknown Exam';
+            history.forEach(item => {
+                // Fuzzy match to fix older records missing the exact string
+                const examData = exams.find(x => 
+                    item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
+                    x.title.toLowerCase().includes(item.examTitle.toLowerCase())
+                );
+                
+                const subj = item.subject || examData?.subject || 'Other';
+                const sub = examData?.sub || 'General';
+                const topic = examData?.topic || 'General';
+                const title = item.examTitle || 'Unknown Exam';
 
-                    if (!grouped[subj]) grouped[subj] = {};
-                    if (!grouped[subj][sub]) grouped[subj][sub] = {};
-                    if (!grouped[subj][sub][topic]) grouped[subj][sub][topic] = {};
-                    if (!grouped[subj][sub][topic][title]) grouped[subj][sub][topic][title] = [];
+                if (!grouped[subj]) grouped[subj] = {};
+                if (!grouped[subj][sub]) grouped[subj][sub] = {};
+                if (!grouped[subj][sub][topic]) grouped[subj][sub][topic] = {};
+                if (!grouped[subj][sub][topic][title]) grouped[subj][sub][topic][title] = [];
 
-                    grouped[subj][sub][topic][title].push(item);
-                });
+                grouped[subj][sub][topic][title].push(item);
+            });
 
-                for (const [subjectName, subs] of Object.entries(grouped)) {
-                    const isBlue = subjectName === 'Anatomy';
-                    const subjectColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
-                    const subjectBorder = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
+            // Render the deeply nested hierarchy
+            for (const [subjectName, subs] of Object.entries(grouped)) {
+                const isBlue = subjectName === 'Anatomy';
+                const subjectColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
+                const subjectBorder = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
 
-                    let groupHTML = `<div class="mb-8"><h4 class="text-sm font-bold uppercase tracking-widest ${subjectColor} mb-4 border-b ${subjectBorder} pb-2">${subjectName}</h4>`;
+                let groupHTML = `
+                    <div class="mb-8">
+                        <h4 class="text-sm font-bold uppercase tracking-widest ${subjectColor} mb-4 border-b ${subjectBorder} pb-2">${subjectName}</h4>
+                `;
 
-                    for (const [subName, topics] of Object.entries(subs)) {
-                        if (subName !== 'General') {
-                            groupHTML += `<div class="mb-5 ml-2"><h5 class="text-[13px] font-bold text-slate-200 uppercase tracking-wide mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>${subName}</h5>`;
+                for (const [subName, topics] of Object.entries(subs)) {
+                    // Hide the folder icon/text if it defaulted to "General"
+                    if (subName !== 'General') {
+                        groupHTML += `
+                            <div class="mb-5 ml-2">
+                                <h5 class="text-[13px] font-bold text-slate-200 uppercase tracking-wide mb-2 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                                    ${subName}
+                                </h5>
+                        `;
+                    } else {
+                        groupHTML += `<div class="mb-5 ml-2">`;
+                    }
+
+                    for (const [topicName, titles] of Object.entries(topics)) {
+                        // Hide the topic header if it defaulted to "General"
+                        if (topicName !== 'General') {
+                            groupHTML += `
+                                <div class="ml-6 mb-3">
+                                    <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 border-l-2 border-slate-700 pl-2">${topicName}</h6>
+                            `;
                         } else {
-                            groupHTML += `<div class="mb-5 ml-2">`;
+                            groupHTML += `<div class="ml-6 mb-3">`;
                         }
 
-                        for (const [topicName, titles] of Object.entries(topics)) {
-                            if (topicName !== 'General') {
-                                groupHTML += `<div class="ml-6 mb-3"><h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 border-l-2 border-slate-700 pl-2">${topicName}</h6>`;
-                            } else {
-                                groupHTML += `<div class="ml-6 mb-3">`;
-                            }
+                        for (const [titleName, attempts] of Object.entries(titles)) {
+                            groupHTML += `
+                                <div class="ml-2 mb-3">
+                                    <h6 class="text-xs font-semibold text-white mb-2">${titleName}</h6>
+                                    <div class="space-y-2 border-l-2 border-slate-800 pl-4">
+                            `;
 
-                            for (const [titleName, attempts] of Object.entries(titles)) {
-                                groupHTML += `<div class="ml-2 mb-3"><h6 class="text-xs font-semibold text-white mb-2">${titleName}</h6><div class="space-y-2 border-l-2 border-slate-800 pl-4">`;
-
-                                attempts.forEach(item => {
-                                    const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
-                                    groupHTML += `
-                                        <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-3 flex justify-between items-center hover:border-slate-700 transition-colors">
-                                            <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                                ${item.date} <span class="mx-0.5">•</span> ${item.time || ''}
-                                            </div>
-                                            <div class="flex items-center gap-4">
-                                                <span class="text-[11px] font-mono text-slate-500">${item.score}/${item.total} pts</span>
-                                                <span class="text-sm font-bold ${scoreColor} w-12 text-right">${item.percent}%</span>
-                                            </div>
+                            attempts.forEach(item => {
+                                const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
+                                groupHTML += `
+                                    <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-3 flex justify-between items-center hover:border-slate-700 transition-colors">
+                                        <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            ${item.date} <span class="mx-0.5">•</span> ${item.time || ''}
                                         </div>
-                                    `;
-                                });
-                                groupHTML += `</div></div>`;
-                            }
-                            groupHTML += `</div>`;
+                                        <div class="flex items-center gap-4">
+                                            <span class="text-[11px] font-mono text-slate-500">${item.score}/${item.total} pts</span>
+                                            <span class="text-sm font-bold ${scoreColor} w-12 text-right">${item.percent}%</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            groupHTML += `</div></div>`;
                         }
                         groupHTML += `</div>`;
                     }
                     groupHTML += `</div>`;
-                    list.innerHTML += groupHTML;
                 }
-            } catch (error) {
-                list.innerHTML = '<p class="text-red-400 text-center py-4">Failed to load complete history.</p>';
+                groupHTML += `</div>`;
+                list.innerHTML += groupHTML;
             }
+
+            modal.classList.remove('hidden');
         }
 
         function closeHistoryModal() {
