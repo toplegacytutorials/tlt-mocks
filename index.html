@@ -359,7 +359,6 @@
             const badgeClass = isBlue ? 'text-blue-400 bg-blue-900/30 border-blue-800/30' : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30';
             const btnClass = isBlue ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/25' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/25';
             
-            // Build the hierarchy breadcrumb for the card
             const pathText = e.topic ? `${e.sub} • ${e.topic}` : e.sub;
 
             return `
@@ -393,7 +392,6 @@
                 history.slice(0, 2).forEach(item => {
                     const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
                     
-                    // Find matching exam in DB to get sub/topic path
                     const examData = exams.find(x => x.title === item.examTitle);
                     const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : '';
 
@@ -432,60 +430,86 @@
                 return;
             }
 
-            // Group History by Subject, then by Exam Title
-            const groupedHistory = {};
+            // --- DEEP GROUPING LOGIC ---
+            // Structure: Subject -> Sub-Discipline -> Topic -> Exam Title -> [Attempts]
+            const grouped = {};
+
             history.forEach(item => {
-                const subj = item.subject || 'Other';
+                // Find the exam metadata to get sub and topic
+                const examData = exams.find(x => x.title === item.examTitle);
+                
+                const subj = item.subject || examData?.subject || 'Other';
+                const sub = examData?.sub || 'General';
+                const topic = examData?.topic || 'General';
                 const title = item.examTitle || 'Unknown Exam';
 
-                if (!groupedHistory[subj]) groupedHistory[subj] = {};
-                if (!groupedHistory[subj][title]) groupedHistory[subj][title] = [];
+                if (!grouped[subj]) grouped[subj] = {};
+                if (!grouped[subj][sub]) grouped[subj][sub] = {};
+                if (!grouped[subj][sub][topic]) grouped[subj][sub][topic] = {};
+                if (!grouped[subj][sub][topic][title]) grouped[subj][sub][topic][title] = [];
 
-                groupedHistory[subj][title].push(item);
+                grouped[subj][sub][topic][title].push(item);
             });
 
-            // Render nested groups
-            for (const [subjectName, examTitles] of Object.entries(groupedHistory)) {
+            // Render the deeply nested hierarchy
+            for (const [subjectName, subs] of Object.entries(grouped)) {
                 const isBlue = subjectName === 'Anatomy';
-                const headerColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
-                const borderColor = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
+                const subjectColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
+                const subjectBorder = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
 
                 let groupHTML = `
                     <div class="mb-8">
-                        <h4 class="text-sm font-bold uppercase tracking-widest ${headerColor} mb-4 border-b ${borderColor} pb-2">${subjectName}</h4>
+                        <h4 class="text-sm font-bold uppercase tracking-widest ${subjectColor} mb-4 border-b ${subjectBorder} pb-2">${subjectName}</h4>
                 `;
 
-                for (const [title, attempts] of Object.entries(examTitles)) {
-                    // Find matching exam in DB to get sub/topic path
-                    const examData = exams.find(x => x.title === title);
-                    const pathText = examData ? (examData.topic ? `${examData.sub} • ${examData.topic}` : examData.sub) : '';
-
+                for (const [subName, topics] of Object.entries(subs)) {
                     groupHTML += `
-                        <div class="mb-5">
-                            <div class="flex flex-col mb-2 ml-1">
-                                <h5 class="text-xs font-semibold text-slate-300">${title}</h5>
-                                <span class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">${pathText}</span>
-                            </div>
-                            <div class="space-y-2 border-l-2 border-slate-800 ml-1 pl-4 mt-3">
+                        <div class="mb-5 ml-2">
+                            <h5 class="text-[13px] font-bold text-slate-200 uppercase tracking-wide mb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                                ${subName}
+                            </h5>
                     `;
 
-                    attempts.forEach(item => {
-                        const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
-                        groupHTML += `
-                            <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-3 flex justify-between items-center hover:border-slate-700 transition-colors">
-                                <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    ${item.date} <span class="mx-0.5">•</span> ${item.time || ''}
-                                </div>
-                                <div class="flex items-center gap-4">
-                                    <span class="text-[11px] font-mono text-slate-500">${item.score}/${item.total} pts</span>
-                                    <span class="text-sm font-bold ${scoreColor} w-12 text-right">${item.percent}%</span>
-                                </div>
-                            </div>
-                        `;
-                    });
+                    for (const [topicName, titles] of Object.entries(topics)) {
+                        // Only show Topic header if it's not "General" (i.e. Physiology has no topic)
+                        if (topicName !== 'General') {
+                            groupHTML += `
+                                <div class="ml-6 mb-3">
+                                    <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 border-l-2 border-slate-700 pl-2">${topicName}</h6>
+                            `;
+                        } else {
+                            groupHTML += `<div class="ml-6 mb-3">`;
+                        }
 
-                    groupHTML += `</div></div>`;
+                        for (const [titleName, attempts] of Object.entries(titles)) {
+                            groupHTML += `
+                                <div class="ml-2 mb-3">
+                                    <h6 class="text-xs font-semibold text-white mb-2">${titleName}</h6>
+                                    <div class="space-y-2 border-l-2 border-slate-800 pl-4">
+                            `;
+
+                            attempts.forEach(item => {
+                                const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
+                                groupHTML += `
+                                    <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-3 flex justify-between items-center hover:border-slate-700 transition-colors">
+                                        <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            ${item.date} <span class="mx-0.5">•</span> ${item.time || ''}
+                                        </div>
+                                        <div class="flex items-center gap-4">
+                                            <span class="text-[11px] font-mono text-slate-500">${item.score}/${item.total} pts</span>
+                                            <span class="text-sm font-bold ${scoreColor} w-12 text-right">${item.percent}%</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            groupHTML += `</div></div>`;
+                        }
+                        groupHTML += `</div>`;
+                    }
+                    groupHTML += `</div>`;
                 }
                 groupHTML += `</div>`;
                 list.innerHTML += groupHTML;
