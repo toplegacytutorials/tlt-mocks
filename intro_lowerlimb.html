@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANATOMY - INTRO TO LOWER LIMB | TLT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 80%; max-height: 190px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 3.8; }
+        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
+        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; border: 2px solid #020617; }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .strike-through { text-decoration: line-through; opacity: 0.5; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
+        <!-- Assessment Injected Here -->
+    </div>
+
+    <script>
+        const EXAM_KEY = "intro_lowerlimb";
+        const EXAM_SUBJECT = "Anatomy";
+        const EXAM_TOPIC = "ANATOMY - INTRO TO LOWER LIMB";
+        const TOTAL_TIME_SECONDS = 1800; // 30 minutes
+        const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+
+        const rawQuestions = [
+            // MODULE 1: OVERVIEW & REGIONS
+            { q: "A patient presents with a severe tear of the triceps surae muscle following a sports injury. In which specific region of the lower limb is this prominent muscular bulge located?", c: "Leg region", i: ["Gluteal region", "Thigh region", "Ankle region", "Foot region"], r: "The calf (L. sura), which is the prominent bulge on the posterior aspect of the leg, is formed mainly by the triceps surae muscle." },
+            { q: "During a surgical procedure involving the posterolateral hip, the surgeon uses the intergluteal cleft as a medial boundary. What structure serves as the inferior boundary of the buttock?", c: "Gluteal fold", i: ["Iliac crest", "Inguinal ligament", "Sacrotuberous ligament", "Ischial tuberosity"], r: "The boundaries of the buttock are: Superior (Iliac crest), Medial (Intergluteal cleft), Inferior (Gluteal fold)." },
+            { q: "A student identifies a region of the lower limb that extends from the hip to the knee and contains the largest and strongest bone in the body. Which anatomical region is being examined?", c: "Thigh or Femoral Region", i: ["Gluteal Region", "Leg Region", "Talocrural Region", "Foot Region"], r: "The thigh or femoral region extends from the hip to the knee, containing the femur (the largest and strongest bone)." },
+            { q: "All of the following statements accurately describe the regions or boundaries of the lower limb EXCEPT:", c: "The leg region contains the weight-bearing fibula and the non-weight-bearing tibia", i: ["The hip region overlies the hip joint and the greater trochanter of the femur", "The ankle joint articulation occurs between the talus bone and the malleoli", "The thigh is separated anteriorly from the abdomen by the inguinal ligament", "The foot region consists of 7 tarsal bones, 5 metatarsals, and 14 phalanges"], r: "The leg region contains the weight-bearing tibia (medial and thick) and the non-weight-bearing fibula (lateral and slender)." },
+            { q: "During a comparative anatomy lecture on evolutionary adaptations, the professor contrasts the human foot with that of primates. Which distinct feature of the human foot is primarily adapted for stable weight support?", c: "The great toe is aligned and non-opposable", i: ["The great toe is prehensile and opposable", "The foot contains a reduced number of tarsal bones", "The arches of the foot are completely flat", "The metatarsals are significantly elongated"], r: "In humans, the great toe is aligned and non-opposable, designed for stable weight support, unlike the prehensile foot of primates." },
+            { q: "The lower limb is anatomically specialized for two primary functions. These are:", c: "Supporting the body's weight and facilitating locomotion", i: ["Prehension and manipulation of objects", "Maintaining balance and thermoregulation", "Protection of abdominal viscera and locomotion", "Hematopoiesis and weight-bearing"], r: "The lower limb (lower extremity) is anatomically specialized for two primary functions: supporting the body's weight and facilitating locomotion." },
+            { q: "A patient requires an intramuscular injection in the gluteal region. To avoid injury to underlying structures, the clinician must be familiar with the lateral hip region, which overlies which of the following structures?", c: "The greater trochanter of the femur", i: ["The ischial tuberosity", "The anterior superior iliac spine", "The lesser trochanter of the femur", "The sacroiliac joint"], r: "The hip region overlies the hip joint and the greater trochanter of the femur." },
+            { q: "Which of the following correctly describes the anatomical junction of the leg and the foot?", c: "It features the medial and lateral malleoli and articulates with the talus", i: ["It is separated anteriorly by the inguinal ligament", "It contains the patella and the femoral condyles", "It is defined posteriorly by the gluteal fold", "It consists of 14 phalanges and 5 metatarsals"], r: "The ankle or talocrural region is the junction between the leg and the foot, featuring the medial and lateral malleoli. Articulation occurs between the talus bone and the malleoli." },
+            { q: "The hamstring (L. poples) is a term used to describe which specific anatomical area?", c: "The lower aspect of the back of the thigh and the back of the knee", i: ["The anterior aspect of the thigh", "The lateral aspect of the gluteal region", "The medial aspect of the leg", "The dorsal surface of the foot"], r: "Hamstring (L. poples) refers to the lower aspect of the back of the thigh and the back of the knee." },
+            { q: "During a clinical examination, a physician palpates the non-weight-bearing bone of the leg. Which statement correctly identifies this bone?", c: "The fibula, which is lateral and slender", i: ["The tibia, which is medial and thick", "The talus, which acts as the keystone", "The calcaneus, which forms the heel", "The patella, which is a sesamoid bone"], r: "The leg region contains the weight-bearing tibia (medial and thick) and the non-weight-bearing fibula (lateral and slender)." },
+
+            // MODULE 2: BIOMECHANICS & WEIGHT TRANSMISSION
+            { q: "In a patient with severe osteoporosis, the pathway of body weight transmission is critical. Weight transfers from the vertebral column to the femurs via which correct sequence?", c: "Sacroiliac joints ➔ pelvic girdle ➔ hip joints ➔ femurs", i: ["Hip joints ➔ pelvic girdle ➔ sacroiliac joints ➔ femurs", "Pelvic girdle ➔ sacroiliac joints ➔ hip joints ➔ femurs", "Sacroiliac joints ➔ hip joints ➔ pelvic girdle ➔ femurs", "Hip joints ➔ sacroiliac joints ➔ pelvic girdle ➔ femurs"], r: "The pathway is: vertebral column ➔ sacroiliac joints ➔ pelvic girdle ➔ hip joints ➔ femurs." },
+            { q: "During standing, the body's line of gravity plays a crucial role in balance. How does this line relate to the hip, knee, and ankle joints?", c: "Posterior to the hip joint, anterior to the knee and ankle joints", i: ["Anterior to the hip joint, posterior to the knee and ankle joints", "Anterior to the hip and knee joints, posterior to the ankle joint", "Posterior to the hip and knee joints, anterior to the ankle joint", "Directly through the center of the hip, knee, and ankle joints"], r: "The body's line of gravity falls posterior to the hip joint and anterior to the knee and ankle joints." },
+            { q: "A patient suffers a fracture of the talus, severely impacting the structural integrity of the foot. Which critical biomechanical role does the talus play in weight distribution?", c: "It acts as the keystone of the arch", i: ["It acts as the primary weight-bearing heel bone", "It forms the lateral malleolus", "It serves as the insertion point for the triceps surae", "It provides the main sesamoid support for the 1st metatarsal"], r: "Weight is passed from the tibia ➔ talus (which acts as the keystone of the arch) ➔ and is then distributed to the heel and forefoot arches." },
+            { q: "A surgeon is evaluating the weight-bearing points of a patient's foot to design custom orthotics. Which structures ultimately bear the weight of the body during standing?", c: "The calcaneus and six anterior pillars", i: ["The talus and five metatarsals", "The calcaneus and the fibula", "The talus and the medial malleolus", "The seven tarsal bones exclusively"], r: "Weight is ultimately borne by the calcaneus (posteriorly) and six anterior pillars (the heads of the four lateral metatarsals + the two sesamoids under the 1st metatarsal head)." },
+            { q: "Compared to quadrupeds, the human femurs are uniquely oriented for bipedal standing. How are human femurs directed?", c: "Obliquely and inferomedially", i: ["Vertically and parallel", "Obliquely and superolaterally", "Horizontally and medially", "Vertically and inferolaterally"], r: "Human femurs are oblique (directed inferomedially) for efficient bipedal standing, bringing the knees directly beneath the trunk." },
+            { q: "All of the following are true regarding the biomechanics of weight transmission in the lower limb EXCEPT:", c: "Weight is primarily transmitted from the tibia directly to the calcaneus", i: ["Quadruped femurs are more vertical than human femurs", "The body's line of gravity falls anterior to the ankle joint", "The talus acts as the keystone of the arch", "Weight is distributed to the forefoot via the metatarsal heads"], r: "Weight is passed from the tibia to the talus (keystone), and then distributed to the heel (calcaneus) and forefoot." },
+            { q: "During a biomechanical assessment, the clinician notes the weight distribution inside the foot. From the tibia, where is the weight first directed?", c: "Talus", i: ["Calcaneus", "Navicular", "Cuboid", "1st Metatarsal"], r: "Weight distribution inside the foot: Weight is passed from the tibia ➔ talus (which acts as the keystone of the arch)." },
+            { q: "Which of the following accurately describes the six anterior pillars that bear weight in the foot?", c: "The heads of the four lateral metatarsals and the two sesamoids under the 1st metatarsal head", i: ["The heads of all five metatarsals and the calcaneus", "The medial and lateral malleoli and the four lateral metatarsals", "The navicular, cuboid, and three cuneiforms", "The calcaneus and the heads of the medial three metatarsals"], r: "The six anterior pillars consist of the heads of the four lateral metatarsals + the two sesamoids under the 1st metatarsal head." },
+            { q: "In efficient bipedal standing, what is the primary anatomical advantage of the oblique orientation of the human femur?", c: "It brings the knees directly beneath the trunk", i: ["It increases the length of the limb for running", "It allows for a wider pelvic inlet", "It reduces the weight-bearing load on the tibia", "It facilitates a prehensile foot posture"], r: "Human femurs are oblique (directed inferomedially) for efficient bipedal standing, bringing the knees directly beneath the trunk." },
+            { q: "A patient with a calcaneal fracture experiences altered weight-bearing. Which portion of the foot's weight-bearing mechanism is directly compromised?", c: "The posterior weight-bearing point", i: ["The keystone of the arch", "The anterior pillars", "The medial longitudinal arch", "The transverse arch"], r: "Weight is ultimately borne by the calcaneus (posteriorly) and six anterior pillars." },
+
+            // MODULE 3: NEUROVASCULAR SUPPLY
+            { q: "A patient presents with weakness in the medial thigh muscles. A lesion is suspected in the nerve that primarily supplies this compartment. Which nerve is most likely affected?", c: "Obturator nerve", i: ["Femoral nerve", "Sciatic nerve", "Tibial nerve", "Common peroneal nerve"], r: "The Obturator nerve supplies the medial thigh muscles." },
+            { q: "During a high-energy trauma, the largest nerve in the body is injured, affecting the posterior thigh. This nerve is a branch of which plexus, and what does it split into?", c: "Sacral plexus; splits into tibial and common peroneal nerves", i: ["Lumbar plexus; splits into femoral and obturator nerves", "Sacral plexus; splits into tibial and sural nerves", "Lumbar plexus; splits into deep and superficial peroneal nerves", "Sacral plexus; splits into medial and lateral plantar nerves"], r: "The Sciatic nerve is the largest nerve in the body; supplies the posterior thigh and splits into the tibial and common peroneal nerves." },
+            { q: "A clinician is assessing a patient's arterial supply to the anterior leg. The common peroneal nerve splits into deep and superficial branches. Which compartment does the deep branch supply?", c: "Anterior leg", i: ["Lateral leg", "Posterior leg", "Medial thigh", "Anterior thigh"], r: "The common peroneal nerve splits into deep (supplies anterior leg) and superficial (supplies lateral leg) branches." },
+            { q: "During a vascular examination, a physician palpates a key pulse point on the dorsum of the foot. Which artery is being palpated, and what is it a direct continuation of?", c: "Dorsalis pedis artery; continuation of the anterior tibial artery", i: ["Posterior tibial artery; continuation of the popliteal artery", "Medial plantar artery; continuation of the superficial peroneal artery", "Femoral artery; continuation of the profunda femoris artery", "Arcuate artery; continuation of the deep peroneal artery"], r: "Anterior tibial artery continues as the dorsalis pedis artery on the dorsum of the foot (key pulse point)." },
+            { q: "A patient suffers from compromised blood flow in the posterior leg. Which artery is primarily responsible for this region, and where is its pulse point located?", c: "Posterior tibial artery; behind the medial malleolus", i: ["Anterior tibial artery; on the dorsum of the foot", "Femoral artery; in the femoral triangle", "Popliteal artery; in the popliteal fossa", "Peroneal artery; behind the lateral malleolus"], r: "Posterior tibial artery supplies the posterior leg; continues as the medial and lateral plantar arteries in the sole (pulse point is found behind the medial malleolus)." },
+            { q: "All of the following correctly describe the neurovascular supply of the lower limb EXCEPT:", c: "The tibial nerve supplies the anterior leg", i: ["The femoral nerve supplies the anterior thigh muscles", "The sciatic nerve is the largest nerve in the body", "The medial and lateral plantar nerves are terminal branches of the tibial nerve", "The popliteal artery is the continuation of the femoral artery"], r: "The Tibial nerve supplies the posterior leg and the sole of the foot, NOT the anterior leg (which is supplied by the deep peroneal nerve)." },
+            { q: "A patient sustains an injury to the deep peroneal nerve. Which specific anatomical region will most likely experience motor deficit?", c: "Anterior leg", i: ["Posterior leg", "Lateral leg", "Medial thigh", "Gluteal region"], r: "The common peroneal nerve splits into deep (supplies anterior leg) and superficial (supplies lateral leg) branches." },
+            { q: "The femoral artery is the main supply to the thigh. It is a direct continuation of which artery, and what is its largest branch?", c: "External iliac artery; profunda femoris artery", i: ["Internal iliac artery; superior gluteal artery", "Popliteal artery; anterior tibial artery", "External iliac artery; inferior epigastric artery", "Internal iliac artery; obturator artery"], r: "Femoral artery: Continuation of the external iliac artery; it is the main supply to the thigh. Its branches include the large profunda femoris artery." },
+            { q: "Which nerve is responsible for supplying the sole of the foot?", c: "Tibial nerve", i: ["Femoral nerve", "Obturator nerve", "Common peroneal nerve", "Superficial peroneal nerve"], r: "The Tibial nerve supplies the posterior leg and the sole of the foot." },
+            { q: "A patient has compromised blood flow to the gluteal region due to an internal iliac artery occlusion. Which arteries are primarily responsible for supplying this region?", c: "Superior and inferior gluteal arteries", i: ["Femoral and profunda femoris arteries", "Popliteal and anterior tibial arteries", "Obturator and medial circumflex femoral arteries", "Internal pudendal and umbilical arteries"], r: "Other contributing arteries include the superior and inferior gluteal arteries (branches from the internal iliac artery)." },
+            { q: "The common peroneal nerve splits into two main branches. Which compartment of the leg is supplied by the superficial branch?", c: "Lateral leg", i: ["Anterior leg", "Posterior leg", "Medial leg", "Deep posterior leg"], r: "The common peroneal nerve splits into deep (supplies anterior leg) and superficial (supplies lateral leg) branches." },
+            { q: "A terminal branch of the tibial nerve is found in the sole of the foot. What are these two terminal branches called?", c: "Medial and lateral plantar nerves", i: ["Deep and superficial peroneal nerves", "Sural and saphenous nerves", "Dorsal and plantar digital nerves", "Femoral and obturator nerves"], r: "Medial and lateral plantar nerves: Terminal branches of the tibial nerve located in the sole of the foot." },
+            { q: "During a procedure in the popliteal fossa, the surgeon identifies the continuation of the femoral artery. This structure is the:", c: "Popliteal artery", i: ["Anterior tibial artery", "Posterior tibial artery", "Profunda femoris artery", "Dorsalis pedis artery"], r: "Popliteal artery: Continuation of the femoral artery in the popliteal fossa." },
+
+            // MODULE 4: VEINS, LYMPHATICS & CLINICAL CORRELATIONS
+            { q: "A patient presents with a painful, pale, pulseless lower limb. A diagnosis of acute arterial occlusion is made. Which of the following is NOT one of the classic 5 P's of this condition?", c: "Pruitis", i: ["Pallor", "Paresthesia", "Paralysis", "Pulselessness"], r: "Acute arterial occlusion presents classically with the 5 P's: Pain, Pallor, Paresthesia, Paralysis, and Pulselessness." },
+            { q: "A patient complains of leg pain during exertion that is relieved by rest. This clinical presentation is characteristic of which condition?", c: "Chronic arterial occlusive disease (intermittent claudication)", i: ["Acute arterial occlusion", "Deep vein thrombosis", "Varicose veins", "Lymphatic obstruction"], r: "Chronic arterial occlusive disease often presents as intermittent claudication (pain in the leg muscles during exertion, which is relieved by rest)." },
+            { q: "A physician is examining a patient with distended superficial veins in the lower limb. This condition is most likely caused by:", c: "Incompetence of the valves in the superficial or perforating veins", i: ["Thrombosis of the deep veins", "Increased arterial pressure", "Obstruction of the lymph nodes", "A defect in the musculovenous pump"], r: "Varicose veins are caused by incompetence of the valves in the superficial or perforating veins, which leads to backflow and distension of the superficial veins." },
+            { q: "During a surgical exploration of the femoral canal, a specific deep inguinal lymph node is identified. What is the name of this node?", c: "Lymph node of Cloquet/Rosenmüller", i: ["Node of Ranvier", "Virchow's node", "Sentinel node", "Delphian node"], r: "Lymph node of Cloquet/Rosenmüller: A specific deep inguinal lymph node located inside the femoral canal." },
+            { q: "A patient is scheduled for a procedure requiring venous access. The great saphenous vein is identified. Into which vein does it drain?", c: "Femoral vein", i: ["Popliteal vein", "External iliac vein", "Internal iliac vein", "Deep femoral vein"], r: "Great saphenous vein: Ascends medially; drains into the femoral vein." },
+            { q: "In a healthy lower limb, the perforating veins connect the superficial and deep venous systems. What is the normal direction of blood flow?", c: "Strictly from superficial to deep", i: ["Strictly from deep to superficial", "Bidirectional based on pressure", "From superficial to lymphatic ducts", "From deep to superficial only during exercise"], r: "Perforating veins connect the superficial and deep veins. They contain valves to ensure one-way flow (strictly from superficial ➔ deep)." },
+            { q: "A patient with a history of prolonged immobility presents with a suspected deep vein thrombosis. Which mechanism is primarily responsible for venous return from the lower limb?", c: "The musculovenous pump", i: ["The respiratory pump", "Negative intrathoracic pressure", "Arterial pulsations", "Gravity alone"], r: "Deep veins accompany major arteries and rely heavily on the musculovenous pump for venous return." },
+            { q: "All of the following are correct regarding the venous and lymphatic drainage of the lower limb EXCEPT:", c: "The small saphenous vein drains into the femoral vein", i: ["Superficial lymphatics drain directly into the superficial inguinal lymph nodes", "Deep lymphatics drain into the deep inguinal lymph nodes", "Perforating veins direct flow from superficial to deep", "The great saphenous vein ascends medially"], r: "The small saphenous vein ascends posteriorly and drains into the popliteal vein, not the femoral vein." },
+            { q: "A clinician is preparing to administer an intramuscular injection in the gluteal region. What is the primary anatomical concern that dictates proper site selection?", c: "Preventing accidental injury to the massive sciatic nerve", i: ["Avoiding the superior gluteal artery", "Preventing damage to the sacroiliac joint", "Avoiding the insertion of the gluteus medius", "Preventing injury to the pudendal nerve"], r: "Proper site selection in the gluteal region prevents accidental injury to the massive sciatic nerve." },
+            { q: "A patient presents with a swollen lower limb. Examination reveals that the deep lymphatics are obstructed. Where do these deep lymphatics normally drain?", c: "Deep inguinal lymph nodes", i: ["Superficial inguinal lymph nodes", "Popliteal lymph nodes", "External iliac lymph nodes", "Para-aortic lymph nodes"], r: "Deep lymphatics: Accompany deep vessels, draining into the deep inguinal lymph nodes." },
+            { q: "Which of the following correctly describes the path of the small saphenous vein?", c: "Ascends posteriorly and drains into the popliteal vein", i: ["Ascends medially and drains into the femoral vein", "Ascends laterally and drains into the great saphenous vein", "Descends posteriorly and drains into the deep plantar veins", "Ascends anteriorly and drains into the dorsalis pedis vein"], r: "Small saphenous vein: Ascends posteriorly; drains into the popliteal vein." },
+            { q: "A patient with severe peripheral arterial disease complains of calf pain. This pain (intermittent claudication) is primarily due to:", c: "Muscle ischemia during exertion", i: ["Venous stasis in the deep veins", "Lymphatic obstruction in the groin", "Compression of the sciatic nerve", "Incompetence of the perforating valves"], r: "Chronic arterial occlusive disease: Often presents as intermittent claudication (pain in the leg muscles during exertion, which is relieved by rest) due to ischemia." }
+        ];
+
+        let candidateID = ""; 
+        let candidateDept = ""; 
+        let questions = []; 
+        let currentQ = 0; 
+        let answers = {}; 
+        let flagged = {}; 
+        let timeLeft = TOTAL_TIME_SECONDS; 
+        let isSubmitted = false; 
+        let timerInterval;
+        let examStartTime = 0;
+        const appDiv = document.getElementById('app');
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isSubmitted && candidateID && timeLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        const icons = {
+            user: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+            flag: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>`,
+            flagSolid: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>`,
+            strike: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>`
+        };
+
+        const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+        function getActiveStateKey(id) { return `tlt_active_exam_${EXAM_KEY}_${id}`; }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = { candidateID, candidateDept, questions, currentQ, answers, flagged, examStartTime, totalTime: TOTAL_TIME_SECONDS };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) localStorage.removeItem(getActiveStateKey(candidateID));
+        }
+
+        function initApp() {
+            const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
+            if (rawSession) { try { sessionID = JSON.parse(rawSession).id || ""; } catch(e) {} }
+
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; currentQ = state.currentQ || 0;
+                            answers = state.answers || {}; flagged = state.flagged || {};
+                            timeLeft = remaining; examStartTime = state.examStartTime;
+                            startTimer(); renderExam(); return;
+                        } else {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; answers = state.answers || {}; 
+                            flagged = state.flagged || {}; timeLeft = 0;
+                            clearActiveState(); submitQuiz(); return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) { idField.value = sessionID; validateInput(); }
+            }
+        }
+
+        function validateInput() {
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
+            const dInput = document.getElementById('cand-dept').value.trim();
+            const btn = document.getElementById('start-btn');
+            const errorMsg = document.getElementById('id-error');
+            const isValidId = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(idInput);
+            
+            if (idInput !== "" && !isValidId) errorMsg.classList.remove('opacity-0');
+            else errorMsg.classList.add('opacity-0');
+
+            if (isValidId && dInput) { 
+                btn.disabled = false; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]"; 
+            } else { 
+                btn.disabled = true; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all"; 
+            }
+        }
+
+        function startExam() {
+            candidateID = document.getElementById('cand-id').value.trim().toUpperCase(); 
+            candidateDept = document.getElementById('cand-dept').value.trim();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: candidateID, timestamp: Date.now() }));
+
+            questions = rawQuestions.sort(() => Math.random() - 0.5).map(q => { 
+                const opts = [q.c, ...q.i].sort(() => Math.random() - 0.5); 
+                return { ...q, options: opts }; 
+            });
+
+            examStartTime = Date.now(); timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState(); startTimer(); renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval); submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function renderLogin() {
+            const timeInMinutes = Math.floor(TOTAL_TIME_SECONDS / 60);
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-8 md:p-12">
+                    <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-800/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-3 py-1 rounded border border-blue-800/30 mb-3">${EXAM_SUBJECT}</span>
+                    <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
+                    <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions</strong>.</p>
+                    <div class="w-full max-w-md space-y-4">
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
+                    </div>
+                </div>`;
+        }
+
+        function renderExam() {
+            let savedScroll = 0;
+            const existingGrid = document.getElementById('q-nav-grid');
+            if (existingGrid) savedScroll = existingGrid.scrollLeft;
+
+            const q = questions[currentQ]; 
+            const hasAnsweredAll = Object.keys(answers).length === questions.length; 
+            const progressPct = (Object.keys(answers).length / questions.length) * 100;
+            const isFlagged = flagged[currentQ] || false;
+            
+            let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
+            questions.forEach((_, idx) => {
+                const isAns = answers[idx] !== undefined; 
+                const isCurr = idx === currentQ;
+                const isF = flagged[idx];
+                let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
+                if (isCurr && isAns) btnClass += "bg-blue-600 text-white shadow-md shadow-blue-500/30";
+                else if (isCurr) btnClass += "border-2 border-blue-500 text-blue-400 bg-blue-950/50";
+                else if (isF) btnClass += "bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 hover:bg-yellow-900";
+                else if (isAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
+                else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
+                gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
+            }); 
+            gridHTML += `</div>`;
+
+            let optionsHTML = `<div class="space-y-3 mt-6">`;
+            q.options.forEach((opt, idx) => {
+                const isSelected = answers[currentQ] === opt;
+                optionsHTML += `<button onclick="selectOption(${idx})" class="option-btn w-full text-left p-4 rounded-xl border-2 ${isSelected ? 'border-blue-500 bg-blue-950/40' : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900'}">
+                    <div class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 font-bold text-xs ${isSelected ? 'border-blue-500 bg-blue-600 text-white' : 'border-slate-700 text-slate-500'}">${optionLetters[idx]}</div>
+                        <span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span>
+                    </div>
+                </button>`;
+            }); 
+            optionsHTML += `</div>`;
+
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white px-6 py-4 flex justify-between items-center flex-wrap gap-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-[11px] font-bold text-blue-400 uppercase tracking-widest">${EXAM_SUBJECT}</span>
+                        <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
+                        <div class="text-xs mt-1 font-mono text-slate-400">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleFlag()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFlagged ? 'bg-yellow-900/40 border-yellow-700/50 text-yellow-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'} transition-colors text-xs font-semibold">
+                            ${isFlagged ? icons.flagSolid : icons.flag} ${isFlagged ? 'Flagged' : 'Flag for Review'}
+                        </button>
+                        <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    </div>
+                </div>
+                <div class="h-1 w-full bg-slate-950"><div class="h-full bg-blue-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    ${gridHTML}
+                    <div class="flex-1"><div class="flex items-start gap-4 mb-2"><span class="text-4xl font-black text-slate-700">${currentQ + 1}</span><h2 class="text-xl md:text-2xl font-semibold text-white leading-snug mt-1">${q.q}</h2></div>${optionsHTML}</div>
+                    <div class="mt-10 flex justify-between items-center"><button onclick="changeQ(-1)" class="px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed" ${currentQ === 0 ? 'disabled' : ''}>← Previous</button>${hasAnsweredAll || currentQ === questions.length - 1 ? `<button onclick="submitQuiz()" class="px-8 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900/30 transition-all active:scale-95">Submit Exam</button>` : `<button onclick="changeQ(1)" class="px-8 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-md active:scale-95">Next →</button>`}</div>
+                </div>`;
+
+            const newGrid = document.getElementById('q-nav-grid');
+            if (newGrid) {
+                newGrid.scrollLeft = savedScroll;
+                const activeBtn = document.getElementById(`q-btn-${currentQ}`);
+                if (activeBtn) {
+                    const gridRect = newGrid.getBoundingClientRect();
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    if (btnRect.left < gridRect.left || btnRect.right > gridRect.right) {
+                        activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }
+            }
+        }
+
+        async function submitQuiz() {
+            isSubmitted = true; clearInterval(timerInterval); clearActiveState();
+
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
+            
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.c) score++; });
+            const percentage = Math.round((score / questions.length) * 100); 
+            let emailStatus = "";
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr };
+
+            try {
+                const storageKey = 'tlt_score_history_' + candidateID;
+                const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                existingHistory.unshift(newRecord);
+                localStorage.setItem(storageKey, JSON.stringify(existingHistory));
+            } catch(e) {}
+
+            if (WEB3FORMS_ACCESS_KEY) {
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', { 
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, name: candidateID, email: "system@mockexam.com", subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, from_name: "Mock Exam Portal", Subject: EXAM_SUBJECT, Topic: EXAM_TOPIC, Candidate_ID: candidateID, Department: candidateDept, Score: `${score} out of ${questions.length} (${percentage}%)`, Time_Spent: formatTime(timeSpentSeconds) }) 
+                    });
+                    if (response.status === 200) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; } else { throw new Error("Failed"); }
+                } catch (e) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; }
+            } 
+            renderResults(score, percentage, emailStatus, dateStr, timeStr);
+        }
+
+        let currentResultFilter = 'all';
+
+        function renderResults(score, percentage, emailStatus, dateStr, timeStr) {
+            const strokeColor = percentage >= 70 ? '#22c55e' : percentage >= 50 ? '#f59e0b' : '#ef4444';
+            
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
+                    <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-blue-900/40 text-blue-400 border border-blue-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
+                    <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
+                        <span class="text-blue-400 font-bold">${candidateID}</span> <span class="text-slate-600">•</span> <span class="text-slate-300 font-sans">${candidateDept}</span> <span class="text-slate-600">•</span> <span>${dateStr} ${timeStr}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 text-center border-b border-slate-800">
+                    <div class="relative w-40 h-40 mx-auto mb-2">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke="${strokeColor}" stroke-dasharray="${percentage}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="21" class="percentage">${percentage}%</text>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white mb-2">${score} / ${questions.length} Correct</h2>
+                    <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider font-semibold">${percentage >= 70 ? 'Distinction Standard' : percentage >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
+                    <div class="flex justify-center">
+                        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-900/30 active:scale-95">Return to Dashboard</a>
+                    </div>
+                    ${emailStatus}
+                </div>
+
+                <div class="p-6 md:p-10 bg-slate-950 flex-1">
+                    <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                        <h3 class="text-lg font-bold text-white">Question Analysis</h3>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white">All</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">Incorrect</button>
+                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">Unanswered</button>
+                        </div>
+                    </div>
+                    <div id="results-container" class="space-y-6"></div>
+                </div>
+            `;
+            currentResultFilter = 'all';
+            renderResultQuestions();
+        }
+
+        function setResultFilter(filter) {
+            currentResultFilter = filter;
+            ['all', 'incorrect', 'unanswered'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white";
+            });
+            renderResultQuestions();
+        }
+
+        function renderResultQuestions() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            let count = 0;
+
+            questions.forEach((q, index) => {
+                const userAns = answers[index]; 
+                const isCorrect = userAns === q.c;
+                
+                if (currentResultFilter === 'incorrect' && isCorrect) return;
+                if (currentResultFilter === 'unanswered' && userAns !== undefined) return;
+
+                count++;
+                const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
+                
+                container.innerHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/40"><span class="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
+            });
+
+            if (count === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-8">No questions match this filter.</p>`;
+            }
+        }
+
+        function formatTime(seconds) { 
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const s = (seconds % 60).toString().padStart(2, '0'); 
+            return `${m}:${s}`; 
+        }
+
+        window.selectOption = function(idx) { 
+            if (isSubmitted) return; 
+            answers[currentQ] = questions[currentQ].options[idx]; 
+            saveActiveState(); renderExam(); 
+        }
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; saveActiveState(); renderExam(); 
+            } 
+        }
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; saveActiveState(); renderExam(); 
+        }
+        window.toggleFlag = function() {
+            if (isSubmitted) return;
+            flagged[currentQ] = !flagged[currentQ];
+            saveActiveState(); renderExam();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>

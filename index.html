@@ -11,6 +11,8 @@
         .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: #020617; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .breadcrumb-link { transition: color 0.2s; cursor: pointer; }
+        .breadcrumb-link:hover { color: #60a5fa; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
@@ -64,54 +66,20 @@
                 </div>
             </div>
             
-            <!-- CONTROLS: SEARCH & FILTER TABS -->
-            <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-8 border-t border-slate-800/80 pt-6">
-                <div class="relative flex-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3.5 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input type="text" id="search-bar" oninput="filterExams()" placeholder="Search exams by title or topic..." class="w-full pl-11 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+            <!-- BREADCRUMBS & SEARCH -->
+            <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-6 border-t border-slate-800/80 pt-6">
+                <div id="breadcrumb-container" class="flex items-center flex-wrap gap-2 text-sm font-medium text-slate-400">
+                    <!-- Injected via JS -->
                 </div>
-                <div class="flex gap-2 overflow-x-auto pb-1 md:pb-0 custom-scroll">
-                    <button onclick="filterTab('all', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-blue-600 text-white transition-all flex-shrink-0">All</button>
-                    <button onclick="filterTab('anatomy', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Anatomy</button>
-                    <button onclick="filterTab('physiology', this)" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0">Physiology</button>
+                <div class="relative w-full md:w-72">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3.5 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <input type="text" id="search-bar" oninput="handleSearch()" placeholder="Search all exams..." class="w-full pl-11 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm">
                 </div>
             </div>
 
-            <!-- EXAM CARDS GRID CONTAINER -->
-            <div id="exam-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- INTRO TO UPPER LIMB CARD -->
-                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="anatomy" data-title="anatomy intro to upper limb osteology myology neurovascular">
-                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-2 py-1 rounded border border-blue-800/30">Anatomy</span>
-                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">ANATOMY - INTRO TO UPPER LIMB</h3>
-                    <p class="text-slate-400 text-sm mb-6">45 Questions • 30 mins • Overview & Osteology</p>
-                    <a href="intro_upperlimb.html" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
-                </div>
-
-                <!-- OSTEOLOGY OF UPPER LIMB CARD -->
-                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="anatomy" data-title="anatomy osteology of the upper limb clavicle scapula humerus radius ulna carpal metacarpal phalanges">
-                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-2 py-1 rounded border border-blue-800/30">Anatomy</span>
-                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">ANATOMY - OSTEOLOGY OF THE UPPER LIMB</h3>
-                    <p class="text-slate-400 text-sm mb-6">60 Questions • 40 mins • Bones & Joints</p>
-                    <a href="osteo_upperlimb.html" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
-                </div>
-
-                <!-- CELL AND ITS FUNCTIONS CARD -->
-                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="physiology the cell and its functions protoplasm cell membrane organelles cytoskeleton endocytosis">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
-                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">PHYSIOLOGY - THE CELL AND ITS FUNCTIONS</h3>
-                    <p class="text-slate-400 text-sm mb-6">50 Questions • 30 mins • Protoplasm & Organelles</p>
-                    <a href="cell_and_function.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
-                </div>
-
-                <!-- GENETIC CONTROL CARD -->
-                <div class="exam-card bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-slate-700 transition-colors" data-category="physiology" data-title="physiology genetic control dna rna transcription translation apoptosis cancer mitosis">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded border border-emerald-800/30">Physiology</span>
-                    <h3 class="font-bold text-lg mt-3 mb-1 text-white">PHYSIOLOGY - GENETIC CONTROL</h3>
-                    <p class="text-slate-400 text-sm mb-6">45 Questions • 30 mins • DNA, RNA & Mitosis</p>
-                    <a href="introphysio_geneticcontrol.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-emerald-900/25">Start Exam</a>
-                </div>
-
+            <!-- DYNAMIC CONTENT CONTAINER -->
+            <div id="exam-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Injected via JS -->
             </div>
 
             <div id="no-results" class="hidden text-center py-16">
@@ -138,7 +106,41 @@
     </div>
 
     <script>
-        let currentFilter = 'all';
+        // --- EXAM DATABASE ---
+        // Note: If an exam has no 'topic', it will display directly under the sub-discipline.
+        const exams = [
+            // ANATOMY (Has Topics)
+            { 
+                id: 'intro_upperlimb', title: 'ANATOMY - INTRO TO UPPER LIMB', desc: '45 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'intro_upperlimb.html', badge: 'blue' 
+            },
+            { 
+                id: 'osteo_upperlimb', title: 'ANATOMY - OSTEOLOGY OF UPPER LIMB', desc: '60 Questions • 40 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'osteo_upperlimb.html', badge: 'blue' 
+            },
+            { 
+                id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
+                file: 'intro_lowerlimb.html', badge: 'blue' 
+            },
+            
+            // PHYSIOLOGY (No Topics - ends at Sub-discipline)
+            { 
+                id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL & FUNCTIONS', desc: '50 Questions • 30 mins', 
+                subject: 'Physiology', sub: 'General & Introductory Physiology', 
+                file: 'cell_and_function.html', badge: 'emerald' 
+            },
+            { 
+                id: 'introphysio_geneticcontrol', title: 'PHYSIOLOGY - GENETIC CONTROL', desc: '45 Questions • 30 mins', 
+                subject: 'Physiology', sub: 'General & Introductory Physiology', 
+                file: 'introphysio_geneticcontrol.html', badge: 'emerald' 
+            }
+        ];
+
+        let currentPath = ['Home']; // Navigation state
+        let isSearching = false;
         const SESSION_DURATION_MS = 4 * 60 * 60 * 1000;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -173,6 +175,201 @@
             }
         }
 
+        function login() {
+            const id = document.getElementById('student-id').value.trim().toUpperCase();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: id, timestamp: Date.now() }));
+            showDashboard(id);
+        }
+
+        function showDashboard(id) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            document.getElementById('display-id').innerText = id;
+            loadAnalytics(id);
+            renderBreadcrumbs();
+            renderGrid();
+        }
+
+        function logout() {
+            const rawSession = localStorage.getItem('tlt_session');
+            if (rawSession) {
+                try {
+                    const id = JSON.parse(rawSession).id;
+                    // Clear all active exam states
+                    localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_intro_lowerlimb_${id}`);
+                } catch(e) {}
+            }
+            localStorage.removeItem('tlt_session');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('student-id').value = '';
+            document.getElementById('login-btn').disabled = true;
+            document.getElementById('login-btn').className = "w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all";
+            
+            // Reset navigation
+            currentPath = ['Home'];
+            isSearching = false;
+            document.getElementById('search-bar').value = '';
+        }
+
+        // --- BREADCRUMB & NAVIGATION LOGIC ---
+        function renderBreadcrumbs() {
+            const container = document.getElementById('breadcrumb-container');
+            container.innerHTML = '';
+            
+            currentPath.forEach((crumb, index) => {
+                const isLast = index === currentPath.length - 1;
+                const span = document.createElement('span');
+                span.innerText = crumb;
+                
+                if (isLast && !isSearching) {
+                    span.className = "text-white font-bold";
+                } else {
+                    span.className = "breadcrumb-link";
+                    span.onclick = () => {
+                        currentPath = currentPath.slice(0, index + 1);
+                        isSearching = false;
+                        document.getElementById('search-bar').value = '';
+                        renderBreadcrumbs();
+                        renderGrid();
+                    };
+                }
+                container.appendChild(span);
+
+                if (!isLast) {
+                    const sep = document.createElement('span');
+                    sep.innerText = '/';
+                    sep.className = "text-slate-600 mx-1";
+                    container.appendChild(sep);
+                }
+            });
+        }
+
+        function navigateTo(pathArray) {
+            currentPath = pathArray;
+            isSearching = false;
+            document.getElementById('search-bar').value = '';
+            renderBreadcrumbs();
+            renderGrid();
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-bar').value.toLowerCase().trim();
+            isSearching = query.length > 0;
+            renderGrid();
+        }
+
+        // --- DYNAMIC GRID RENDERING ---
+        function renderGrid() {
+            const grid = document.getElementById('exam-grid');
+            const noResults = document.getElementById('no-results');
+            grid.innerHTML = '';
+            let html = '';
+            let count = 0;
+
+            const query = document.getElementById('search-bar').value.toLowerCase().trim();
+
+            if (isSearching && query) {
+                // SEARCH MODE
+                const filtered = exams.filter(e => 
+                    e.title.toLowerCase().includes(query) || 
+                    (e.topic && e.topic.toLowerCase().includes(query)) || 
+                    e.subject.toLowerCase().includes(query) ||
+                    e.sub.toLowerCase().includes(query)
+                );
+                filtered.forEach(e => { html += createExamCard(e); count++; });
+            
+            } else {
+                // BREADCRUMB MODE
+                let filtered = exams;
+
+                // Filter by the current path
+                if (currentPath.length > 1) filtered = filtered.filter(e => e.subject === currentPath[1]);
+                if (currentPath.length > 2) filtered = filtered.filter(e => e.sub === currentPath[2]);
+                if (currentPath.length > 3) filtered = filtered.filter(e => e.topic === currentPath[3]);
+
+                if (currentPath.length === 1) {
+                    // Show Subjects
+                    const subjects = [...new Set(exams.map(e => e.subject))];
+                    subjects.forEach(sub => {
+                        const countExams = exams.filter(e => e.subject === sub).length;
+                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', sub]);
+                        count++;
+                    });
+                } else if (currentPath.length === 2) {
+                    // Show Sub-Disciplines
+                    const subs = [...new Set(filtered.map(e => e.sub))];
+                    subs.forEach(sub => {
+                        const countExams = filtered.filter(e => e.sub === sub).length;
+                        html += createFolderCard(sub, `${countExams} Assessments available`, ['Home', currentPath[1], sub]);
+                        count++;
+                    });
+                } else if (currentPath.length === 3) {
+                    // Check if there are topics
+                    const topics = [...new Set(filtered.map(e => e.topic).filter(Boolean))];
+                    
+                    if (topics.length > 0) {
+                        // Render Topics
+                        topics.forEach(top => {
+                            const countExams = filtered.filter(e => e.topic === top).length;
+                            html += createFolderCard(top, `${countExams} Assessments available`, ['Home', currentPath[1], currentPath[2], top]);
+                            count++;
+                        });
+                    } else {
+                        // No topics exist, render exams directly
+                        filtered.forEach(e => { html += createExamCard(e); count++; });
+                    }
+                } else if (currentPath.length === 4) {
+                    // Show Exams (Under a Topic)
+                    filtered.forEach(e => { html += createExamCard(e); count++; });
+                }
+            }
+
+            if (count === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                grid.innerHTML = html;
+            }
+        }
+
+        function createFolderCard(title, subtitle, path) {
+            const pathString = JSON.stringify(path).replace(/"/g, '&quot;');
+            return `
+                <div onclick="navigateTo(${pathString})" class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden hover:border-blue-500 cursor-pointer transition-all group active:scale-[0.98]">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-500 group-hover:text-blue-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-600 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1 text-white group-hover:text-blue-400 transition-colors">${title}</h3>
+                    <p class="text-slate-400 text-sm">${subtitle}</p>
+                </div>
+            `;
+        }
+
+        function createExamCard(e) {
+            const colorClasses = e.badge === 'blue' 
+                ? 'text-blue-400 bg-blue-900/30 border-blue-800/30 hover:bg-blue-500 shadow-blue-900/25' 
+                : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30 hover:bg-emerald-500 shadow-emerald-900/25';
+            const badgeClass = e.badge === 'blue' ? 'text-blue-400 bg-blue-900/30 border-blue-800/30' : 'text-emerald-400 bg-emerald-900/30 border-emerald-800/30';
+
+            return `
+                <div class="bg-slate-900 rounded-xl shadow-lg border border-slate-800 p-6 relative overflow-hidden flex flex-col h-full">
+                    <span class="text-xs font-bold uppercase tracking-wider ${badgeClass} px-2 py-1 rounded border w-max mb-3">${e.subject}</span>
+                    <h3 class="font-bold text-lg mb-1 text-white flex-1">${e.title}</h3>
+                    <p class="text-slate-400 text-sm mb-6">${e.desc}</p>
+                    <a href="${e.file}" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-900/25">Start Exam</a>
+                </div>
+            `;
+        }
+
+        // --- ANALYTICS ---
         function loadAnalytics(studentId) {
             const historyGrid = document.getElementById('history-grid');
             const analyticsContainer = document.getElementById('analytics-container');
@@ -184,15 +381,10 @@
 
             if (history.length > 0) {
                 analyticsContainer.classList.remove('hidden');
-                
-                if (history.length > 2) {
-                    viewAllBtn.classList.remove('hidden');
-                } else {
-                    viewAllBtn.classList.add('hidden');
-                }
+                if (history.length > 2) viewAllBtn.classList.remove('hidden');
+                else viewAllBtn.classList.add('hidden');
 
-                const topTwo = history.slice(0, 2);
-                topTwo.forEach(item => {
+                history.slice(0, 2).forEach(item => {
                     const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
                     historyGrid.innerHTML += `
                         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-md">
@@ -243,69 +435,6 @@
 
         function closeHistoryModal() {
             document.getElementById('history-modal').classList.add('hidden');
-        }
-
-        function login() {
-            const id = document.getElementById('student-id').value.trim().toUpperCase();
-            localStorage.setItem('tlt_session', JSON.stringify({ id: id, timestamp: Date.now() }));
-            showDashboard(id);
-        }
-
-        function showDashboard(id) {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.remove('hidden');
-            document.getElementById('display-id').innerText = id;
-            loadAnalytics(id);
-        }
-
-        function logout() {
-            const rawSession = localStorage.getItem('tlt_session');
-            if (rawSession) {
-                try {
-                    const id = JSON.parse(rawSession).id;
-                    localStorage.removeItem(`tlt_active_exam_intro_upperlimb_${id}`);
-                    localStorage.removeItem(`tlt_active_exam_cell_and_function_${id}`);
-                    localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
-                    localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
-                } catch(e) {}
-            }
-            localStorage.removeItem('tlt_session');
-            document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('student-id').value = '';
-            document.getElementById('login-btn').disabled = true;
-            document.getElementById('login-btn').className = "w-full py-3 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all";
-        }
-
-        function filterTab(category, btnElement) {
-            currentFilter = category;
-            document.querySelectorAll('.filter-pill').forEach(btn => {
-                btn.className = "filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 transition-all flex-shrink-0";
-            });
-            btnElement.className = "filter-pill px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-blue-600 text-white transition-all flex-shrink-0";
-            applyFilters();
-        }
-
-        function filterExams() { applyFilters(); }
-
-        function applyFilters() {
-            const query = document.getElementById('search-bar').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.exam-card');
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const category = card.getAttribute('data-category');
-                const titleText = card.getAttribute('data-title');
-                const matchesCategory = (currentFilter === 'all' || category === currentFilter);
-                const matchesSearch = titleText.includes(query);
-
-                if (matchesCategory && matchesSearch) { card.classList.remove('hidden'); visibleCount++; } 
-                else { card.classList.add('hidden'); }
-            });
-
-            const noResults = document.getElementById('no-results');
-            if (visibleCount === 0) noResults.classList.remove('hidden');
-            else noResults.classList.add('hidden');
         }
     </script>
 </body>
