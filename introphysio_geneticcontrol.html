@@ -13,9 +13,9 @@
         .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
         @keyframes progress { 0% { stroke-dasharray: 0 100; } }
         .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
-        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #020617; border-radius: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; border: 2px solid #020617; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
@@ -371,12 +371,14 @@
                 </div>
 
                 <div class="p-6 md:p-10 bg-slate-950 flex-1">
-                    <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <h3 class="text-lg font-bold text-white">Question Analysis</h3>
-                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
-                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white">All</button>
-                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">Incorrect</button>
-                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">Unanswered</button>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800 overflow-x-auto custom-scroll w-full md:w-auto">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap">All</button>
+                            <button onclick="setResultFilter('correct')" id="filter-btn-correct" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Correct</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Incorrect</button>
+                            <button onclick="setResultFilter('answered')" id="filter-btn-answered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Answered</button>
+                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Unanswered</button>
                         </div>
                     </div>
                     <div id="results-container" class="space-y-6"></div>
@@ -388,10 +390,10 @@
 
         function setResultFilter(filter) {
             currentResultFilter = filter;
-            ['all', 'incorrect', 'unanswered'].forEach(f => {
+            ['all', 'correct', 'incorrect', 'answered', 'unanswered'].forEach(f => {
                 const btn = document.getElementById(`filter-btn-${f}`);
-                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white";
-                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white";
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap";
             });
             renderResultQuestions();
         }
@@ -404,9 +406,13 @@
             questions.forEach((q, index) => {
                 const userAns = answers[index]; 
                 const isCorrect = userAns === q.c;
+                const isAnswered = userAns !== undefined;
                 
-                if (currentResultFilter === 'incorrect' && isCorrect) return;
-                if (currentResultFilter === 'unanswered' && userAns !== undefined) return;
+                // Filtering Logic
+                if (currentResultFilter === 'correct' && !isCorrect) return;
+                if (currentResultFilter === 'incorrect' && (isCorrect || !isAnswered)) return; // Incorrect implies they answered it wrong
+                if (currentResultFilter === 'answered' && !isAnswered) return;
+                if (currentResultFilter === 'unanswered' && isAnswered) return;
 
                 count++;
                 const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
