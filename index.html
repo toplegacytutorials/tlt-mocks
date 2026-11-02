@@ -119,6 +119,11 @@
                 file: 'osteo_upperlimb.html', color: 'blue' 
             },
             { 
+                id: 'UL_pectoralandmammary', title: 'ANATOMY - THE PECTORAL REGION AND THE MAMMARY GLAND', desc: '45 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'UL_pectoralandmammary.html', color: 'blue' 
+            },
+            { 
                 id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
                 file: 'intro_lowerlimb.html', color: 'blue' 
@@ -196,6 +201,7 @@
                     localStorage.removeItem(`tlt_active_exam_osteo_upperlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
                     localStorage.removeItem(`tlt_active_exam_intro_lowerlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_UL_pectoralandmammary_${id}`);
                 } catch(e) {}
             }
             localStorage.removeItem('tlt_session');
@@ -392,7 +398,6 @@
                 history.slice(0, 2).forEach(item => {
                     const scoreColor = item.percent >= 70 ? 'text-green-400' : item.percent >= 50 ? 'text-yellow-400' : 'text-red-400';
                     
-                    // Fuzzy match for older saved titles
                     const examData = exams.find(x => 
                         item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
                         x.title.toLowerCase().includes(item.examTitle.toLowerCase())
@@ -435,11 +440,9 @@
                 return;
             }
 
-            // --- DEEP GROUPING LOGIC ---
             const grouped = {};
 
             history.forEach(item => {
-                // Fuzzy match to fix older records missing the exact string
                 const examData = exams.find(x => 
                     item.examTitle.toLowerCase().includes(x.title.toLowerCase()) || 
                     x.title.toLowerCase().includes(item.examTitle.toLowerCase())
@@ -458,7 +461,6 @@
                 grouped[subj][sub][topic][title].push(item);
             });
 
-            // Render the deeply nested hierarchy
             for (const [subjectName, subs] of Object.entries(grouped)) {
                 const isBlue = subjectName === 'Anatomy';
                 const subjectColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
@@ -470,7 +472,6 @@
                 `;
 
                 for (const [subName, topics] of Object.entries(subs)) {
-                    // Hide the folder icon/text if it defaulted to "General"
                     if (subName !== 'General') {
                         groupHTML += `
                             <div class="mb-5 ml-2">
@@ -484,7 +485,6 @@
                     }
 
                     for (const [topicName, titles] of Object.entries(topics)) {
-                        // Hide the topic header if it defaulted to "General"
                         if (topicName !== 'General') {
                             groupHTML += `
                                 <div class="ml-6 mb-3">
