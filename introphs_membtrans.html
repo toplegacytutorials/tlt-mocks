@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHYSIOLOGY - TRANSPORT OF SUBSTANCES THROUGH CELL MEMBRANES | TLT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 80%; max-height: 190px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 3.8; }
+        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
+        <!-- Assessment Injected Here -->
+    </div>
+
+    <script>
+        const EXAM_KEY = "introphs_membtrans";
+        const EXAM_SUBJECT = "Physiology";
+        const EXAM_TOPIC = "PHYSIOLOGY - TRANSPORT OF SUBSTANCES THROUGH CELL MEMBRANES";
+        const TOTAL_TIME_SECONDS = 1800; // 30 minutes
+        const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+
+        const rawQuestions = [
+            // DIRECT RECALL & BASIC CONCEPTS (18 Questions)
+            { q: "What is the primary driving force for simple diffusion through the cell membrane?", c: "Random kinetic movement of molecules", i: ["Active transport via ATP hydrolysis", "Conformational changes in carrier proteins", "Hydrostatic pressure gradients", "Osmotic pressure gradients"], r: "Diffusion is driven entirely by normal kinetic 'heat' energy where colliding molecules transfer kinetic energy to one another, moving down a concentration gradient without additional energy." },
+            { q: "Which specialized protein pores allow water to pass astonishingly rapidly through the cell membrane?", c: "Aquaporins", i: ["Voltage-gated channels", "Ligand-gated channels", "Symport carriers", "Antiport carriers"], r: "Water passes rapidly through specialized protein pores called aquaporins (e.g., RBC water diffusion per second is 100 times the cell volume)." },
+            { q: "What specific type of channel gating responds to electrical potential changes across the membrane?", c: "Voltage gating", i: ["Chemical (Ligand) gating", "Mechanical gating", "Thermal gating", "Osmotic gating"], r: "Voltage gating responds to electrical potential changes across the membrane (e.g., loss of intracellular negativity opens Na⁺ gates to elicit a nerve action potential)." },
+            { q: "What term describes the maximum rate reached by facilitated diffusion when the carrier proteins are saturated?", c: "Vmax", i: ["Km", "Vmin", "Equilibrium potential", "Nernst potential"], r: "Facilitated diffusion reaches a maximum rate (Vmax) because the carrier protein requires a finite fraction of a second to undergo the necessary conformational change." },
+            { q: "What is the equation for the Nernst potential at 37°C?", c: "EMF = ±61 log(C1/C2)", i: ["EMF = ±61 ln(C1/C2)", "EMF = ±1400 log(C1/C2)", "EMF = ±19,300 log(C1/C2)", "EMF = ±61 (C1 - C2)"], r: "The Nernst equation calculates the exact concentration difference required to perfectly balance a given electrical potential: EMF = ±61 log(C1/C2) at 37°C." },
+            { q: "How many osmoles does a fully dissociated 58.5g of NaCl yield?", c: "2 osmoles", i: ["1 osmole", "3 osmoles", "4 osmoles", "0.5 osmoles"], r: "1 osmole = 1 gram molecular weight of osmotically active solute. A fully dissociated solute like NaCl (58.5g) yields 2 osmoles." },
+            { q: "What is the normal osmolality of body fluids in mOsm/kg?", c: "~300 mOsm/kg", i: ["~150 mOsm/kg", "~500 mOsm/kg", "~1000 mOsm/kg", "~5500 mOsm/kg"], r: "Normal body fluid measures approximately 300 mOsm/kg." },
+            { q: "Which structural part of the Na⁺-K⁺ ATPase pump contains the internal ATPase activity?", c: "Alpha subunit", i: ["Beta subunit", "Gamma subunit", "Delta subunit", "Epsilon subunit"], r: "The larger α subunit has three intracellular Na⁺ binding sites, two extracellular K⁺ binding sites, and internal ATPase activity." },
+            { q: "How many intracellular Na⁺ binding sites are located on the alpha subunit of the Na⁺-K⁺ pump?", c: "Three", i: ["One", "Two", "Four", "Five"], r: "The α subunit of the Na⁺-K⁺ pump has three intracellular Na⁺ binding sites." },
+            { q: "Which ions does the Na⁺-K⁺ pump pull into the cell when it cleaves one ATP molecule?", c: "2 Potassium (K⁺) ions", i: ["3 Sodium (Na⁺) ions", "2 Sodium (Na⁺) ions", "3 Calcium (Ca²⁺) ions", "2 Hydrogen (H⁺) ions"], r: "Cleaving one ATP extrudes 3 Na⁺ OUT and pulls 2 K⁺ IN." },
+            { q: "What type of active transport uses energy stored in ionic concentration gradients that were originally created by primary active transport?", c: "Secondary active transport", i: ["Primary active transport", "Facilitated diffusion", "Simple diffusion", "Osmosis"], r: "Secondary active transport uses energy stored in ionic concentration gradients that were originally created by primary active transport." },
+            { q: "What is another term for co-transport, where substances move in the same direction?", c: "Symport", i: ["Antiport", "Uniport", "Counter-transport", "Exocytosis"], r: "Co-Transport is also known as Symport. The massive diffusion energy of extracellular sodium pulls other substances inward via a symport carrier protein." },
+            { q: "What is another term for counter-transport, where substances move in opposite directions?", c: "Antiport", i: ["Symport", "Uniport", "Co-transport", "Endocytosis"], r: "Counter-Transport is also known as Antiport. It transports Na⁺ inward while simultaneously moving another substance outward." },
+            { q: "Which specific cells utilize highly potent H⁺ ATPase pumps to secrete HCl?", c: "Gastric gland parietal cells", i: ["Renal intercalated cells", "Intestinal goblet cells", "Pancreatic acinar cells", "Hepatic Kupffer cells"], r: "Highly potent H⁺ ATPase pumps concentrate hydrogen ions a million-fold in gastric gland parietal cells (to secrete HCl)." },
+            { q: "Where are the H⁺ ATPase pumps located to eliminate excess acid from the body?", c: "Renal intercalated cells", i: ["Gastric gland parietal cells", "Proximal convoluted tubule cells", "Alveolar type II cells", "Sweat gland cells"], r: "H⁺ ATPase pumps are located in the renal intercalated cells of late distal tubules/cortical collecting ducts to eliminate excess acid." },
+            { q: "Does diffusion require an additional energy source like ATP?", c: "No, it requires no additional energy", i: ["Yes, it requires ATP hydrolysis", "Yes, it uses a carrier protein and GTP", "Yes, it uses the Na⁺ gradient", "Yes, it uses light energy"], r: "Diffusion is the random kinetic movement of molecules moving DOWN a concentration gradient. It requires NO additional energy." },
+            { q: "In which membrane structure do oxygen, nitrogen, carbon dioxide, and alcohols dissolve directly?", c: "Lipid bilayer", i: ["Aquaporins", "Integral protein channels", "Carrier proteins", "Peripheral protein complexes"], r: "Lipid-soluble substances like oxygen, nitrogen, carbon dioxide, and alcohols dissolve directly into the lipid bilayer." },
+            { q: "What type of transport moves substances UPHILL against an electrochemical gradient?", c: "Active transport", i: ["Diffusion", "Osmosis", "Facilitated diffusion", "Bulk flow"], r: "Active Transport moves substances UPHILL against an electrochemical gradient in combination with a carrier protein, requiring an additional energy source." },
+            
+            // CLINICAL, SPATIAL, PROCEDURAL & EXCLUSIONARY (27 Questions)
+            { q: "During a laboratory experiment, a red blood cell is placed in a solution and water diffuses at a rate 100 times the cell volume per second. Which specialized structures are primarily responsible for this rapid transport?", c: "Aquaporins", i: ["Na⁺-K⁺ ATPase pumps", "Voltage-gated sodium channels", "GLUT4 transporters", "Lipid rafts"], r: "Water passes astonishingly rapidly through specialized protein pores called aquaporins. RBC water diffusion per second is 100 times the cell volume." },
+            { q: "A physiologist is studying a mutant potassium channel where the narrow selectivity filter lacks carbonyl oxygens. Which of the following is the MOST likely consequence?", c: "Inability to strip bound water from K⁺", i: ["Inability to exclude tightly hydrated Na⁺", "Loss of voltage gating properties", "Continuous influx of calcium ions", "Failure to bind ATP"], r: "The potassium channel's selectivity filter contains carbonyl oxygens that strip bound water from K⁺ to allow passage." },
+            { q: "During a nerve action potential, a loss of intracellular negativity causes specific channels to snap open. Which type of gating is being described?", c: "Voltage gating", i: ["Chemical (Ligand) gating", "Mechanical gating", "Thermal gating", "Osmotic gating"], r: "Voltage gating responds to electrical potential changes across the membrane, such as the loss of intracellular negativity that opens Na⁺ gates." },
+            { q: "At the neuromuscular junction, acetylcholine binds to a protein to induce a conformational change. This is an example of which mechanism?", c: "Chemical (Ligand) gating", i: ["Voltage gating", "Mechanical gating", "Primary active transport", "Secondary active transport"], r: "Chemical (Ligand) gating occurs when a chemical ligand (e.g., acetylcholine) binds to the protein to induce a conformational change." },
+            { q: "A researcher uses a micropipette to form a tight seal over a minute membrane patch to record the current flow of a single ion channel. What is the name of this technique?", c: "Patch clamp method", i: ["Voltage clamp method", "Nernst equation", "Chromatography", "Spectrophotometry"], r: "The Patch Clamp Method uses a micropipette to form a tight seal over a minute membrane 'patch' to isolate a single protein channel." },
+            { q: "A patient has a mutation affecting the GLUT4 transporter. Despite normal insulin levels, glucose fails to enter muscle cells. Which transport mechanism is impaired?", c: "Facilitated diffusion", i: ["Simple diffusion", "Primary active transport", "Secondary active transport", "Osmosis"], r: "Facilitated diffusion utilizes a specific carrier protein to shuttle substances like glucose (e.g., the GLUT4 transporter, activated by insulin)." },
+            { q: "Why does simple diffusion increase proportionately with concentration, whereas facilitated diffusion plateaus at a Vmax?", c: "The carrier protein requires a finite fraction of a second to undergo conformational change", i: ["Simple diffusion requires ATP", "Facilitated diffusion is an active process", "Carrier proteins are destroyed at high concentrations", "The lipid bilayer becomes rigid at high concentrations"], r: "Facilitated diffusion reaches a maximum rate (Vmax) because the carrier protein requires a finite fraction of a second to undergo the necessary conformational change." },
+            { q: "A patient is administered an intravenous solution that exerts a higher hydrostatic pressure on the capillary wall than the interstitial fluid. What is the primary mechanism driving the net bulk flow of molecules?", c: "Pressure difference", i: ["Concentration difference", "Electrical potential", "Osmotic pressure", "Active transport"], r: "Higher hydrostatic pressure on one side (e.g., blood capillaries operating 20 mm Hg higher than the interstitium) causes a net bulk flow of molecules toward the low-pressure side." },
+            { q: "A clinician notes that the osmotic pressure of a patient's plasma is 5500 mm Hg despite a calculated value of ~5790 mm Hg from 300 mOsm/L. What is the primary reason for this discrepancy?", c: "Intermolecular ionic attraction", i: ["Inaccurate osmometer calibration", "Presence of undissociated proteins", "Temperature fluctuation in the sample", "Active transport of ions"], r: "Although body fluids at 300 mOsm/L calculate to 5790 mm Hg, intermolecular ionic attraction reduces the actual measured value to roughly 5500 mm Hg." },
+            { q: "A cell is poisoned with a drug that inhibits ATP production. Which of the following transport mechanisms will be affected FIRST?", c: "Primary active transport", i: ["Simple diffusion", "Osmosis", "Facilitated diffusion", "Secondary active transport"], r: "Primary active transport derives its energy directly from the breakdown of ATP. Without ATP, it is immediately affected." },
+            { q: "All of the following statements accurately describe the Na⁺-K⁺ ATPase pump EXCEPT:", c: "It moves 2 Na⁺ out and 3 K⁺ in", i: ["It extrudes 3 Na⁺ out and pulls 2 K⁺ in", "It contains a smaller beta subunit", "It has internal ATPase activity", "It controls cell volume"], r: "Cleaving one ATP extrudes 3 Na⁺ OUT and pulls 2 K⁺ IN. The reverse (2 Na⁺ out, 3 K⁺ in) is incorrect." },
+            { q: "In a patient with severe cellular edema, which function of the Na⁺-K⁺ pump is most likely failing?", c: "Controlling cell volume", i: ["Electrogenic nature", "Calcium regulation", "Glucose co-transport", "pH regulation"], r: "Negatively charged intracellular proteins continuously attract positive ions and water. The pump extrudes a net loss of ions, preventing the cell from swelling indefinitely and bursting." },
+            { q: "The Na⁺-K⁺ pump creates a net deficit of positive ions inside the cell. What is this property called?", c: "Electrogenic nature", i: ["Osmotic nature", "Hydrostatic nature", "Nernst potential", "Voltage gating"], r: "By extruding three positive charges for every two it internalizes, the pump creates a net deficit of positive ions inside the cell, generating the negative intracellular electrical potential (Electrogenic Nature)." },
+            { q: "Which specific ATPase pump maintains intracellular Ca²⁺ concentrations 10,000 times lower than the ECF by pumping Ca²⁺ into the sarcoplasmic reticulum?", c: "Ca²⁺ ATPase pump", i: ["H⁺ ATPase pump", "Na⁺-K⁺ ATPase pump", "Na⁺-Ca²⁺ counter-transporter", "Na⁺-glucose symporter"], r: "Two specific Ca²⁺ ATPase pumps maintain low intracellular Ca²⁺. One ejects Ca²⁺ out of the cell; the other pumps it into the sarcoplasmic reticulum and mitochondria." },
+            { q: "A patient is prescribed a drug that blocks the Na⁺-glucose co-transporter in the renal tubules. Which transport mechanism is being targeted?", c: "Secondary active transport (Symport)", i: ["Primary active transport", "Facilitated diffusion", "Simple diffusion", "Osmosis"], r: "The co-transport of glucose and amino acids is crucial for renal and intestinal absorption and is a form of secondary active transport (symport)." },
+            { q: "In the proximal renal tubules, a carrier protein transports Na⁺ inward while moving H⁺ outward. What is this process called?", c: "Counter-transport (Antiport)", i: ["Co-transport (Symport)", "Primary active transport", "Facilitated diffusion", "Simple diffusion"], r: "Counter-Transport (Antiport) transports Na⁺ inward while simultaneously moving another substance outward. Sodium-hydrogen counter-transport occurs in the proximal renal tubules." },
+            { q: "During intestinal absorption, how does water move across the cellular sheet after Na⁺ and water diffuse into the luminal pole?", c: "Osmosis driven by basolateral Na⁺-K⁺ pump gradient", i: ["Active transport via aquaporins", "Bulk flow via hydrostatic pressure", "Secondary active transport via symport", "Diffusion through the lipid bilayer"], r: "Cells tightly connected at the luminal pole allow Na⁺ and water to diffuse into the cell. Primary active transport at the basolateral membranes creates a high concentration gradient that drives the osmosis of water." },
+            { q: "The energy required to transport a substance against its concentration gradient is proportional to what relationship?", c: "The logarithm of the concentration degree", i: ["The linear difference in concentration", "The square of the concentration difference", "The inverse of the concentration", "The square root of the concentration"], r: "The energy required is proportional to the logarithm of the concentration degree: (Energy (cal/osm) = 1400 log(C1/C2))." },
+            { q: "A student examines a potassium channel and a sodium channel. Which structural feature allows the sodium channel to pull small, dehydrated Na⁺ ions inward?", c: "Negatively charged amino acids lining the channel", i: ["Carbonyl oxygens in the selectivity filter", "A wide, non-selective pore diameter", "Positively charged amino acids lining the channel", "ATPase activity on the intracellular side"], r: "The Sodium Channel is lined with strong negative amino acids that pull small, dehydrated Na⁺ ions inward." },
+            { q: "All of the following are examples of lipid-soluble substances that dissolve directly into the lipid bilayer EXCEPT:", c: "Urea", i: ["Oxygen", "Nitrogen", "Carbon dioxide", "Alcohols"], r: "Oxygen, nitrogen, carbon dioxide, and alcohols are lipid-soluble and dissolve directly. Urea is a small lipid-insoluble molecule that passes through protein channels." },
+            { q: "Which of the following molecules requires a specific carrier protein to shuttle it across the cell membrane via facilitated diffusion?", c: "Glucose", i: ["Oxygen", "Carbon dioxide", "Nitrogen", "Alcohol"], r: "Facilitated diffusion utilizes a specific carrier protein to shuttle substances like glucose and amino acids." },
+            { q: "A physiology student is calculating the Nernst potential for a specific ion. If the concentration of the ion is 10 times higher outside than inside, what is the electrical potential required to balance it at 37°C?", c: "61 mV", i: ["30.5 mV", "120 mV", "1400 mV", "19,300 mV"], r: "Using the Nernst equation (EMF = ±61 log(C1/C2)), if C1/C2 is 10, log(10) = 1, so EMF = 61 mV." },
+            { q: "Glandular and renal cells may expend up to what percentage of their total cellular energy solely on active transport?", c: "90%", i: ["10%", "25%", "50%", "75%"], r: "Glandular and renal cells may expend up to 90% of their total cellular energy solely on active transport." },
+            { q: "In the alpha subunit of the Na⁺-K⁺ pump, where are the binding sites for K⁺ located?", c: "Extracellular", i: ["Intracellular", "Within the lipid bilayer", "On the beta subunit", "In the ATPase domain"], r: "The α subunit has three intracellular Na⁺ binding sites and two extracellular K⁺ binding sites." },
+            { q: "What drives the movement of glucose and amino acids against their concentration gradient during secondary active transport?", c: "Massive diffusion energy of extracellular sodium", i: ["ATP hydrolysis by the carrier protein", "Hydrostatic pressure differences", "The electrogenic nature of the Na⁺-K⁺ pump", "Osmotic pressure of intracellular proteins"], r: "The massive diffusion energy of extracellular sodium pulls other substances inward via a symport carrier protein." },
+            { q: "Which of the following best describes the movement of water and small lipid-insoluble molecules through the cell membrane as molecular size increases?", c: "Penetration falls rapidly", i: ["Penetration increases proportionately", "Penetration remains constant", "Penetration increases exponentially", "Penetration is independent of size"], r: "Small lipid-insoluble molecules (like urea) can pass through the membrane, but their penetration falls rapidly as molecular size increases." },
+            { q: "A cell is placed in a hypertonic solution. Which of the following mechanisms is primarily responsible for the shrinkage of the cell?", c: "Osmosis", i: ["Active transport", "Facilitated diffusion", "Bulk flow", "Endocytosis"], r: "Osmosis is the net movement of water across a selectively permeable membrane caused by a water concentration difference, leading to cell shrinkage in hypertonic solutions." },
+            { q: "In the context of channel gating, how do ion channels conduct current?", c: "In an all-or-none fashion", i: ["In a graded, proportional fashion", "In a continuous, unregulated flow", "Only when ATP is bound", "Only when the membrane is depolarized"], r: "Ion channels conduct current in an all-or-none fashion, snapping open and closed intermittently for fractions of a millisecond." }
+        ];
+
+        let candidateID = ""; 
+        let candidateDept = ""; 
+        let questions = []; 
+        let currentQ = 0; 
+        let answers = {}; 
+        let flagged = {}; 
+        let timeLeft = TOTAL_TIME_SECONDS; 
+        let isSubmitted = false; 
+        let timerInterval;
+        let examStartTime = 0;
+        const appDiv = document.getElementById('app');
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isSubmitted && candidateID && timeLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        const icons = {
+            user: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+            flag: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>`,
+            flagSolid: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>`
+        };
+
+        const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+        function getActiveStateKey(id) { return `tlt_active_exam_${EXAM_KEY}_${id}`; }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = { candidateID, candidateDept, questions, currentQ, answers, flagged, examStartTime, totalTime: TOTAL_TIME_SECONDS };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) localStorage.removeItem(getActiveStateKey(candidateID));
+        }
+
+        function initApp() {
+            const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
+            if (rawSession) { try { sessionID = JSON.parse(rawSession).id || ""; } catch(e) {} }
+
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; currentQ = state.currentQ || 0;
+                            answers = state.answers || {}; flagged = state.flagged || {};
+                            timeLeft = remaining; examStartTime = state.examStartTime;
+                            startTimer(); renderExam(); return;
+                        } else {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; answers = state.answers || {}; 
+                            flagged = state.flagged || {}; timeLeft = 0;
+                            clearActiveState(); submitQuiz(); return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) { idField.value = sessionID; validateInput(); }
+            }
+        }
+
+        function validateInput() {
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
+            const dInput = document.getElementById('cand-dept').value.trim();
+            const btn = document.getElementById('start-btn');
+            const errorMsg = document.getElementById('id-error');
+            const isValidId = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(idInput);
+            
+            if (idInput !== "" && !isValidId) errorMsg.classList.remove('opacity-0');
+            else errorMsg.classList.add('opacity-0');
+
+            if (isValidId && dInput) { 
+                btn.disabled = false; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]"; 
+            } else { 
+                btn.disabled = true; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all"; 
+            }
+        }
+
+        function startExam() {
+            candidateID = document.getElementById('cand-id').value.trim().toUpperCase(); 
+            candidateDept = document.getElementById('cand-dept').value.trim();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: candidateID, timestamp: Date.now() }));
+
+            questions = rawQuestions.sort(() => Math.random() - 0.5).map(q => { 
+                const opts = [q.c, ...q.i].sort(() => Math.random() - 0.5); 
+                return { ...q, options: opts }; 
+            });
+
+            examStartTime = Date.now(); timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState(); startTimer(); renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval); submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function renderLogin() {
+            const timeInMinutes = Math.floor(TOTAL_TIME_SECONDS / 60);
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-8 md:p-12">
+                    <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-800/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-3 py-1 rounded border border-emerald-800/30 mb-3">${EXAM_SUBJECT}</span>
+                    <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
+                    <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions</strong>.</p>
+                    <div class="w-full max-w-md space-y-4">
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
+                    </div>
+                </div>`;
+        }
+
+        function renderExam() {
+            let savedScroll = 0;
+            const existingGrid = document.getElementById('q-nav-grid');
+            if (existingGrid) savedScroll = existingGrid.scrollLeft;
+
+            const q = questions[currentQ]; 
+            const hasAnsweredAll = Object.keys(answers).length === questions.length; 
+            const progressPct = (Object.keys(answers).length / questions.length) * 100;
+            const isFlagged = flagged[currentQ] || false;
+            
+            let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
+            questions.forEach((_, idx) => {
+                const isAns = answers[idx] !== undefined; 
+                const isCurr = idx === currentQ;
+                const isF = flagged[idx];
+                let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
+                if (isCurr && isAns) btnClass += "bg-emerald-600 text-white shadow-md shadow-emerald-500/30";
+                else if (isCurr) btnClass += "border-2 border-emerald-500 text-emerald-400 bg-emerald-950/50";
+                else if (isF) btnClass += "bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 hover:bg-yellow-900";
+                else if (isAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
+                else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
+                gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
+            }); 
+            gridHTML += `</div>`;
+
+            let optionsHTML = `<div class="space-y-3 mt-6">`;
+            q.options.forEach((opt, idx) => {
+                const isSelected = answers[currentQ] === opt;
+                optionsHTML += `<button onclick="selectOption(${idx})" class="option-btn w-full text-left p-4 rounded-xl border-2 ${isSelected ? 'border-emerald-500 bg-emerald-950/40' : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900'}">
+                    <div class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 font-bold text-xs ${isSelected ? 'border-emerald-500 bg-emerald-600 text-white' : 'border-slate-700 text-slate-500'}">${optionLetters[idx]}</div>
+                        <span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span>
+                    </div>
+                </button>`;
+            }); 
+            optionsHTML += `</div>`;
+
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white px-6 py-4 flex justify-between items-center flex-wrap gap-4 border-b border-slate-800">
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-widest">${EXAM_SUBJECT}</span>
+                        <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
+                        <div class="text-xs mt-1 font-mono text-slate-400 truncate">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
+                    </div>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <button onclick="toggleFlag()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFlagged ? 'bg-yellow-900/40 border-yellow-700/50 text-yellow-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'} transition-colors text-xs font-semibold">
+                            ${isFlagged ? icons.flagSolid : icons.flag} ${isFlagged ? 'Flagged' : 'Flag for Review'}
+                        </button>
+                        <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-emerald-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    </div>
+                </div>
+                <div class="h-1 w-full bg-slate-950"><div class="h-full bg-emerald-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    ${gridHTML}
+                    <div class="flex-1"><div class="flex items-start gap-4 mb-2"><span class="text-4xl font-black text-slate-700">${currentQ + 1}</span><h2 class="text-xl md:text-2xl font-semibold text-white leading-snug mt-1">${q.q}</h2></div>${optionsHTML}</div>
+                    <div class="mt-10 flex justify-between items-center"><button onclick="changeQ(-1)" class="px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed" ${currentQ === 0 ? 'disabled' : ''}>← Previous</button>${hasAnsweredAll || currentQ === questions.length - 1 ? `<button onclick="submitQuiz()" class="px-8 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900/30 transition-all active:scale-95">Submit Exam</button>` : `<button onclick="changeQ(1)" class="px-8 py-3 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-md active:scale-95">Next →</button>`}</div>
+                </div>`;
+
+            const newGrid = document.getElementById('q-nav-grid');
+            if (newGrid) {
+                newGrid.scrollLeft = savedScroll;
+                const activeBtn = document.getElementById(`q-btn-${currentQ}`);
+                if (activeBtn) {
+                    const gridRect = newGrid.getBoundingClientRect();
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    if (btnRect.left < gridRect.left || btnRect.right > gridRect.right) {
+                        activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }
+            }
+        }
+
+        async function submitQuiz() {
+            isSubmitted = true; clearInterval(timerInterval); clearActiveState();
+
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-emerald-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
+            
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.c) score++; });
+            const percentage = Math.round((score / questions.length) * 100); 
+            let emailStatus = "";
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr };
+
+            try {
+                const storageKey = 'tlt_score_history_' + candidateID;
+                const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                existingHistory.unshift(newRecord);
+                localStorage.setItem(storageKey, JSON.stringify(existingHistory));
+            } catch(e) {}
+
+            if (WEB3FORMS_ACCESS_KEY) {
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', { 
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, name: candidateID, email: "system@mockexam.com", subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, from_name: "Mock Exam Portal", Subject: EXAM_SUBJECT, Topic: EXAM_TOPIC, Candidate_ID: candidateID, Department: candidateDept, Score: `${score} out of ${questions.length} (${percentage}%)`, Time_Spent: formatTime(timeSpentSeconds) }) 
+                    });
+                    if (response.status === 200) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; } else { throw new Error("Failed"); }
+                } catch (e) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; }
+            } 
+            renderResults(score, percentage, emailStatus, dateStr, timeStr);
+        }
+
+        let currentResultFilter = 'all';
+
+        function renderResults(score, percentage, emailStatus, dateStr, timeStr) {
+            const strokeColor = percentage >= 70 ? '#22c55e' : percentage >= 50 ? '#f59e0b' : '#ef4444';
+            
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
+                    <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-emerald-900/40 text-emerald-400 border border-emerald-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
+                    <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
+                        <span class="text-emerald-400 font-bold">${candidateID}</span> <span class="text-slate-600">•</span> <span class="text-slate-300 font-sans">${candidateDept}</span> <span class="text-slate-600">•</span> <span>${dateStr} ${timeStr}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 text-center border-b border-slate-800">
+                    <div class="relative w-40 h-40 mx-auto mb-2">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke="${strokeColor}" stroke-dasharray="${percentage}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="21" class="percentage">${percentage}%</text>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white mb-2">${score} / ${questions.length} Correct</h2>
+                    <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider font-semibold">${percentage >= 70 ? 'Distinction Standard' : percentage >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
+                    <div class="flex justify-center">
+                        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-emerald-900/30 active:scale-95">Return to Dashboard</a>
+                    </div>
+                    ${emailStatus}
+                </div>
+
+                <div class="p-6 md:p-10 bg-slate-950 flex-1">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="text-lg font-bold text-white">Question Analysis</h3>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800 overflow-x-auto custom-scroll w-full md:w-auto">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white whitespace-nowrap">All</button>
+                            <button onclick="setResultFilter('correct')" id="filter-btn-correct" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Correct</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Incorrect</button>
+                            <button onclick="setResultFilter('answered')" id="filter-btn-answered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Answered</button>
+                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Unanswered</button>
+                        </div>
+                    </div>
+                    <div id="results-container" class="space-y-6"></div>
+                </div>
+            `;
+            currentResultFilter = 'all';
+            renderResultQuestions();
+        }
+
+        function setResultFilter(filter) {
+            currentResultFilter = filter;
+            ['all', 'correct', 'incorrect', 'answered', 'unanswered'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white whitespace-nowrap";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap";
+            });
+            renderResultQuestions();
+        }
+
+        function renderResultQuestions() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            let count = 0;
+
+            questions.forEach((q, index) => {
+                const userAns = answers[index]; 
+                const isCorrect = userAns === q.c;
+                const isAnswered = userAns !== undefined;
+                
+                // Filtering Logic
+                if (currentResultFilter === 'correct' && !isCorrect) return;
+                if (currentResultFilter === 'incorrect' && (isCorrect || !isAnswered)) return;
+                if (currentResultFilter === 'answered' && !isAnswered) return;
+                if (currentResultFilter === 'unanswered' && isAnswered) return;
+
+                count++;
+                const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
+                
+                container.innerHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-900/40"><span class="flex items-center gap-2 font-bold text-emerald-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
+            });
+
+            if (count === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-8">No questions match this filter.</p>`;
+            }
+        }
+
+        function formatTime(seconds) { 
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const s = (seconds % 60).toString().padStart(2, '0'); 
+            return `${m}:${s}`; 
+        }
+
+        window.selectOption = function(idx) { 
+            if (isSubmitted) return; 
+            answers[currentQ] = questions[currentQ].options[idx]; 
+            saveActiveState(); renderExam(); 
+        }
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; saveActiveState(); renderExam(); 
+            } 
+        }
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; saveActiveState(); renderExam(); 
+        }
+        window.toggleFlag = function() {
+            if (isSubmitted) return;
+            flagged[currentQ] = !flagged[currentQ];
+            saveActiveState(); renderExam();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>

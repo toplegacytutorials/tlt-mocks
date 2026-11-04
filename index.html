@@ -137,6 +137,11 @@
                 id: 'introphysio_geneticcontrol', title: 'PHYSIOLOGY - GENETIC CONTROL', desc: '45 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'General & Introductory Physiology', 
                 file: 'introphysio_geneticcontrol.html', color: 'emerald' 
+            },
+            { 
+                id: 'introphs_membtrans', title: 'PHYSIOLOGY - TRANSPORT OF SUBSTANCES THROUGH CELL MEMBRANES', desc: '45 Questions • 30 mins', 
+                subject: 'Physiology', sub: 'General & Introductory Physiology', 
+                file: 'introphs_membtrans.html', color: 'emerald' 
             }
         ];
 
@@ -202,6 +207,7 @@
                     localStorage.removeItem(`tlt_active_exam_introphysio_geneticcontrol_${id}`);
                     localStorage.removeItem(`tlt_active_exam_intro_lowerlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_UL_pectoralandmammary_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_introphs_membtrans_${id}`);
                 } catch(e) {}
             }
             localStorage.removeItem('tlt_session');
