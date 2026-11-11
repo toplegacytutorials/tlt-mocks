@@ -142,6 +142,11 @@
                 id: 'introphs_membtrans', title: 'PHYSIOLOGY - TRANSPORT OF SUBSTANCES THROUGH CELL MEMBRANES', desc: '45 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'General & Introductory Physiology', 
                 file: 'introphs_membtrans.html', color: 'emerald' 
+            },
+            { 
+                id: 'amino_acids', title: 'MEDICAL BIOCHEMISTRY - AMINO ACIDS', desc: '60 Questions (T/F) • 40 mins', 
+                subject: 'Medical Biochemistry', sub: 'Amino Acids', 
+                file: 'amino_acids.html', color: 'blue' 
             }
         ];
 
@@ -208,6 +213,7 @@
                     localStorage.removeItem(`tlt_active_exam_intro_lowerlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_UL_pectoralandmammary_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphs_membtrans_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_amino_acids_${id}`);
                 } catch(e) {}
             }
             localStorage.removeItem('tlt_session');
@@ -468,7 +474,7 @@
             });
 
             for (const [subjectName, subs] of Object.entries(grouped)) {
-                const isBlue = subjectName === 'Anatomy';
+                const isBlue = subjectName === 'Anatomy' || subjectName === 'Medical Biochemistry';
                 const subjectColor = isBlue ? 'text-blue-400' : 'text-emerald-400';
                 const subjectBorder = isBlue ? 'border-blue-900/50' : 'border-emerald-900/50';
 
