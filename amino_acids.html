@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDICAL BIOCHEMISTRY - AMINO ACIDS | TLT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 80%; max-height: 190px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 3.8; }
+        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
+        <!-- Assessment Injected Here -->
+    </div>
+
+    <script>
+        const EXAM_KEY = "amino_acids";
+        const EXAM_SUBJECT = "Medical Biochemistry";
+        const EXAM_TOPIC = "MEDICAL BIOCHEMISTRY - AMINO ACIDS";
+        const TOTAL_TIME_SECONDS = 2400; // 40 minutes
+        const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+
+        // 60 Questions strictly from the provided source text
+        const rawQuestions = [
+            { q: "Regarding the introductory chemistry of amino acids, evaluate the following statements:", statements: [{ text: "Amino acids are the fundamental monomeric building blocks of proteins.", correct: true }, { text: "All mammalian proteins are constructed from a standard set of 22 alpha-amino acids.", correct: false }, { text: "Every alpha-amino acid consists of a central alpha-carbon atom.", correct: true }, { text: "The alpha-carbon is bonded to four different groups.", correct: true }, { text: "The R-group is a distinctive side chain attached to the alpha-carbon.", correct: true }], r: "Amino acids are the building blocks (A). Mammalian proteins use 20 standard amino acids, not 22 (B is false). The alpha-carbon is central (C) and is bonded to four different groups (D) including the R-group (E)." },
+            { q: "Concerning the four groups attached to the central alpha-carbon of an amino acid, evaluate the following statements:", statements: [{ text: "One of the groups is an acidic carboxyl group (-COOH).", correct: true }, { text: "One of the groups is a basic amino group (-NH2).", correct: true }, { text: "One of the groups is a hydrogen atom (-H).", correct: true }, { text: "One of the groups is a distinctive side chain (-R).", correct: true }, { text: "The alpha-carbon is bonded to three identical hydrogen atoms.", correct: false }], r: "The four groups are carboxyl (A), amino (B), hydrogen (C), and R-group (D). The alpha-carbon is not bonded to three identical hydrogens (E is false)." },
+            { q: "Regarding the stereochemistry (chirality) of amino acids, evaluate the following statements:", statements: [{ text: "Because the alpha-carbon is attached to four different groups, it is a chiral center.", correct: true }, { text: "Chirality allows for D- and L-forms of amino acids.", correct: true }, { text: "Only D-amino acids are found in mammalian proteins.", correct: false }, { text: "Only L-amino acids are found in mammalian proteins.", correct: true }, { text: "D-amino acids are found in some bacterial cell walls and antibiotics.", correct: true }], r: "Chirality allows D and L forms (A, B). Mammalian proteins contain exclusively L-amino acids (C is false, D is true). D-forms are found in bacteria (E)." },
+            { q: "Concerning Glycine, evaluate the following statements:", statements: [{ text: "Glycine is achiral.", correct: true }, { text: "Glycine's R-group is a second hydrogen atom.", correct: true }, { text: "Because of its R-group, Glycine's alpha-carbon is not bonded to four different groups.", correct: true }, { text: "Glycine is the only standard amino acid that does not have D- and L- enantiomers.", correct: true }, { text: "Glycine is a basic amino acid.", correct: false }], r: "Glycine is achiral (A) because its R-group is a second hydrogen atom (B), meaning the alpha-carbon does not have four different groups (C). It is the only standard amino acid lacking enantiomers (D). It is non-polar, not basic (E is false)." },
+            { q: "Regarding non-polar (hydrophobic) amino acids, evaluate the following statements:", statements: [{ text: "They have aliphatic or aromatic side chains.", correct: true }, { text: "They do not interact with water.", correct: true }, { text: "They cluster in the interior of proteins to avoid aqueous environments.", correct: true }, { text: "Glycine, Alanine, Valine, Leucine, Isoleucine, Proline, and Methionine are aliphatic non-polar amino acids.", correct: true }, { text: "Phenylalanine and Tryptophan are polar uncharged amino acids.", correct: false }], r: "Non-polar amino acids are hydrophobic (A, B), cluster in the interior (C), include the listed aliphatic examples (D), and Phenylalanine/Tryptophan are aromatic non-polar (E is false)." },
+            { q: "Concerning Proline, evaluate the following statements:", statements: [{ text: "Proline is technically an imino acid.", correct: true }, { text: "It has a rigid ring structure.", correct: true }, { text: "Its rigid ring structure often creates 'kinks' in protein chains.", correct: true }, { text: "Proline is classified as an aromatic amino acid.", correct: false }, { text: "Proline is a polar uncharged amino acid.", correct: false }], r: "Proline is an imino acid (A) with a rigid ring (B) causing kinks (C). It is an aliphatic non-polar amino acid (D and E are false)." },
+            { q: "Regarding polar, uncharged amino acids, evaluate the following statements:", statements: [{ text: "Their side chains can form hydrogen bonds.", correct: true }, { text: "They are hydrophilic.", correct: true }, { text: "They do not carry a net electrical charge at physiological pH.", correct: true }, { text: "Serine, Threonine, Tyrosine, Cysteine, Asparagine, and Glutamine belong to this group.", correct: true }, { text: "They carry a net positive charge at physiological pH.", correct: false }], r: "Polar uncharged amino acids form H-bonds (A), are hydrophilic (B), and have no net charge at physiological pH (C, E is false). The listed amino acids are in this group (D)." },
+            { q: "Concerning Cysteine, evaluate the following statements:", statements: [{ text: "It is a polar, uncharged amino acid.", correct: true }, { text: "It contains a sulfhydryl (-SH) group.", correct: true }, { text: "It can form disulfide bonds.", correct: true }, { text: "These bonds help stabilize protein structures.", correct: true }, { text: "It is classified as an acidic amino acid.", correct: false }], r: "Cysteine is polar uncharged (A) with a sulfhydryl group (B) forming stabilizing disulfide bonds (C, D). It is not acidic (E is false)." },
+            { q: "Regarding charged amino acids at physiological pH, evaluate the following statements:", statements: [{ text: "Acidic amino acids have a second carboxyl group on their side chain.", correct: true }, { text: "Aspartic acid (Aspartate) and Glutamic acid (Glutamate) are acidic amino acids.", correct: true }, { text: "Basic amino acids have an additional amino group on their side chain.", correct: true }, { text: "Histidine, Lysine, and Arginine are basic amino acids.", correct: true }, { text: "Basic amino acids carry a net negative charge at physiological pH.", correct: false }], r: "Acidic have a second carboxyl group (A) and include Asp and Glu (B). Basic have an extra amino group (C) and include His, Lys, Arg (D). Basic carry a positive charge (E is false)." },
+            { q: "Regarding the nutritional classification of essential amino acids, evaluate the following statements:", statements: [{ text: "They cannot be synthesized by the body.", correct: true }, { text: "They must be obtained from the diet.", correct: true }, { text: "The mnemonic PVT TIM HALL stands for the essential amino acids.", correct: true }, { text: "PVT TIM HALL stands for Phenylalanine, Valine, Threonine, Tryptophan, Isoleucine, Methionine, Histidine, Arginine, Leucine, Lysine.", correct: true }, { text: "Tyrosine is an essential amino acid.", correct: false }], r: "Essential amino acids cannot be synthesized (A) and must come from diet (B). PVT TIM HALL is the mnemonic (C, D). Tyrosine is non-essential (E is false)." },
+            { q: "Concerning the semi-essential amino acids, evaluate the following statements:", statements: [{ text: "Arginine and Histidine are often termed semi-essential.", correct: true }, { text: "They are required in the diet primarily during periods of rapid growth.", correct: true }, { text: "They are required during positive nitrogen balance.", correct: true }, { text: "Examples of periods requiring them include childhood, pregnancy, or recovery from severe illness.", correct: true }, { text: "They are never required in the adult diet.", correct: false }], r: "Arg and His are semi-essential (A) needed during rapid growth (B) and positive nitrogen balance (C, D). They can be required in adults during severe illness (E is false)." },
+            { q: "Regarding non-essential amino acids, evaluate the following statements:", statements: [{ text: "They can be synthesized by the body in adequate amounts.", correct: true }, { text: "They are synthesized from metabolic intermediates like pyruvate or oxaloacetate.", correct: true }, { text: "Alanine, Asparagine, Aspartate, Cysteine, Glutamate, and Glutamine are non-essential.", correct: true }, { text: "Glycine, Proline, Serine, and Tyrosine are non-essential.", correct: true }, { text: "Leucine is a non-essential amino acid.", correct: false }], r: "Non-essential amino acids are synthesized from intermediates (A, B) and include the listed groups (C, D). Leucine is essential (E is false)." },
+            { q: "Addressing the 'Arginine Confusion' in nutritional classification, evaluate the following statements:", statements: [{ text: "The adult body can produce trace amounts of Arginine via the Urea Cycle.", correct: true }, { text: "This production is usually sufficient to support protein synthesis during high metabolic demand.", correct: false }, { text: "If Arginine is grouped as non-essential, there are 11 non-essential amino acids.", correct: true }, { text: "If Arginine is grouped as non-essential, there are 9 essential amino acids.", correct: true }, { text: "Arginine is an essential amino acid during childhood.", correct: true }], r: "Adults produce trace Arg via urea cycle (A), but it's insufficient during high demand (B is false). If non-essential, it makes 11 non-essential/9 essential (C, D). It is semi-essential during childhood (E)." },
+            { q: "Regarding the physical properties of amino acids, evaluate the following statements:", statements: [{ text: "Amino acids are colorless.", correct: true }, { text: "Amino acids are crystalline solids.", correct: true }, { text: "They have low melting points.", correct: false }, { text: "They have high melting points due to strong ionic interactions within the crystal lattice.", correct: true }, { text: "They are generally soluble in water.", correct: true }], r: "Amino acids are colorless, crystalline solids (A, B) with HIGH melting points (C is false, D is true) and are water-soluble (E)." },
+            { q: "Concerning the solubility of amino acids, evaluate the following statements:", statements: [{ text: "They are generally soluble in water.", correct: true }, { text: "Their solubility heavily depends on the polarity of the R-group.", correct: true }, { text: "Non-polar amino acids are highly soluble in water.", correct: false }, { text: "Polar amino acids are generally soluble in water.", correct: true }, { text: "Amino acids are insoluble in water regardless of their R-group.", correct: false }], r: "Amino acids are generally water-soluble (A), depending on R-group polarity (B). Non-polar are hydrophobic (C is false). Polar are hydrophilic (D is true, E is false)." },
+            { q: "Regarding the acid-base properties (amphoteric nature) of amino acids, evaluate the following statements:", statements: [{ text: "Amino acids can act as acids.", correct: true }, { text: "Amino acids can act as bases.", correct: true }, { text: "This is because they contain both -COOH and -NH2 groups.", correct: true }, { text: "They act as proton donors and proton acceptors.", correct: true }, { text: "They can only act as acids, never as bases.", correct: false }], r: "Amino acids are amphoteric (A, B) due to the presence of both carboxyl and amino groups (C), acting as both proton donors and acceptors (D, E is false)." },
+            { q: "Concerning the formation of a zwitterion at physiological pH (~7.4), evaluate the following statements:", statements: [{ text: "Both the carboxyl and amino groups are ionized.", correct: true }, { text: "The carboxyl group loses a proton.", correct: true }, { text: "The carboxyl group becomes -COO-.", correct: true }, { text: "The amino group gains a proton.", correct: true }, { text: "The amino group becomes -NH3+.", correct: true }], r: "At pH 7.4, both groups ionize (A). Carboxyl loses a proton to become -COO- (B, C). Amino gains a proton to become -NH3+ (D, E)." },
+            { q: "Regarding the net charge of a zwitterion, evaluate the following statements:", statements: [{ text: "It has both positive and negative charges.", correct: true }, { text: "It has a net positive charge.", correct: false }, { text: "It has a net negative charge.", correct: false }, { text: "It has a net charge of zero.", correct: true }, { text: "It is a dipolar ion.", correct: true }], r: "A zwitterion has positive and negative charges (A), resulting in a net charge of zero (B, C are false; D is true). It is a dipolar ion (E)." },
+            { q: "Regarding the Isoelectric Point (pI), evaluate the following statements:", statements: [{ text: "It is the specific pH at which an amino acid exists predominantly as a zwitterion.", correct: true }, { text: "At the pI, the net charge is zero.", correct: true }, { text: "At the pI, the amino acid will migrate toward the anode in an electrical field.", correct: false }, { text: "At the pI, the amino acid will not migrate toward the cathode.", correct: true }, { text: "At the pI, the amino acid will not migrate toward either electrode.", correct: true }], r: "The pI is the pH where net charge is zero (A, B) and the molecule is a zwitterion. Because it has no net charge, it will not migrate in an electric field (C is false; D, E are true)." },
+            { q: "Concerning the buffering capacity of amino acids, evaluate the following statements:", statements: [{ text: "Amino acids can act as buffers against pH changes.", correct: true }, { text: "They can accept or donate protons.", correct: true }, { text: "This is mathematically defined by the Henderson-Hasselbalch equation.", correct: true }, { text: "The equation is pH = pKa + log([A-] / [HA]).", correct: true }, { text: "The equation is pH = pKa + log([HA] / [A-]).", correct: false }], r: "Amino acids buffer pH (A) by accepting/donating protons (B) as defined by Henderson-Hasselbalch (C). The equation is pH = pKa + log([A-]/[HA]) (D is true, E is false)." },
+            { q: "Regarding the formation of peptide bonds, evaluate the following statements:", statements: [{ text: "The carboxyl group of one amino acid reacts with the amino group of another.", correct: true }, { text: "It is a condensation reaction.", correct: true }, { text: "It releases a molecule of water.", correct: true }, { text: "It forms a rigid, covalent amide linkage.", correct: true }, { text: "The peptide bond is highly flexible and rotates freely.", correct: false }], r: "Peptide bonds form between carboxyl and amino groups (A) via condensation (B) releasing water (C) to form a rigid amide linkage (D). They are not freely flexible (E is false)." },
+            { q: "Concerning the Ninhydrin reaction, evaluate the following statements:", statements: [{ text: "It is a general chemical test for the detection of amino acids.", correct: true }, { text: "Ninhydrin reacts with the free alpha-amino group.", correct: true }, { text: "It produces a deep purple/blue color.", correct: true }, { text: "The purple color produced is called Ruhemann's purple.", correct: true }, { text: "Proline yields a yellow color with Ninhydrin.", correct: true }], r: "Ninhydrin is a general test (A) reacting with the alpha-amino group (B) to produce Ruhemann's purple (C, D). Proline is an exception yielding yellow (E)." },
+            { q: "Regarding the specific R-group chemical tests, evaluate the following statements:", statements: [{ text: "The Xanthoproteic test is used for aromatic amino acids.", correct: true }, { text: "Millon's test is used for Tyrosine.", correct: true }, { text: "Sakaguchi test is used for Arginine.", correct: true }, { text: "Millon's test detects the phenolic group.", correct: true }, { text: "Sakaguchi test detects the sulfhydryl group.", correct: false }], r: "Xanthoproteic is for aromatic (A). Millon's is for Tyrosine's phenolic group (B, D). Sakaguchi is for Arginine's guanidinium group (C, E is false)." },
+            { q: "Concerning the biological functions of Tyrosine, evaluate the following statements:", statements: [{ text: "It is a precursor for catecholamines.", correct: true }, { text: "It is a precursor for dopamine, norepinephrine, and epinephrine.", correct: true }, { text: "It is a precursor for thyroid hormones.", correct: true }, { text: "It is a precursor for melanin.", correct: true }, { text: "It is the primary precursor for serotonin.", correct: false }], r: "Tyrosine makes catecholamines (A, B), thyroid hormones (C), and melanin (D). Tryptophan is the precursor for serotonin (E is false)." },
+            { q: "Regarding the biological functions of Tryptophan, evaluate the following statements:", statements: [{ text: "It is a precursor for serotonin.", correct: true }, { text: "It is a precursor for melatonin.", correct: true }, { text: "It is a precursor for niacin (Vitamin B3).", correct: true }, { text: "It is a precursor for histamine.", correct: false }, { text: "It is an aromatic amino acid.", correct: true }], r: "Tryptophan makes serotonin (A), melatonin (B), and niacin (C). Histidine makes histamine (D is false). Tryptophan is aromatic (E)." },
+            { q: "Concerning the biological functions of Histidine, evaluate the following statements:", statements: [{ text: "It is decarboxylated to form histamine.", correct: true }, { text: "Histamine mediates allergic responses.", correct: true }, { text: "Histamine mediates gastric acid secretion.", correct: true }, { text: "It is a precursor for GABA.", correct: false }, { text: "It is an aliphatic non-polar amino acid.", correct: false }], r: "Histidine forms histamine (A) which mediates allergies (B) and gastric acid (C). Glutamate makes GABA (D is false). Histidine is basic (E is false)." },
+            { q: "Regarding the biological functions of Glutamate, evaluate the following statements:", statements: [{ text: "It is the primary excitatory neurotransmitter in the CNS.", correct: true }, { text: "It is a precursor for GABA.", correct: true }, { text: "GABA is the primary inhibitory neurotransmitter.", correct: true }, { text: "It is the direct precursor for Nitric Oxide.", correct: false }, { text: "It is an acidic amino acid.", correct: true }], r: "Glutamate is excitatory (A) and makes GABA (B), which is inhibitory (C). Arginine makes NO (D is false). Glutamate is acidic (E)." },
+            { q: "Concerning the role of amino acids as metabolic intermediates, evaluate the following statements:", statements: [{ text: "Many amino acids participate directly in the urea cycle.", correct: true }, { text: "Arginine is an intermediate in the urea cycle.", correct: true }, { text: "Ornithine is an intermediate in the urea cycle.", correct: true }, { text: "Citrulline is an intermediate in the urea cycle.", correct: true }, { text: "Amino acids do not feed into the TCA cycle for energy.", correct: false }], r: "Amino acids are in the urea cycle (A), including Arg (B), Ornithine (C), and Citrulline (D). They can feed into the TCA cycle (E is false)." },
+            { q: "Regarding signaling molecules derived from amino acids, evaluate the following statements:", statements: [{ text: "Arginine is the direct precursor for Nitric Oxide (NO).", correct: true }, { text: "Nitric Oxide is a potent endogenous vasodilator.", correct: true }, { text: "Glutamate is the direct precursor for Nitric Oxide.", correct: false }, { text: "Nitric Oxide is a signaling molecule.", correct: true }, { text: "Arginine is a basic amino acid.", correct: true }], r: "Arginine is the direct precursor for NO (A), a signaling molecule (D) that acts as a vasodilator (B). Glutamate is not (C). Arginine is basic (E)." },
+            { q: "Evaluate the following statements regarding the general structure of amino acids:", statements: [{ text: "Every amino acid has a central alpha-carbon.", correct: true }, { text: "The alpha-carbon is attached to an acidic carboxyl group.", correct: true }, { text: "The alpha-carbon is attached to a basic amino group.", correct: true }, { text: "The alpha-carbon is attached to a hydrogen atom.", correct: true }, { text: "The alpha-carbon is attached to a distinctive R-group.", correct: true }], r: "All four groups (carboxyl, amino, hydrogen, R-group) plus the central alpha-carbon are standard features as per the text." },
+            { q: "Evaluate the following statements regarding the chirality of standard amino acids:", statements: [{ text: "The alpha-carbon is a chiral center in all standard amino acids.", correct: false }, { text: "Chirality allows for D- and L-forms.", correct: true }, { text: "Glycine is achiral.", correct: true }, { text: "Glycine's R-group is a hydrogen atom.", correct: true }, { text: "Because Glycine is achiral, it does not have D- and L- forms.", correct: true }], r: "Not all standard amino acids are chiral (Glycine is an exception, A is false). Chirality allows D/L forms (B). Glycine is achiral because its R-group is H (C, D, E)." },
+            { q: "Evaluate the following statements regarding non-polar amino acids:", statements: [{ text: "They are also known as hydrophobic amino acids.", correct: true }, { text: "They have aliphatic or aromatic side chains.", correct: true }, { text: "They interact strongly with water.", correct: false }, { text: "They cluster in the interior of proteins.", correct: true }, { text: "This clustering helps them avoid aqueous environments.", correct: true }], r: "Non-polar amino acids are hydrophobic (A), have aliphatic/aromatic side chains (B), do not interact with water (C is false), and cluster internally (D, E)." },
+            { q: "Evaluate the following statements regarding the classification of specific non-polar amino acids:", statements: [{ text: "Glycine, Alanine, and Valine are aliphatic non-polar amino acids.", correct: true }, { text: "Leucine, Isoleucine, and Methionine are aliphatic non-polar amino acids.", correct: true }, { text: "Proline is an aliphatic non-polar amino acid.", correct: true }, { text: "Phenylalanine is an aromatic non-polar amino acid.", correct: true }, { text: "Tryptophan is a polar uncharged amino acid.", correct: false }], r: "The aliphatic list includes Gly, Ala, Val, Leu, Ile, Pro, Met (A, B, C). Phenylalanine is aromatic non-polar (D). Tryptophan is also aromatic non-polar (E is false)." },
+            { q: "Evaluate the following statements regarding the structure of Proline:", statements: [{ text: "Proline is an imino acid.", correct: true }, { text: "Proline has a rigid ring structure.", correct: true }, { text: "Proline is an aromatic amino acid.", correct: false }, { text: "Proline often creates 'kinks' in protein chains.", correct: true }, { text: "Proline is classified as non-polar.", correct: true }], r: "Proline is an imino acid (A) with a rigid ring (B) that creates kinks (D). It is non-polar (E) but aliphatic, not aromatic (C is false)." },
+            { q: "Evaluate the following statements regarding polar, uncharged amino acids:", statements: [{ text: "Their side chains can form hydrogen bonds.", correct: true }, { text: "They are hydrophilic.", correct: true }, { text: "Serine, Threonine, and Tyrosine are in this group.", correct: true }, { text: "Cysteine, Asparagine, and Glutamine are in this group.", correct: true }, { text: "They carry a net electrical charge at physiological pH.", correct: false }], r: "Polar uncharged amino acids can form H-bonds (A), are hydrophilic (B), and include the listed amino acids (C, D). They do not carry a net charge at physiological pH (E is false)." },
+            { q: "Evaluate the following statements regarding Cysteine:", statements: [{ text: "Cysteine contains a sulfhydryl (-SH) group.", correct: true }, { text: "Cysteine is an aromatic amino acid.", correct: false }, { text: "Cysteine can form disulfide bonds.", correct: true }, { text: "Disulfide bonds stabilize protein structures.", correct: true }, { text: "Cysteine is a polar, uncharged amino acid.", correct: true }], r: "Cysteine has a sulfhydryl group (A) and forms stabilizing disulfide bonds (C, D). It is polar uncharged (E) and not aromatic (B is false)." },
+            { q: "Evaluate the following statements regarding acidic amino acids:", statements: [{ text: "They have a second carboxyl group on their side chain.", correct: true }, { text: "The second carboxyl group donates a proton.", correct: true }, { text: "They carry a net negative charge at physiological pH.", correct: true }, { text: "Aspartic acid (Aspartate) is an acidic amino acid.", correct: true }, { text: "Glutamic acid (Glutamate) is a basic amino acid.", correct: false }], r: "Acidic amino acids have a second carboxyl group (A) that donates a proton (B), giving a negative charge (C). Aspartate (D) and Glutamate are acidic (E is false)." },
+            { q: "Evaluate the following statements regarding basic amino acids:", statements: [{ text: "They have an additional amino group on their side chain.", correct: true }, { text: "The additional amino group accepts a proton.", correct: true }, { text: "They carry a net positive charge at physiological pH.", correct: true }, { text: "Histidine is a basic amino acid.", correct: true }, { text: "Lysine and Arginine are acidic amino acids.", correct: false }], r: "Basic amino acids have an extra amino group (A) that accepts a proton (B), giving a positive charge (C). Histidine is basic (D). Lysine and Arginine are also basic (E is false)." },
+            { q: "Evaluate the following statements regarding essential amino acids:", statements: [{ text: "They cannot be synthesized by the human body.", correct: true }, { text: "They must be obtained from the diet.", correct: true }, { text: "The mnemonic PVT TIM HALL lists them.", correct: true }, { text: "PVT TIM HALL includes Phenylalanine, Valine, Threonine, Tryptophan.", correct: true }, { text: "PVT TIM HALL includes Tyrosine.", correct: false }], r: "Essential amino acids cannot be synthesized (A) and must come from diet (B). PVT TIM HALL (C, D) includes Phenylalanine, Valine, Threonine, Tryptophan, but not Tyrosine (E is false)." },
+            { q: "Evaluate the following statements regarding semi-essential amino acids:", statements: [{ text: "Arginine and Histidine are often termed semi-essential.", correct: true }, { text: "They are required in the diet during periods of rapid growth.", correct: true }, { text: "They are required during positive nitrogen balance.", correct: true }, { text: "Positive nitrogen balance occurs in childhood.", correct: true }, { text: "Positive nitrogen balance occurs during recovery from severe illness.", correct: true }], r: "Arg and His are semi-essential (A) needed during rapid growth (B) and positive nitrogen balance (C), which occurs in childhood and severe illness recovery (D, E)." },
+            { q: "Evaluate the following statements regarding non-essential amino acids:", statements: [{ text: "They can be synthesized by the body in adequate amounts.", correct: true }, { text: "They are synthesized from metabolic intermediates.", correct: true }, { text: "Pyruvate and oxaloacetate are examples of these intermediates.", correct: true }, { text: "Alanine, Asparagine, and Aspartate are non-essential.", correct: true }, { text: "Cysteine, Glutamate, Glutamine, Glycine, Proline, Serine, and Tyrosine are non-essential.", correct: true }], r: "Non-essential amino acids are synthesized from intermediates (A, B, C) and include the full listed set (D, E)." },
+            { q: "Evaluate the following statements regarding the nutritional classification of Arginine:", statements: [{ text: "The adult body can produce trace amounts via the Urea Cycle.", correct: true }, { text: "This production is usually sufficient for high metabolic demand.", correct: false }, { text: "Arginine is often grouped as a non-essential amino acid.", correct: true }, { text: "If grouped as non-essential, there are 11 non-essential and 9 essential amino acids.", correct: true }, { text: "If grouped as essential, there are 10 essential and 10 non-essential amino acids.", correct: true }], r: "Adults produce trace Arg via urea cycle (A), but it's insufficient during high demand (B is false). It is often non-essential (C), giving an 11/9 split (D). If essential, it's 10/10 (E)." },
+            { q: "Evaluate the following statements regarding the physical properties of amino acids:", statements: [{ text: "They are colorless.", correct: true }, { text: "They are crystalline solids.", correct: true }, { text: "They have high melting points.", correct: true }, { text: "The high melting points are due to strong ionic interactions within the crystal lattice.", correct: true }, { text: "They have low melting points.", correct: false }], r: "Amino acids are colorless crystalline solids (A, B) with high melting points due to strong ionic interactions (C, D). Low melting points are incorrect (E is false)." },
+            { q: "Evaluate the following statements regarding the solubility of amino acids:", statements: [{ text: "They are generally soluble in water.", correct: true }, { text: "Solubility depends on the polarity of the R-group.", correct: true }, { text: "Non-polar amino acids are highly water-soluble.", correct: false }, { text: "Polar amino acids are hydrophilic.", correct: true }, { text: "Non-polar amino acids are hydrophobic.", correct: true }], r: "Amino acids are generally water-soluble (A) depending on R-group polarity (B). Non-polar are hydrophobic/insoluble (C is false, E is true). Polar are hydrophilic (D)." },
+            { q: "Evaluate the following statements regarding the amphoteric nature of amino acids:", statements: [{ text: "Amino acids act as acids (proton donors).", correct: true }, { text: "Amino acids act as bases (proton acceptors).", correct: true }, { text: "This is due to the presence of the -COOH group.", correct: true }, { text: "This is due to the presence of the -NH2 group.", correct: true }, { text: "Amino acids cannot act as bases.", correct: false }], r: "Amino acids are amphoteric (A, B) due to the -COOH group (C) and -NH2 group (D). They can act as bases (E is false)." },
+            { q: "Evaluate the following statements regarding zwitterion formation at physiological pH:", statements: [{ text: "The carboxyl group loses a proton to become -COO-.", correct: true }, { text: "The amino group gains a proton to become -NH3+.", correct: true }, { text: "The resulting molecule has both positive and negative charges.", correct: true }, { text: "The resulting molecule has a net positive charge.", correct: false }, { text: "The resulting molecule has a net charge of zero.", correct: true }], r: "At pH 7.4, the carboxyl loses a proton (A) and the amino gains a proton (B), resulting in both charges (C) but a net charge of zero (D is false, E is true)." },
+            { q: "Evaluate the following statements regarding the Isoelectric Point (pI):", statements: [{ text: "It is the pH at which the amino acid exists predominantly as a zwitterion.", correct: true }, { text: "At the pI, the net charge is zero.", correct: true }, { text: "At the pI, the amino acid migrates toward the anode.", correct: false }, { text: "At the pI, the amino acid migrates toward the cathode.", correct: false }, { text: "At the pI, the amino acid will not migrate in an electrical field.", correct: true }], r: "The pI is where the amino acid is a zwitterion (A) with zero net charge (B). It does not migrate in an electric field (C, D are false, E is true)." },
+            { q: "Evaluate the following statements regarding the buffering capacity of amino acids:", statements: [{ text: "Amino acids can act as buffers against pH changes.", correct: true }, { text: "This is because they can accept or donate protons.", correct: true }, { text: "The Henderson-Hasselbalch equation mathematically defines this.", correct: true }, { text: "The equation is pH = pKa + log([A-] / [HA]).", correct: true }, { text: "The equation is pH = pKa + log([HA] / [A-]).", correct: false }], r: "Amino acids buffer pH (A) via proton donation/acceptance (B) described by Henderson-Hasselbalch (C). The correct equation is pH = pKa + log([A-]/[HA]) (D is true, E is false)." },
+            { q: "Evaluate the following statements regarding peptide bond formation:", statements: [{ text: "The carboxyl group of one amino acid reacts with the amino group of another.", correct: true }, { text: "It is a condensation reaction.", correct: true }, { text: "It releases a molecule of water.", correct: true }, { text: "It forms a rigid, covalent amide linkage.", correct: true }, { text: "The resulting bond is flexible and freely rotating.", correct: false }], r: "Peptide bonds form between carboxyl and amino groups (A) via condensation (B) releasing water (C) to form a rigid amide linkage (D). It is not flexible (E is false)." },
+            { q: "Evaluate the following statements regarding the Ninhydrin reaction:", statements: [{ text: "It is a general chemical test for amino acids.", correct: true }, { text: "It reacts with the free alpha-amino group.", correct: true }, { text: "It produces a deep purple/blue color.", correct: true }, { text: "The purple color is known as Ruhemann's purple.", correct: true }, { text: "Proline yields a deep purple color.", correct: false }], r: "Ninhydrin is a general test (A) for the alpha-amino group (B) producing Ruhemann's purple (C, D). Proline yields a yellow color, not purple (E is false)." },
+            { q: "Evaluate the following statements regarding specific R-group chemical tests:", statements: [{ text: "The Xanthoproteic test detects aromatic amino acids.", correct: true }, { text: "Millon's test detects Tyrosine.", correct: true }, { text: "Sakaguchi test detects Arginine.", correct: true }, { text: "Millon's test detects the phenolic group.", correct: true }, { text: "Sakaguchi test detects the phenolic group.", correct: false }], r: "Xanthoproteic detects aromatics (A). Millon's detects Tyrosine's phenolic group (B, D). Sakaguchi detects Arginine's guanidinium group, not phenolic (C, E is false)." },
+            { q: "Evaluate the following statements regarding Tyrosine:", statements: [{ text: "It is a precursor for catecholamines.", correct: true }, { text: "Catecholamines include dopamine, norepinephrine, and epinephrine.", correct: true }, { text: "It is a precursor for thyroid hormones.", correct: true }, { text: "It is a precursor for melanin.", correct: true }, { text: "It is the direct precursor for serotonin.", correct: false }], r: "Tyrosine is a precursor for catecholamines (A, B), thyroid hormones (C), and melanin (D). Tryptophan is the precursor for serotonin (E is false)." },
+            { q: "Evaluate the following statements regarding Tryptophan:", statements: [{ text: "It is a precursor for serotonin.", correct: true }, { text: "It is a precursor for melatonin.", correct: true }, { text: "It is a precursor for niacin (Vitamin B3).", correct: true }, { text: "It is the direct precursor for histamine.", correct: false }, { text: "It is an aromatic amino acid.", correct: true }], r: "Tryptophan is a precursor for serotonin (A), melatonin (B), and niacin (C). Histidine is the precursor for histamine (D is false). Tryptophan is aromatic (E)." },
+            { q: "Evaluate the following statements regarding Histidine:", statements: [{ text: "It is decarboxylated to form histamine.", correct: true }, { text: "Histamine mediates allergic responses.", correct: true }, { text: "Histamine mediates gastric acid secretion.", correct: true }, { text: "It is a basic amino acid.", correct: true }, { text: "It is a non-polar aliphatic amino acid.", correct: false }], r: "Histidine is decarboxylated to histamine (A) which mediates allergies (B) and gastric acid (C). Histidine is basic (D) and not non-polar aliphatic (E is false)." },
+            { q: "Evaluate the following statements regarding Glutamate:", statements: [{ text: "It is the primary excitatory neurotransmitter in the CNS.", correct: true }, { text: "It is a precursor for GABA.", correct: true }, { text: "GABA is the primary inhibitory neurotransmitter.", correct: true }, { text: "It is the direct precursor for Nitric Oxide.", correct: false }, { text: "It is a basic amino acid.", correct: false }], r: "Glutamate is the primary excitatory neurotransmitter (A) and precursor for GABA (B), which is inhibitory (C). Arginine is the precursor for NO (D is false). Glutamate is acidic (E is false)." },
+            { q: "Evaluate the following statements regarding the metabolic roles of amino acids:", statements: [{ text: "Many amino acids participate directly in the urea cycle.", correct: true }, { text: "Arginine is an intermediate in the urea cycle.", correct: true }, { text: "Ornithine is an intermediate in the urea cycle.", correct: true }, { text: "Citrulline is an intermediate in the urea cycle.", correct: true }, { text: "Amino acids do not feed into the TCA cycle.", correct: false }], r: "Amino acids are involved in the urea cycle (A), including Arg (B), Ornithine (C), and Citrulline (D). They do feed into the TCA cycle (E is false)." },
+            { q: "Evaluate the following statements regarding Nitric Oxide (NO):", statements: [{ text: "Arginine is the direct precursor for NO.", correct: true }, { text: "NO is a potent endogenous vasodilator.", correct: true }, { text: "NO is a signaling molecule.", correct: true }, { text: "Glutamate is the direct precursor for NO.", correct: false }, { text: "Arginine is an aromatic amino acid.", correct: false }], r: "Arginine is the direct precursor for NO (A), a vasodilator (B) and signaling molecule (C). Glutamate is not (D is false). Arginine is basic, not aromatic (E is false)." },
+            { q: "Evaluate the following statements regarding the chemical classification of amino acids:", statements: [{ text: "Non-polar amino acids have aliphatic or aromatic side chains.", correct: true }, { text: "Polar uncharged amino acids can form hydrogen bonds.", correct: true }, { text: "Acidic amino acids have a second carboxyl group.", correct: true }, { text: "Basic amino acids have an additional amino group.", correct: true }, { text: "All polar amino acids carry a net charge at physiological pH.", correct: false }], r: "Non-polar have aliphatic/aromatic chains (A). Polar uncharged form H-bonds (B). Acidic have a second carboxyl (C). Basic have an additional amino (D). Polar uncharged do not carry a net charge (E is false)." },
+            { q: "Evaluate the following statements regarding the nutritional classification of amino acids:", statements: [{ text: "Essential amino acids cannot be synthesized by the body.", correct: true }, { text: "Non-essential amino acids can be synthesized by the body.", correct: true }, { text: "Semi-essential amino acids are required during rapid growth.", correct: true }, { text: "Semi-essential amino acids are required during positive nitrogen balance.", correct: true }, { text: "Tyrosine is an essential amino acid.", correct: false }], r: "Essential cannot be synthesized (A). Non-essential can (B). Semi-essential are needed during rapid growth (C) and positive nitrogen balance (D). Tyrosine is non-essential (E is false)." },
+            { q: "Evaluate the following statements regarding the physical and acid-base properties of amino acids:", statements: [{ text: "Amino acids are colorless, crystalline solids.", correct: true }, { text: "Amino acids have high melting points.", correct: true }, { text: "Amino acids are amphoteric.", correct: true }, { text: "At physiological pH, amino acids form a zwitterion.", correct: true }, { text: "A zwitterion has a net positive charge.", correct: false }], r: "Amino acids are colorless, crystalline, high melting solids (A, B). They are amphoteric (C) forming zwitterions at pH 7.4 (D). Zwitterions have a net charge of zero (E is false)." },
+            { q: "Evaluate the following statements regarding the Isoelectric Point (pI) and buffering:", statements: [{ text: "The pI is the pH where the net charge is zero.", correct: true }, { text: "At the pI, the amino acid exists predominantly as a zwitterion.", correct: true }, { text: "At the pI, the amino acid does not migrate in an electrical field.", correct: true }, { text: "Amino acids act as buffers against pH changes.", correct: true }, { text: "The Henderson-Hasselbalch equation is pH = pKa + log([HA]/[A-]).", correct: false }], r: "pI is where net charge is zero (A) and the molecule is a zwitterion (B), so it doesn't migrate (C). Amino acids buffer (D). The equation is pH = pKa + log([A-]/[HA]) (E is false)." },
+            { q: "Evaluate the following statements regarding the chemical reactions of amino acids:", statements: [{ text: "Peptide bonds form via a condensation reaction.", correct: true }, { text: "Peptide bond formation releases water.", correct: true }, { text: "Peptide bonds are rigid amide linkages.", correct: true }, { text: "Ninhydrin reacts with the alpha-amino group to produce Ruhemann's purple.", correct: true }, { text: "Proline produces a purple color with Ninhydrin.", correct: false }], r: "Peptide bonds form via condensation (A), releasing water (B) to form rigid amides (C). Ninhydrin reacts with alpha-amino to form Ruhemann's purple (D). Proline yields yellow (E is false)." },
+            { q: "Evaluate the following statements regarding specific amino acid derivatives and their functions:", statements: [{ text: "Tyrosine is a precursor for catecholamines, thyroid hormones, and melanin.", correct: true }, { text: "Tryptophan is a precursor for serotonin, melatonin, and niacin.", correct: true }, { text: "Histidine is decarboxylated to form histamine.", correct: true }, { text: "Glutamate is the primary excitatory neurotransmitter.", correct: true }, { text: "Glutamate is the primary inhibitory neurotransmitter.", correct: false }], r: "Tyrosine makes catecholamines/thyroid/melanin (A). Tryptophan makes serotonin/melatonin/niacin (B). Histidine makes histamine (C). Glutamate is excitatory (D) and a precursor for inhibitory GABA (E is false)." },
+            { q: "Evaluate the following statements regarding amino acid metabolism and signaling:", statements: [{ text: "Arginine, Ornithine, and Citrulline are involved in the urea cycle.", correct: true }, { text: "Amino acids can feed into the TCA cycle for energy.", correct: true }, { text: "Arginine is the direct precursor for Nitric Oxide.", correct: true }, { text: "Nitric Oxide is a vasodilator.", correct: true }, { text: "Nitric Oxide is a vasoconstrictor.", correct: false }], r: "The urea cycle involves Arg, Ornithine, Citrulline (A). Amino acids feed into TCA (B). Arginine makes NO (C), which is a vasodilator (D), not a vasoconstrictor (E is false)." },
+            { q: "Evaluate the following statements regarding the R-group tests:", statements: [{ text: "The Xanthoproteic test detects aromatic amino acids.", correct: true }, { text: "Millon's test detects Tyrosine by its phenolic group.", correct: true }, { text: "The Sakaguchi test detects Arginine.", correct: true }, { text: "The Sakaguchi test detects the guanidinium group.", correct: true }, { text: "Millon's test detects the sulfhydryl group of Cysteine.", correct: false }], r: "Xanthoproteic detects aromatics (A). Millon's detects Tyrosine's phenol (B) but not sulfhydryl groups (E is false). Sakaguchi detects Arginine (C) via its guanidinium group (D)." },
+            { q: "Evaluate the following statements regarding the physical state and solubility of amino acids:", statements: [{ text: "They are colorless, crystalline solids.", correct: true }, { text: "They have high melting points due to strong ionic interactions.", correct: true }, { text: "They are generally soluble in water.", correct: true }, { text: "Solubility depends on the polarity of the R-group.", correct: true }, { text: "They are highly volatile liquids at room temperature.", correct: false }], r: "Amino acids are crystalline solids (A) with high melting points (B), and they are water-soluble (C) dependent on R-group polarity (D). They are not volatile liquids (E is false)." },
+            { q: "Evaluate the following statements regarding the nutritional classification of specific amino acids:", statements: [{ text: "Phenylalanine, Valine, Threonine, Tryptophan, Isoleucine, Methionine, Histidine, Arginine, Leucine, and Lysine are essential.", correct: true }, { text: "Alanine, Asparagine, Aspartate, Cysteine, Glutamate, Glutamine, Glycine, Proline, Serine, and Tyrosine are non-essential.", correct: true }, { text: "Arginine is the only amino acid that can be confusing to classify.", correct: false }, { text: "Semi-essential amino acids are required during rapid growth.", correct: true }, { text: "Semi-essential amino acids are required during positive nitrogen balance.", correct: true }], r: "The lists for essential (A) and non-essential (B) are correct per the text. Arginine is the main source of confusion but not the ONLY one (C is false). Semi-essential are needed in growth (D) and positive nitrogen balance (E)." }
+        ];
+
+        let candidateID = ""; 
+        let candidateDept = ""; 
+        let questions = []; 
+        let currentQ = 0; 
+        let answers = {}; // Format: { 0: [true, false, null, null, null], 1: ... }
+        let flagged = {}; 
+        let timeLeft = TOTAL_TIME_SECONDS; 
+        let isSubmitted = false; 
+        let timerInterval;
+        let examStartTime = 0;
+        const appDiv = document.getElementById('app');
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isSubmitted && candidateID && timeLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        const icons = {
+            user: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+            flag: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>`,
+            flagSolid: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>`
+        };
+
+        function getActiveStateKey(id) { return `tlt_active_exam_${EXAM_KEY}_${id}`; }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = { candidateID, candidateDept, questions, currentQ, answers, flagged, examStartTime, totalTime: TOTAL_TIME_SECONDS };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) localStorage.removeItem(getActiveStateKey(candidateID));
+        }
+
+        function initApp() {
+            const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
+            if (rawSession) { try { sessionID = JSON.parse(rawSession).id || ""; } catch(e) {} }
+
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; currentQ = state.currentQ || 0;
+                            answers = state.answers || {}; flagged = state.flagged || {};
+                            timeLeft = remaining; examStartTime = state.examStartTime;
+                            startTimer(); renderExam(); return;
+                        } else {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; answers = state.answers || {}; 
+                            flagged = state.flagged || {}; timeLeft = 0;
+                            clearActiveState(); submitQuiz(); return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) { idField.value = sessionID; validateInput(); }
+            }
+        }
+
+        function validateInput() {
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
+            const dInput = document.getElementById('cand-dept').value.trim();
+            const btn = document.getElementById('start-btn');
+            const errorMsg = document.getElementById('id-error');
+            const isValidId = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(idInput);
+            
+            if (idInput !== "" && !isValidId) errorMsg.classList.remove('opacity-0');
+            else errorMsg.classList.add('opacity-0');
+
+            if (isValidId && dInput) { 
+                btn.disabled = false; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]"; 
+            } else { 
+                btn.disabled = true; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all"; 
+            }
+        }
+
+        function startExam() {
+            candidateID = document.getElementById('cand-id').value.trim().toUpperCase(); 
+            candidateDept = document.getElementById('cand-dept').value.trim();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: candidateID, timestamp: Date.now() }));
+
+            // No need to shuffle options since they are fixed A-E statements
+            questions = [...rawQuestions]; 
+
+            examStartTime = Date.now(); timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState(); startTimer(); renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval); submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function renderLogin() {
+            const timeInMinutes = Math.floor(TOTAL_TIME_SECONDS / 60);
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-8 md:p-12">
+                    <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-800/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-900/30 px-3 py-1 rounded border border-blue-800/30 mb-3">${EXAM_SUBJECT}</span>
+                    <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
+                    <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions (5 statements each)</strong>. <br><span class="text-red-400 font-bold mt-2 inline-block">NOTE: Negative marking applies (-0.25 for incorrect statements).</span></p>
+                    <div class="w-full max-w-md space-y-4">
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
+                    </div>
+                </div>`;
+        }
+
+        function renderExam() {
+            let savedScroll = 0;
+            const existingGrid = document.getElementById('q-nav-grid');
+            if (existingGrid) savedScroll = existingGrid.scrollLeft;
+
+            const q = questions[currentQ]; 
+            
+            // Count total statements answered for progress bar
+            let answeredStatements = 0;
+            Object.values(answers).forEach(ansArr => {
+                ansArr.forEach(val => { if (val !== null && val !== undefined) answeredStatements++; });
+            });
+            const totalStatements = questions.length * 5;
+            const progressPct = (answeredStatements / totalStatements) * 100;
+
+            const isFlagged = flagged[currentQ] || false;
+            
+            let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
+            questions.forEach((_, idx) => {
+                const hasAns = answers[idx] && answers[idx].some(v => v !== null);
+                const isCurr = idx === currentQ;
+                const isF = flagged[idx];
+                let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
+                if (isCurr && hasAns) btnClass += "bg-blue-600 text-white shadow-md shadow-blue-500/30";
+                else if (isCurr) btnClass += "border-2 border-blue-500 text-blue-400 bg-blue-950/50";
+                else if (isF) btnClass += "bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 hover:bg-yellow-900";
+                else if (hasAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
+                else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
+                gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
+            }); 
+            gridHTML += `</div>`;
+
+            let statementsHTML = `<div class="space-y-4 mt-6">`;
+            q.statements.forEach((stmt, idx) => {
+                const userAns = answers[currentQ] ? answers[currentQ][idx] : null;
+                const isTrue = userAns === true;
+                const isFalse = userAns === false;
+                const letter = String.fromCharCode(65 + idx); // A, B, C, D, E
+
+                statementsHTML += `
+                <div class="flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-xl border-2 transition-all ${isTrue ? 'border-green-500 bg-green-950/20' : isFalse ? 'border-red-500 bg-red-950/20' : 'border-slate-800 bg-slate-950/50'}">
+                    <div class="flex-1 flex items-start gap-3">
+                        <span class="font-bold text-slate-500 mt-0.5">${letter}.</span>
+                        <span class="text-slate-200 text-base leading-relaxed">${stmt.text}</span>
+                    </div>
+                    <div class="flex gap-2 shrink-0 md:ml-4">
+                        <button onclick="selectTF(${idx}, true)" class="px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider ${isTrue ? 'bg-green-600 text-white shadow-lg shadow-green-900/50 scale-105' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} transition-all active:scale-95">True</button>
+                        <button onclick="selectTF(${idx}, false)" class="px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider ${isFalse ? 'bg-red-600 text-white shadow-lg shadow-red-900/50 scale-105' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} transition-all active:scale-95">False</button>
+                    </div>
+                </div>`;
+            }); 
+            statementsHTML += `</div>`;
+
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white px-6 py-4 flex justify-between items-center flex-wrap gap-4 border-b border-slate-800">
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[11px] font-bold text-blue-400 uppercase tracking-widest">${EXAM_SUBJECT}</span>
+                        <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
+                        <div class="text-xs mt-1 font-mono text-slate-400 truncate">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
+                    </div>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <button onclick="toggleFlag()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFlagged ? 'bg-yellow-900/40 border-yellow-700/50 text-yellow-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'} transition-colors text-xs font-semibold">
+                            ${isFlagged ? icons.flagSolid : icons.flag} ${isFlagged ? 'Flagged' : 'Flag for Review'}
+                        </button>
+                        <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-blue-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    </div>
+                </div>
+                <div class="h-1 w-full bg-slate-950"><div class="h-full bg-blue-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    ${gridHTML}
+                    <div class="flex-1">
+                        <div class="flex items-start gap-4 mb-2">
+                            <span class="text-4xl font-black text-slate-700">${currentQ + 1}</span>
+                            <h2 class="text-lg md:text-xl font-semibold text-white leading-snug mt-1">${q.q}</h2>
+                        </div>
+                        ${statementsHTML}
+                    </div>
+                    <div class="mt-10 flex justify-between items-center">
+                        <button onclick="changeQ(-1)" class="px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed" ${currentQ === 0 ? 'disabled' : ''}>← Previous</button>
+                        ${currentQ === questions.length - 1 ? `<button onclick="submitQuiz()" class="px-8 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900/30 transition-all active:scale-95">Submit Exam</button>` : `<button onclick="changeQ(1)" class="px-8 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-md active:scale-95">Next →</button>`}
+                    </div>
+                </div>`;
+
+            const newGrid = document.getElementById('q-nav-grid');
+            if (newGrid) {
+                newGrid.scrollLeft = savedScroll;
+                const activeBtn = document.getElementById(`q-btn-${currentQ}`);
+                if (activeBtn) {
+                    const gridRect = newGrid.getBoundingClientRect();
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    if (btnRect.left < gridRect.left || btnRect.right > gridRect.right) {
+                        activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }
+            }
+        }
+
+        async function submitQuiz() {
+            isSubmitted = true; clearInterval(timerInterval); clearActiveState();
+
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-blue-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & applying negative marking...</p></div>`;
+            
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
+            let score = 0;
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let unattemptedCount = 0;
+
+            questions.forEach((q, index) => {
+                const userAns = answers[index] || [];
+                q.statements.forEach((stmt, sIdx) => {
+                    const ans = userAns[sIdx];
+                    if (ans === null || ans === undefined) {
+                        unattemptedCount++;
+                    } else if (ans === stmt.correct) {
+                        score += 1;
+                        correctCount++;
+                    } else {
+                        score -= 0.25;
+                        incorrectCount++;
+                    }
+                });
+            });
+
+            const maxScore = questions.length * 5;
+            const percentage = Math.max(0, (score / maxScore) * 100);
+            
+            let emailStatus = "";
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score: score.toFixed(2), total: maxScore, percent: Math.round(percentage), date: dateStr, time: timeStr };
+
+            try {
+                const storageKey = 'tlt_score_history_' + candidateID;
+                const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                existingHistory.unshift(newRecord);
+                localStorage.setItem(storageKey, JSON.stringify(existingHistory));
+            } catch(e) {}
+
+            if (WEB3FORMS_ACCESS_KEY) {
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', { 
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ 
+                            access_key: WEB3FORMS_ACCESS_KEY, 
+                            name: candidateID, email: "system@mockexam.com", 
+                            subject: `Exam Result: ${candidateID} - ${Math.round(percentage)}% (${EXAM_TOPIC})`, 
+                            from_name: "Mock Exam Portal", 
+                            Subject: EXAM_SUBJECT, Topic: EXAM_TOPIC, Candidate_ID: candidateID, 
+                            Department: candidateDept, 
+                            Raw_Score: `${score} out of ${maxScore}`, 
+                            Percentage: `${Math.round(percentage)}%`,
+                            Negative_Marking: "Yes (-0.25 per incorrect statement)",
+                            Time_Spent: formatTime(timeSpentSeconds) 
+                        }) 
+                    });
+                    if (response.status === 200) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; } else { throw new Error("Failed"); }
+                } catch (e) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; }
+            } 
+            renderResults(score, percentage, correctCount, incorrectCount, unattemptedCount, emailStatus, dateStr, timeStr);
+        }
+
+        let currentResultFilter = 'all';
+
+        function renderResults(score, percentage, correctCount, incorrectCount, unattemptedCount, emailStatus, dateStr, timeStr) {
+            const displayPercent = Math.round(percentage);
+            const strokeColor = displayPercent >= 70 ? '#22c55e' : displayPercent >= 50 ? '#f59e0b' : '#ef4444';
+            
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
+                    <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-blue-900/40 text-blue-400 border border-blue-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
+                    <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
+                        <span class="text-blue-400 font-bold">${candidateID}</span> <span class="text-slate-600">•</span> <span class="text-slate-300 font-sans">${candidateDept}</span> <span class="text-slate-600">•</span> <span>${dateStr} ${timeStr}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 text-center border-b border-slate-800">
+                    <div class="relative w-40 h-40 mx-auto mb-2">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke="${strokeColor}" stroke-dasharray="${displayPercent}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="21" class="percentage">${displayPercent}%</text>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white mb-1">${score.toFixed(2)} / ${questions.length * 5} Marks</h2>
+                    <p class="text-xs text-slate-400 mb-4 uppercase tracking-wider font-semibold">${displayPercent >= 70 ? 'Distinction Standard' : displayPercent >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
+                    
+                    <div class="inline-block bg-red-950/30 border border-red-900/50 rounded-lg px-4 py-2 mb-6">
+                        <span class="text-xs font-bold text-red-400 uppercase tracking-widest block mb-1">Negative Marking Applied (-0.25)</span>
+                        <div class="flex justify-center gap-4 text-xs font-mono">
+                            <span class="text-green-400">✓ ${correctCount} Correct</span>
+                            <span class="text-red-400">✗ ${incorrectCount} Incorrect</span>
+                            <span class="text-slate-400">- ${unattemptedCount} Unattempted</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center mt-2">
+                        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-900/30 active:scale-95">Return to Dashboard</a>
+                    </div>
+                    ${emailStatus}
+                </div>
+
+                <div class="p-6 md:p-10 bg-slate-950 flex-1">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="text-lg font-bold text-white">Detailed Question Analysis</h3>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800 overflow-x-auto custom-scroll w-full md:w-auto">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap">All</button>
+                            <button onclick="setResultFilter('correct')" id="filter-btn-correct" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Fully Correct</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Has Errors</button>
+                        </div>
+                    </div>
+                    <div id="results-container" class="space-y-6"></div>
+                </div>
+            `;
+            currentResultFilter = 'all';
+            renderResultQuestions();
+        }
+
+        function setResultFilter(filter) {
+            currentResultFilter = filter;
+            ['all', 'correct', 'incorrect'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-blue-600 text-white whitespace-nowrap";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap";
+            });
+            renderResultQuestions();
+        }
+
+        function renderResultQuestions() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            let count = 0;
+
+            questions.forEach((q, index) => {
+                const userAns = answers[index] || [];
+                let qCorrect = 0;
+                let qIncorrect = 0;
+                let qUnattempted = 0;
+
+                const stmtHTML = q.statements.map((stmt, sIdx) => {
+                    const uAns = userAns[sIdx];
+                    const isCorrect = uAns === stmt.correct;
+                    const isAnswered = uAns !== null && uAns !== undefined;
+                    const letter = String.fromCharCode(65 + sIdx);
+
+                    if (!isAnswered) qUnattempted++;
+                    else if (isCorrect) qCorrect++;
+                    else qIncorrect++;
+
+                    let statusIcon = '';
+                    let bgClass = '';
+                    if (!isAnswered) {
+                        statusIcon = `<span class="text-xs font-bold text-slate-500">Skipped</span>`;
+                        bgClass = 'bg-slate-900/50 border-slate-800';
+                    } else if (isCorrect) {
+                        statusIcon = `<span class="text-xs font-bold text-green-400">+1</span>`;
+                        bgClass = 'bg-slate-950 border-green-900/30';
+                    } else {
+                        statusIcon = `<span class="text-xs font-bold text-red-400">-0.25</span>`;
+                        bgClass = 'bg-slate-950 border-red-900/30';
+                    }
+
+                    return `
+                        <div class="flex items-start gap-3 p-3 rounded-lg border ${bgClass}">
+                            <span class="font-bold text-slate-500 mt-0.5">${letter}.</span>
+                            <div class="flex-1">
+                                <span class="text-sm text-slate-300 block mb-1">${stmt.text}</span>
+                                <div class="flex gap-4 text-[11px] font-mono">
+                                    <span class="${isAnswered ? (isCorrect ? 'text-green-400' : 'text-red-400') : 'text-slate-500'}">Your Answer: ${isAnswered ? (uAns ? 'True' : 'False') : 'None'}</span>
+                                    <span class="text-green-400">Correct: ${stmt.correct ? 'True' : 'False'}</span>
+                                </div>
+                            </div>
+                            <div class="shrink-0 mt-1">${statusIcon}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Filtering Logic
+                const isFullyCorrect = qIncorrect === 0 && qUnattempted === 0;
+                if (currentResultFilter === 'correct' && !isFullyCorrect) return;
+                if (currentResultFilter === 'incorrect' && isFullyCorrect) return;
+
+                count++;
+                
+                container.innerHTML += `
+                    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm">
+                        <p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug">
+                            <span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}
+                        </p>
+                        <div class="space-y-3 mb-6">${stmtHTML}</div>
+                        <div class="bg-blue-950/30 p-4 rounded-xl border border-blue-900/40">
+                            <span class="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider mb-2">Rationale</span>
+                            <p class="text-sm text-slate-300 leading-relaxed">${q.r}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (count === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-8">No questions match this filter.</p>`;
+            }
+        }
+
+        function formatTime(seconds) { 
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const s = (seconds % 60).toString().padStart(2, '0'); 
+            return `${m}:${s}`; 
+        }
+
+        window.selectTF = function(stmtIdx, val) { 
+            if (isSubmitted) return; 
+            if (!answers[currentQ]) answers[currentQ] = Array(5).fill(null);
+            answers[currentQ][stmtIdx] = val;
+            saveActiveState(); 
+            renderExam(); 
+        }
+        
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; saveActiveState(); renderExam(); 
+            } 
+        }
+        
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; saveActiveState(); renderExam(); 
+        }
+        
+        window.toggleFlag = function() {
+            if (isSubmitted) return;
+            flagged[currentQ] = !flagged[currentQ];
+            saveActiveState(); renderExam();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
