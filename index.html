@@ -124,6 +124,11 @@
                 file: 'UL_pectoralandmammary.html', color: 'blue' 
             },
             { 
+                id: 'axilla', title: 'ANATOMY - THE AXILLA BOUNDARIES, CONTENTS & THE BRACHIAL PLEXUS', desc: '50 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'axilla.html', color: 'blue' 
+            },
+            { 
                 id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
                 file: 'intro_lowerlimb.html', color: 'blue' 
@@ -219,6 +224,7 @@
                     localStorage.removeItem(`tlt_active_exam_UL_pectoralandmammary_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphs_membtrans_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphs_membpot_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_axilla_${id}`);
                     localStorage.removeItem(`tlt_active_exam_amino_acids_${id}`);
                 } catch(e) {}
             }
