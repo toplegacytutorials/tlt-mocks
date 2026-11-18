@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHYSIOLOGY - HISTORY OF PHYSIOLOGY, SPECIAL TRANSPORT MECHANISMS, CIRCADIAN RHYTHMS AND TEMPERATURE REGULATION | TLT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 80%; max-height: 190px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 3.8; }
+        .circle { fill: none; stroke-width: 3.8; stroke-linecap: round; animation: progress 1.2s ease-out forwards; }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .percentage { fill: #f8fafc; font-size: 0.6em; text-anchor: middle; font-weight: 700; }
+        .custom-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-4xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden min-h-[600px] flex flex-col relative">
+        <!-- Assessment Injected Here -->
+    </div>
+
+    <script>
+        const EXAM_KEY = "introphs_final";
+        const EXAM_SUBJECT = "Physiology";
+        const EXAM_TOPIC = "PHYSIOLOGY - HISTORY OF PHYSIOLOGY, SPECIAL TRANSPORT MECHANISMS, CIRCADIAN RHYTHMS AND TEMPERATURE REGULATION";
+        const TOTAL_TIME_SECONDS = 1800; // 30 minutes
+        const WEB3FORMS_ACCESS_KEY = "a9cd9997-29c3-486f-9667-bb01dfdb0375";
+
+        const rawQuestions = [
+            // UNIBEN-STYLE & CLINICAL VIGNETTES (30 Questions)
+            { q: "A researcher is investigating the historical discovery of blood circulation. Who discovered the pulmonary circulation (transit of blood from the right ventricle to the lungs and back to the left atrium) centuries before William Harvey mapped the systemic circulation?", c: "Ibn al-Nafis", i: ["Claudius Galen", "Marcello Malpighi", "Aristotle", "Hippocrates"], r: "Ibn al-Nafis (1213–1288) discovered the pulmonary circulation 300 years before Harvey." },
+            { q: "A scientist is looking at a frog lung under a newly invented microscope and discovers the tiny vessels connecting arteries to veins. Who is this scientist?", c: "Marcello Malpighi", i: ["William Harvey", "Claude Bernard", "Walter Cannon", "Karl Landsteiner"], r: "Marcello Malpighi used the microscope to discover capillaries in the lungs of a frog, completing Harvey's theory." },
+            { q: "Which two historical figures are correctly paired with their specific coined terms?", c: "Claude Bernard (Milieu intérieur) and Walter Cannon (Homeostasis)", i: ["Claude Bernard (Homeostasis) and Walter Cannon (Milieu intérieur)", "William Harvey (Hormone) and Ernest Starling (Milieu intérieur)", "Walter Cannon (Milieu intérieur) and Claude Bernard (Fight or Flight)", "Ernest Starling (Homeostasis) and Claude Bernard (Hormone)"], r: "Claude Bernard coined Milieu intérieur. Walter Cannon coined Homeostasis and 'Fight or Flight'." },
+            { q: "Which historical figure proposed the theory of the Four Humors and is considered the 'Father of Medicine'?", c: "Hippocrates", i: ["Aristotle", "Galen", "Ibn al-Nafis", "Claude Bernard"], r: "Hippocrates (460–370 BC) is the Father of Medicine and proposed the Theory of the Four Humors." },
+            { q: "Aristotle believed the heart and the brain had specific roles. Which of the following correctly describes his belief?", c: "The heart was the seat of intelligence and the brain was a cooling organ for the blood", i: ["The brain was the seat of intelligence and the heart was a pump", "The heart was a cooling organ and the brain was the seat of intelligence", "Both the heart and brain were considered hollow organs for animal spirits", "The brain controlled the four humors and the heart controlled movement"], r: "Aristotle believed the heart was the seat of intelligence and the brain was just a cooling organ for the blood." },
+            { q: "Claudius Galen's incorrect theories ruled medicine for 1,400 years. Which of the following describes his theories?", c: "Blood moved in a tidal 'ebb and flow' pattern, and 'animal spirits' flowed through hollow nerves", i: ["Blood circulated continuously in a closed circuit, and nerves were solid cords", "Blood was pumped by the liver and nerves carried electrical impulses", "Blood was filtered by the spleen and nerves were hollow tubes for bile", "Blood moved in a tidal pattern, and nerves were solid cords"], r: "Galen claimed blood moved in a tidal 'ebb and flow' pattern and believed 'animal spirits' flowed through hollow nerves." },
+            { q: "During an experiment on the amphibian urinary bladder, ADH binds to V2 receptors on the basolateral membrane. What is the IMMEDIATE next step in this molecular mechanism?", c: "Activation of Adenylyl Cyclase", i: ["Exocytosis of Aquaporin-2", "Phosphorylation by Protein Kinase A", "Insertion of channels into the apical membrane", "Conversion of cAMP into ATP"], r: "ADH binds to V2 receptors, which activates Adenylyl Cyclase. This converts ATP into cAMP, which then activates PKA." },
+            { q: "Following the ADH signaling cascade in the amphibian bladder, which specific target protein is phosphorylated by PKA to cause water reabsorption?", c: "Aquaporin-2 (AQP2)", i: ["Aquaporin-1 (AQP1)", "Na+/K+ ATPase", "Adenylyl Cyclase", "Protein Kinase A"], r: "PKA phosphorylates intracellular vesicles containing Aquaporin-2 (AQP2) water channels, causing them to undergo exocytosis and insert into the apical membrane." },
+            { q: "During rapid neuronal firing, K+ accumulates in the extracellular fluid. If left there, it would depolarize surrounding neurons and cause seizures. Which specific transporter/channel is NOT used by astrocytes to take up this K+ for spatial buffering?", c: "CFTR channels", i: ["Na+/K+ ATPase", "NKCC1 co-transporters", "Inward-rectifying K+ channels (Kir4.1)", "Gap junctions"], r: "Astrocytes take up K+ via Na+/K+ ATPase, NKCC1 co-transporters, and inward-rectifying K+ channels (Kir4.1). They do not use CFTR channels for K+ buffering." },
+            { q: "If glutamate stays in the synapse, it causes fatal excitotoxicity. How do astrocytes prevent this?", c: "They use secondary active transport (EAATs) to suck glutamate up, convert it to glutamine, and pass it back to the neuron", i: ["They use primary active transport to pump glutamate into the blood", "They convert glutamate to GABA to inhibit the neuron", "They block postsynaptic glutamate receptors", "They use gap junctions to shunt glutamate away"], r: "Astrocytes use secondary active transport (EAATs) to take up glutamate, convert it to harmless glutamine via glutamine synthetase, and pass it back to the neuron." },
+            { q: "The gallbladder concentrates bile by removing water against seemingly impossible gradients. According to the Standing Gradient Osmosis Model, where is Na+ actively pumped to create the hyperosmotic 'salt pocket'?", c: "Into the narrow lateral intercellular spaces between the cells", i: ["Into the lumen of the gallbladder", "Into the blood vessels directly", "Into the intracellular space of the epithelial cells", "Into the basement membrane"], r: "Epithelial cells actively pump Na+ into the narrow lateral intercellular spaces between the cells. Cl- follows, creating a highly localized, hyperosmotic 'salt pocket'." },
+            { q: "According to the Standing Gradient Osmosis Model, how does water move into the lateral intercellular spaces of the gallbladder?", c: "Transcellularly across the cells and paracellularly through leaky tight junctions", i: ["Exclusively transcellularly across the cells", "Exclusively paracellularly through leaky tight junctions", "Exclusively through aquaporins on the basolateral membrane", "Through active transport pumps"], r: "Water is drawn out of the lumen across the cells (transcellular) and through the 'leaky' tight junctions (paracellular) into the lateral space by osmosis." },
+            { q: "In the exocrine gland transport of saliva and sweat, what is the primary secretion in the acini relative to plasma?", c: "Isotonic", i: ["Hypotonic", "Hypertonic", "Isosmotic but not isotonic", "Free of electrolytes"], r: "Stage 1 (Primary Secretion in Acini): The primary secretion is Isotonic (plasma-like)." },
+            { q: "In the exocrine gland transport of saliva and sweat, why is the final secretion reaching the skin/mouth highly hypotonic?", c: "Ductal cells actively reabsorb Na+ and Cl- while the duct walls are impermeable to water", i: ["Ductal cells actively secrete water but not electrolytes", "The acini secrete a hypertonic fluid that is diluted by sweat glands", "Ductal cells actively pump water back into the blood", "The duct walls are highly permeable to water, diluting the salt"], r: "Stage 2 (Secondary Modification in Ducts): Ductal cells actively reabsorb Na+ and Cl-. The duct walls are completely impermeable to water. Because salt leaves but water is trapped inside, the final sweat or saliva is highly Hypotonic." },
+            { q: "In the acinar cells of exocrine glands, which specific channel is often used to actively secrete Cl-?", c: "CFTR channels", i: ["NKCC1 co-transporters", "Kir4.1 channels", "Aquaporin-2 channels", "Na+/K+ ATPase"], r: "Acinar cells actively secrete Cl- (often via CFTR channels)." },
+            { q: "A patient has a disrupted 90-minute REM sleep cycle. This is an example of which type of biological rhythm?", c: "Ultradian", i: ["Circadian", "Infradian", "Diurnal", "Circannual"], r: "Ultradian rhythms are less than 24 hours (e.g., the 90-minute REM sleep cycle, heart rate)." },
+            { q: "A 28-day menstrual cycle is an example of which type of biological rhythm?", c: "Infradian", i: ["Circadian", "Ultradian", "Diurnal", "Circannual"], r: "Infradian rhythms are greater than 24 hours (e.g., the 28-day menstrual cycle)." },
+            { q: "Light hits the retina and stimulates special intrinsically photosensitive Retinal Ganglion Cells (ipRGCs). Through which tract does the signal travel directly to the SCN?", c: "Retinohypothalamic Tract", i: ["Optic Tract", "Geniculohypothalamic Tract", "Superior Cervical Tract", "Spinothalamic Tract"], r: "The signal travels via the Retinohypothalamic Tract directly to the SCN." },
+            { q: "What specific photopigment do the intrinsically photosensitive Retinal Ganglion Cells (ipRGCs) contain?", c: "Melanopsin", i: ["Rhodopsin", "Cone opsin", "Cryptochrome", "Period"], r: "The ipRGCs contain the photopigment melanopsin." },
+            { q: "The SCN sends inhibitory signals down to which structure to stop the production of Melatonin?", c: "Superior Cervical Ganglion", i: ["Pineal Gland", "Retinohypothalamic Tract", "Adrenal Medulla", "Posterior Hypothalamus"], r: "The SCN sends inhibitory signals down to the Superior Cervical Ganglion, which then inhibits the Pineal Gland, stopping the production of Melatonin." },
+            { q: "Melatonin is synthesized in the Pineal Gland. What is the correct synthesis pathway?", c: "Tryptophan -> Serotonin -> Melatonin", i: ["Tyrosine -> Dopamine -> Melatonin", "Tryptophan -> Dopamine -> Melatonin", "Tyrosine -> Serotonin -> Melatonin", "Glutamate -> Serotonin -> Melatonin"], r: "Melatonin is synthesized from Tryptophan -> Serotonin -> Melatonin." },
+            { q: "In the molecular clock (Transcription-Translation Feedback Loop), which genes act as the repressors?", c: "PER (Period) and CRY (Cryptochrome)", i: ["CLOCK and BMAL1", "Tryptophan and Serotonin", "Melanopsin and Rhodopsin", "Kir4.1 and NKCC1"], r: "The Repressors are the genes PER (Period) and CRY (Cryptochrome)." },
+            { q: "In the molecular clock (Transcription-Translation Feedback Loop), which genes act as the activators?", c: "CLOCK and BMAL1", i: ["PER and CRY", "Melanopsin and Rhodopsin", "Tryptophan and Serotonin", "AQP2 and CFTR"], r: "The Activators are the genes CLOCK and BMAL1." },
+            { q: "Which specific area of the hypothalamus contains heat-sensitive and cold-sensitive neurons and acts as the thermostat?", c: "Preoptic Area (POA) of the anterior hypothalamus", i: ["Posterior hypothalamus", "Suprachiasmatic Nucleus (SCN)", "Lateral hypothalamus", "Ventromedial hypothalamus"], r: "The Preoptic Area (POA) of the anterior hypothalamus contains heat-sensitive and cold-sensitive neurons." },
+            { q: "When blood temperature rises above the set-point, sympathetic tone to skin vessels is inhibited, allowing massive blood flow to the skin. This process is known as:", c: "Vasodilation", i: ["Vasoconstriction", "Shivering thermogenesis", "Non-shivering thermogenesis", "Sweating"], r: "Vasodilation occurs when blood temperature rises above the set-point; sympathetic tone is inhibited, allowing massive blood flow to the skin to radiate heat." },
+            { q: "Sweating is stimulated by which specific type of nerve fibers?", c: "Sympathetic cholinergic fibers", i: ["Parasympathetic cholinergic fibers", "Sympathetic adrenergic fibers", "Somatic motor fibers", "Sensory afferent fibers"], r: "Sweating is stimulated by sympathetic cholinergic fibers (an exception to the rule, as sympathetic fibers usually use norepinephrine, but sweat glands use acetylcholine)." },
+            { q: "During non-shivering thermogenesis in brown fat, what is the mechanism of Thermogenin (UCP1)?", c: "It uncouples the electron transport chain, allowing protons to slip back across the membrane and generate pure heat", i: ["It increases ATP production by accelerating the electron transport chain", "It increases the mitochondrial membrane potential", "It stimulates the release of ATP synthase", "It phosphorylates Aquaporin-2 channels"], r: "UCP1 'uncouples' the electron transport chain. Instead of the proton gradient generating ATP, the protons slip back across the membrane and generate pure HEAT." },
+            { q: "Why is non-shivering thermogenesis highly active in infants compared to adults?", c: "Because they lack the muscle mass to shiver", i: ["Because their brown fat is less efficient than white fat", "Because they have a lower core temperature set-point", "Because they have more muscle mass to shiver", "Because their sweat glands are not fully developed"], r: "Non-shivering thermogenesis in brown fat is highly active in infants because they lack the muscle mass to shiver." },
+            { q: "Which specific sympathetic receptor is activated by norepinephrine to stimulate brown adipose tissue (BAT) during non-shivering thermogenesis?", c: "Beta-3 receptors", i: ["Alpha-1 receptors", "Alpha-2 receptors", "Beta-1 receptors", "Beta-2 receptors"], r: "Sympathetic nervous system releases norepinephrine, binding to beta-3 receptors on Brown Adipose Tissue (BAT)." },
+            
+            // DIRECT RECALL (20 Questions)
+            { q: "Which historical figure published De Motu Cordis in 1628 and proved the systemic circulation of blood pumped by the heart in a continuous circuit?", c: "William Harvey", i: ["Marcello Malpighi", "Claudius Galen", "Ibn al-Nafis", "Ernest Starling"], r: "William Harvey (1578–1657) published De Motu Cordis (1628) and proved the systemic circulation of blood pumped by the heart." },
+            { q: "Who discovered the ABO blood group system, making safe blood transfusions possible?", c: "Karl Landsteiner", i: ["William Harvey", "Claude Bernard", "Walter Cannon", "Ivan Pavlov"], r: "Karl Landsteiner (1868–1943) discovered the ABO blood group system." },
+            { q: "Who discovered classical conditioning via his experiments on the digestive secretions of dogs?", c: "Ivan Pavlov", i: ["Claude Bernard", "Walter Cannon", "Ernest Starling", "Karl Landsteiner"], r: "Ivan Pavlov (1849–1936) discovered classical conditioning via his experiments on the digestive secretions of dogs." },
+            { q: "Claude Bernard discovered that the liver stores which substance?", c: "Glycogen", i: ["Fat", "Protein", "Bile", "Serotonin"], r: "Claude Bernard discovered that the liver stores glycogen and that pancreatic secretions digest fats." },
+            { q: "The amphibian urinary bladder is structurally and functionally identical to which mammalian structures?", c: "Distal convoluted tubule and cortical collecting duct", i: ["Proximal convoluted tubule and Loop of Henle", "Glomerulus and Bowman's capsule", "Ureter and bladder", "Collecting duct and urethra"], r: "The amphibian urinary bladder is structurally and functionally identical to the mammalian distal convoluted tubule and cortical collecting duct." },
+            { q: "Astrocytes are often referred to as the brain's:", c: "Syncytium", i: ["Pacemaker", "Thermostat", "Barrier", "Antenna"], r: "Astrocytes (The Brain's Syncytium) manage the microenvironment so neurons can survive." },
+            { q: "The Standing Gradient Osmosis Model used by the gallbladder was proposed by:", c: "Diamond and Bossert", i: ["Hodgkin and Huxley", "Claude Bernard and Walter Cannon", "Ibn al-Nafis and William Harvey", "Starling and Landsteiner"], r: "The Standing Gradient Osmosis Model was proposed by Diamond and Bossert." },
+            { q: "In the exocrine gland transport model, which stage involves secondary modification in ducts?", c: "Stage 2", i: ["Stage 1", "Stage 3", "Stage 4", "Stage 0"], r: "Stage 2 is Secondary Modification in Ducts, where ductal cells actively reabsorb Na+ and Cl-." },
+            { q: "What is the approximate duration of a circadian rhythm?", c: "~24 hours", i: ["Less than 24 hours", "Greater than 24 hours", "12 hours", "48 hours"], r: "Circadian rhythms are approximately 24 hours (e.g., Sleep/wake cycle, cortisol secretion)." },
+            { q: "What is the master pacemaker of the circadian rhythm, located in the anterior hypothalamus?", c: "Suprachiasmatic Nucleus (SCN)", i: ["Preoptic Area (POA)", "Pineal Gland", "Posterior Hypothalamus", "Superior Cervical Ganglion"], r: "The SCN (anterior hypothalamus) is the master pacemaker of circadian rhythms." },
+            { q: "The preoptic area of the anterior hypothalamus contains which specific types of neurons?", c: "Heat-sensitive and cold-sensitive neurons", i: ["Motor neurons", "Sympathetic neurons", "Parasympathetic neurons", "Sensory neurons"], r: "The Preoptic Area (POA) of the anterior hypothalamus contains heat-sensitive and cold-sensitive neurons." },
+            { q: "Which part of the hypothalamus controls heat production mechanisms like shivering?", c: "Posterior hypothalamus", i: ["Anterior hypothalamus", "Preoptic Area", "Suprachiasmatic Nucleus", "Lateral hypothalamus"], r: "Heat Production Mechanisms (e.g., shivering) occur when blood temperature falls below the set-point, controlled by the Posterior Hypothalamus." },
+            { q: "Shivering thermogenesis is initiated by which specific center?", c: "Primary motor center", i: ["Thermostat center", "Respiratory center", "Vasomotor center", "Cardioinhibitory center"], r: "Shivering Thermogenesis: The primary motor center for shivering is excited." },
+            { q: "Brown Adipose Tissue is often abbreviated as:", c: "BAT", i: ["WAT", "BFT", "UCP", "SCN"], r: "BAT stands for Brown Adipose Tissue." },
+            { q: "Thermogenin is also known as:", c: "Uncoupling Protein 1 (UCP1)", i: ["Uncoupling Protein 2 (UCP2)", "Uncoupling Protein 3 (UCP3)", "Adenylyl Cyclase", "Aquaporin-2"], r: "Thermogenin is also known as Uncoupling Protein 1 / UCP1." },
+            { q: "Who coined the term 'Hormone' and formulated the Frank-Starling Law of the Heart?", c: "Ernest Starling", i: ["Claude Bernard", "Walter Cannon", "Karl Landsteiner", "Ivan Pavlov"], r: "Ernest Starling coined the word 'Hormone' and formulated the Frank-Starling Law of the Heart." },
+            { q: "Which specific enzyme converts glutamate to harmless glutamine in astrocytes?", c: "Glutamine synthetase", i: ["Glutaminase", "Adenylyl Cyclase", "Protein Kinase A", "ATPase"], r: "Astrocytes convert glutamate to harmless glutamine via the enzyme glutamine synthetase." },
+            { q: "Which ductal cells actively reabsorb Na+ and Cl- in the secondary modification of exocrine secretions?", c: "Ductal cells", i: ["Acinar cells", "Endothelial cells", "Epithelial cells", "Goblet cells"], r: "Stage 2 (Secondary Modification in Ducts): Ductal cells actively reabsorb Na+ and Cl-." },
+            { q: "In the molecular clock, what happens to PER and CRY over the night?", c: "They degrade, lifting the inhibition and restarting the cycle at dawn", i: ["They accumulate, increasing inhibition of CLOCK and BMAL1", "They translocate to the mitochondria to generate heat", "They activate the production of melanopsin"], r: "As PER and CRY degrade over the night, the inhibition is lifted, and the 24-hour cycle begins again at dawn." },
+            { q: "What is the core body temperature strictly regulated at?", c: "~37°C", i: ["~35°C", "~38°C", "~39°C", "~40°C"], r: "Core Temperature (deep organs) is strictly regulated at ~37°C." }
+        ];
+
+        let candidateID = ""; 
+        let candidateDept = ""; 
+        let questions = []; 
+        let currentQ = 0; 
+        let answers = {}; 
+        let flagged = {}; 
+        let timeLeft = TOTAL_TIME_SECONDS; 
+        let isSubmitted = false; 
+        let timerInterval;
+        let examStartTime = 0;
+        const appDiv = document.getElementById('app');
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isSubmitted && candidateID && timeLeft > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        const icons = {
+            user: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+            flag: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>`,
+            flagSolid: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>`
+        };
+
+        const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+        function getActiveStateKey(id) { return `tlt_active_exam_${EXAM_KEY}_${id}`; }
+
+        function saveActiveState() {
+            if (!candidateID || isSubmitted) return;
+            const state = { candidateID, candidateDept, questions, currentQ, answers, flagged, examStartTime, totalTime: TOTAL_TIME_SECONDS };
+            localStorage.setItem(getActiveStateKey(candidateID), JSON.stringify(state));
+        }
+
+        function clearActiveState() {
+            if (candidateID) localStorage.removeItem(getActiveStateKey(candidateID));
+        }
+
+        function initApp() {
+            const rawSession = localStorage.getItem('tlt_session');
+            let sessionID = "";
+            if (rawSession) { try { sessionID = JSON.parse(rawSession).id || ""; } catch(e) {} }
+
+            if (sessionID) {
+                const activeStateRaw = localStorage.getItem(getActiveStateKey(sessionID));
+                if (activeStateRaw) {
+                    try {
+                        const state = JSON.parse(activeStateRaw);
+                        const elapsed = Math.floor((Date.now() - state.examStartTime) / 1000);
+                        const remaining = state.totalTime - elapsed;
+
+                        if (remaining > 0) {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; currentQ = state.currentQ || 0;
+                            answers = state.answers || {}; flagged = state.flagged || {};
+                            timeLeft = remaining; examStartTime = state.examStartTime;
+                            startTimer(); renderExam(); return;
+                        } else {
+                            candidateID = state.candidateID; candidateDept = state.candidateDept;
+                            questions = state.questions; answers = state.answers || {}; 
+                            flagged = state.flagged || {}; timeLeft = 0;
+                            clearActiveState(); submitQuiz(); return;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            renderLogin();
+            if (sessionID) {
+                const idField = document.getElementById('cand-id');
+                if (idField) { idField.value = sessionID; validateInput(); }
+            }
+        }
+
+        function validateInput() {
+            const idInput = document.getElementById('cand-id').value.trim().toUpperCase();
+            const dInput = document.getElementById('cand-dept').value.trim();
+            const btn = document.getElementById('start-btn');
+            const errorMsg = document.getElementById('id-error');
+            const isValidId = /^TLT260(59\d{2}|60\d{2}|6100)$/.test(idInput);
+            
+            if (idInput !== "" && !isValidId) errorMsg.classList.remove('opacity-0');
+            else errorMsg.classList.add('opacity-0');
+
+            if (isValidId && dInput) { 
+                btn.disabled = false; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/50 transition-all active:scale-[0.98]"; 
+            } else { 
+                btn.disabled = true; 
+                btn.className = "w-full py-3.5 mt-2 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all"; 
+            }
+        }
+
+        function startExam() {
+            candidateID = document.getElementById('cand-id').value.trim().toUpperCase(); 
+            candidateDept = document.getElementById('cand-dept').value.trim();
+            localStorage.setItem('tlt_session', JSON.stringify({ id: candidateID, timestamp: Date.now() }));
+
+            questions = rawQuestions.sort(() => Math.random() - 0.5).map(q => { 
+                const opts = [q.c, ...q.i].sort(() => Math.random() - 0.5); 
+                return { ...q, options: opts }; 
+            });
+
+            examStartTime = Date.now(); timeLeft = TOTAL_TIME_SECONDS;
+            saveActiveState(); startTimer(); renderExam();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+                timeLeft = TOTAL_TIME_SECONDS - elapsed;
+
+                if (timeLeft > 0 && !isSubmitted) { 
+                    const display = document.getElementById('timer-display');
+                    if (display) { 
+                        display.innerText = formatTime(timeLeft); 
+                        if (timeLeft < 300) display.parentElement.classList.add('text-red-400', 'animate-pulse'); 
+                    }
+                } else if (timeLeft <= 0 && !isSubmitted) {
+                    clearInterval(timerInterval); submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function renderLogin() {
+            const timeInMinutes = Math.floor(TOTAL_TIME_SECONDS / 60);
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-8 md:p-12">
+                    <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-800/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 px-3 py-1 rounded border border-emerald-800/30 mb-3">${EXAM_SUBJECT}</span>
+                    <h1 class="text-3xl font-bold text-white tracking-tight text-center mb-2">${EXAM_TOPIC}</h1>
+                    <p class="text-slate-400 text-center mb-8 max-w-sm">Enter details to proceed. You have <strong>${timeInMinutes} minutes</strong> for <strong>${rawQuestions.length} questions</strong>.</p>
+                    <div class="w-full max-w-md space-y-4">
+                        <form onsubmit="event.preventDefault(); if(!document.getElementById('start-btn').disabled) startExam();" class="w-full">
+                            <div class="relative mb-4">${icons.user}<input type="text" id="cand-id" name="tlt_exam_cand_id" autocomplete="username" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all text-white placeholder:text-slate-600 font-mono uppercase" placeholder="ID (e.g. TLT2605900)"><p id="id-error" class="text-xs text-red-400 mt-1.5 font-medium ml-1 opacity-0 transition-opacity">Access Denied. ID not in registry.</p></div>
+                            <div class="relative">${icons.book}<input type="text" id="cand-dept" oninput="validateInput()" class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:bg-slate-900 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none transition-all text-white placeholder:text-slate-600" placeholder="Department / Course"></div>
+                            <button type="submit" id="start-btn" disabled class="w-full py-3.5 mt-6 rounded-xl font-semibold text-slate-500 bg-slate-800 cursor-not-allowed transition-all">Start Assessment</button>
+                        </form>
+                    </div>
+                </div>`;
+        }
+
+        function renderExam() {
+            let savedScroll = 0;
+            const existingGrid = document.getElementById('q-nav-grid');
+            if (existingGrid) savedScroll = existingGrid.scrollLeft;
+
+            const q = questions[currentQ]; 
+            const hasAnsweredAll = Object.keys(answers).length === questions.length; 
+            const progressPct = (Object.keys(answers).length / questions.length) * 100;
+            const isFlagged = flagged[currentQ] || false;
+            
+            let gridHTML = `<div id="q-nav-grid" class="flex gap-2 overflow-x-auto pb-3 custom-scroll mb-6">`;
+            questions.forEach((_, idx) => {
+                const isAns = answers[idx] !== undefined; 
+                const isCurr = idx === currentQ;
+                const isF = flagged[idx];
+                let btnClass = "min-w-[36px] h-9 rounded-lg font-medium text-xs flex items-center justify-center transition-all flex-shrink-0 cursor-pointer ";
+                if (isCurr && isAns) btnClass += "bg-emerald-600 text-white shadow-md shadow-emerald-500/30";
+                else if (isCurr) btnClass += "border-2 border-emerald-500 text-emerald-400 bg-emerald-950/50";
+                else if (isF) btnClass += "bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 hover:bg-yellow-900";
+                else if (isAns) btnClass += "bg-slate-800 text-slate-200 hover:bg-slate-700";
+                else btnClass += "bg-slate-950 text-slate-500 border border-slate-800 hover:border-slate-700 hover:text-slate-300";
+                gridHTML += `<div id="q-btn-${idx}" onclick="jumpToQ(${idx})" class="${btnClass}">${idx + 1}</div>`;
+            }); 
+            gridHTML += `</div>`;
+
+            let optionsHTML = `<div class="space-y-3 mt-6">`;
+            q.options.forEach((opt, idx) => {
+                const isSelected = answers[currentQ] === opt;
+                optionsHTML += `<button onclick="selectOption(${idx})" class="option-btn w-full text-left p-4 rounded-xl border-2 ${isSelected ? 'border-emerald-500 bg-emerald-950/40' : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900'}">
+                    <div class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 font-bold text-xs ${isSelected ? 'border-emerald-500 bg-emerald-600 text-white' : 'border-slate-700 text-slate-500'}">${optionLetters[idx]}</div>
+                        <span class="text-slate-200 text-base leading-relaxed ${isSelected ? 'font-medium text-white' : ''}">${opt}</span>
+                    </div>
+                </button>`;
+            }); 
+            optionsHTML += `</div>`;
+
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white px-6 py-4 flex justify-between items-center flex-wrap gap-4 border-b border-slate-800">
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-widest">${EXAM_SUBJECT}</span>
+                        <h2 class="text-sm font-bold text-slate-200">${EXAM_TOPIC}</h2>
+                        <div class="text-xs mt-1 font-mono text-slate-400 truncate">${candidateID} <span class="text-slate-600 mx-1">•</span> <span class="font-sans">${candidateDept}</span></div>
+                    </div>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <button onclick="toggleFlag()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFlagged ? 'bg-yellow-900/40 border-yellow-700/50 text-yellow-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'} transition-colors text-xs font-semibold">
+                            ${isFlagged ? icons.flagSolid : icons.flag} ${isFlagged ? 'Flagged' : 'Flag for Review'}
+                        </button>
+                        <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 font-mono text-lg font-bold text-emerald-400 shadow-inner">${icons.clock}<span id="timer-display">${formatTime(Math.max(0, timeLeft))}</span></div>
+                    </div>
+                </div>
+                <div class="h-1 w-full bg-slate-950"><div class="h-full bg-emerald-500 transition-all duration-300" style="width: ${progressPct}%"></div></div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    ${gridHTML}
+                    <div class="flex-1"><div class="flex items-start gap-4 mb-2"><span class="text-4xl font-black text-slate-700">${currentQ + 1}</span><h2 class="text-xl md:text-2xl font-semibold text-white leading-snug mt-1">${q.q}</h2></div>${optionsHTML}</div>
+                    <div class="mt-10 flex justify-between items-center"><button onclick="changeQ(-1)" class="px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed" ${currentQ === 0 ? 'disabled' : ''}>← Previous</button>${hasAnsweredAll || currentQ === questions.length - 1 ? `<button onclick="submitQuiz()" class="px-8 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900/30 transition-all active:scale-95">Submit Exam</button>` : `<button onclick="changeQ(1)" class="px-8 py-3 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-md active:scale-95">Next →</button>`}</div>
+                </div>`;
+
+            const newGrid = document.getElementById('q-nav-grid');
+            if (newGrid) {
+                newGrid.scrollLeft = savedScroll;
+                const activeBtn = document.getElementById(`q-btn-${currentQ}`);
+                if (activeBtn) {
+                    const gridRect = newGrid.getBoundingClientRect();
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    if (btnRect.left < gridRect.left || btnRect.right > gridRect.right) {
+                        activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                }
+            }
+        }
+
+        async function submitQuiz() {
+            isSubmitted = true; clearInterval(timerInterval); clearActiveState();
+
+            appDiv.innerHTML = `<div class="flex flex-col items-center justify-center h-full p-12"><div class="w-12 h-12 border-4 border-slate-800 border-t-emerald-500 rounded-full animate-spin mb-4"></div><p class="text-slate-400 font-medium animate-pulse">Calculating score & transmitting verification...</p></div>`;
+            
+            const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+            const timeSpentSeconds = Math.min(TOTAL_TIME_SECONDS, elapsed > 0 ? elapsed : TOTAL_TIME_SECONDS - timeLeft); 
+            
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.c) score++; });
+            const percentage = Math.round((score / questions.length) * 100); 
+            let emailStatus = "";
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const newRecord = { examTitle: EXAM_TOPIC, subject: EXAM_SUBJECT, score, total: questions.length, percent: percentage, date: dateStr, time: timeStr };
+
+            try {
+                const storageKey = 'tlt_score_history_' + candidateID;
+                const existingHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                existingHistory.unshift(newRecord);
+                localStorage.setItem(storageKey, JSON.stringify(existingHistory));
+            } catch(e) {}
+
+            if (WEB3FORMS_ACCESS_KEY) {
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', { 
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                        body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, name: candidateID, email: "system@mockexam.com", subject: `Exam Result: ${candidateID} - ${percentage}% (${EXAM_TOPIC})`, from_name: "Mock Exam Portal", Subject: EXAM_SUBJECT, Topic: EXAM_TOPIC, Candidate_ID: candidateID, Department: candidateDept, Score: `${score} out of ${questions.length} (${percentage}%)`, Time_Spent: formatTime(timeSpentSeconds) }) 
+                    });
+                    if (response.status === 200) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-950/60 text-green-400 text-sm font-semibold rounded-full border border-green-800/60">${icons.check} Result verified & logged</div>`; } else { throw new Error("Failed"); }
+                } catch (e) { emailStatus = `<div class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-950/60 text-red-400 text-sm font-semibold rounded-full border border-red-800/60">${icons.x} Verification offline. Saved locally.</div>`; }
+            } 
+            renderResults(score, percentage, emailStatus, dateStr, timeStr);
+        }
+
+        let currentResultFilter = 'all';
+
+        function renderResults(score, percentage, emailStatus, dateStr, timeStr) {
+            const strokeColor = percentage >= 70 ? '#22c55e' : percentage >= 50 ? '#f59e0b' : '#ef4444';
+            
+            appDiv.innerHTML = `
+                <div class="bg-slate-950 text-white p-6 md:p-8 text-center border-b border-slate-800">
+                    <span class="inline-block text-[11px] font-bold tracking-widest uppercase bg-emerald-900/40 text-emerald-400 border border-emerald-800/50 px-3 py-1 rounded mb-2">${EXAM_SUBJECT}</span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">${EXAM_TOPIC}</h1>
+                    <div class="flex justify-center items-center gap-4 mt-3 pt-3 border-t border-slate-800/80 font-mono text-xs text-slate-400">
+                        <span class="text-emerald-400 font-bold">${candidateID}</span> <span class="text-slate-600">•</span> <span class="text-slate-300 font-sans">${candidateDept}</span> <span class="text-slate-600">•</span> <span>${dateStr} ${timeStr}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 text-center border-b border-slate-800">
+                    <div class="relative w-40 h-40 mx-auto mb-2">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" stroke="${strokeColor}" stroke-dasharray="${percentage}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="21" class="percentage">${percentage}%</text>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white mb-2">${score} / ${questions.length} Correct</h2>
+                    <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider font-semibold">${percentage >= 70 ? 'Distinction Standard' : percentage >= 50 ? 'Pass Standard' : 'Requires Revision'}</p>
+                    <div class="flex justify-center">
+                        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-emerald-900/30 active:scale-95">Return to Dashboard</a>
+                    </div>
+                    ${emailStatus}
+                </div>
+
+                <div class="p-6 md:p-10 bg-slate-950 flex-1">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="text-lg font-bold text-white">Question Analysis</h3>
+                        <div class="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800 overflow-x-auto custom-scroll w-full md:w-auto">
+                            <button onclick="setResultFilter('all')" id="filter-btn-all" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white whitespace-nowrap">All</button>
+                            <button onclick="setResultFilter('correct')" id="filter-btn-correct" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Correct</button>
+                            <button onclick="setResultFilter('incorrect')" id="filter-btn-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Incorrect</button>
+                            <button onclick="setResultFilter('answered')" id="filter-btn-answered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Answered</button>
+                            <button onclick="setResultFilter('unanswered')" id="filter-btn-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap">Unanswered</button>
+                        </div>
+                    </div>
+                    <div id="results-container" class="space-y-6"></div>
+                </div>
+            `;
+            currentResultFilter = 'all';
+            renderResultQuestions();
+        }
+
+        function setResultFilter(filter) {
+            currentResultFilter = filter;
+            ['all', 'correct', 'incorrect', 'answered', 'unanswered'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (f === filter) btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white whitespace-nowrap";
+                else btn.className = "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white whitespace-nowrap";
+            });
+            renderResultQuestions();
+        }
+
+        function renderResultQuestions() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            let count = 0;
+
+            questions.forEach((q, index) => {
+                const userAns = answers[index]; 
+                const isCorrect = userAns === q.c;
+                const isAnswered = userAns !== undefined;
+                
+                if (currentResultFilter === 'correct' && !isCorrect) return;
+                if (currentResultFilter === 'incorrect' && (isCorrect || !isAnswered)) return;
+                if (currentResultFilter === 'answered' && !isAnswered) return;
+                if (currentResultFilter === 'unanswered' && isAnswered) return;
+
+                count++;
+                const icon = isCorrect ? `<div class="w-8 h-8 rounded-full bg-green-950 text-green-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-green-800">${icons.check}</div>` : `<div class="w-8 h-8 rounded-full bg-red-950 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5 border border-red-800">${icons.x}</div>`;
+                
+                container.innerHTML += `<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-sm flex gap-4">${icon}<div class="flex-1"><p class="font-semibold text-white text-base md:text-lg mb-4 leading-snug"><span class="text-slate-500 font-bold mr-2">${index + 1}.</span>${q.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"><div class="bg-slate-950 p-3 rounded-lg border border-slate-800"><span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Answer</span><span class="${isCorrect ? 'text-green-400' : 'text-red-400 line-through'} font-medium">${userAns || 'Not Answered'}</span></div>${!isCorrect ? `<div class="bg-green-950/40 p-3 rounded-lg border border-green-900/50"><span class="block text-xs font-bold text-green-500 uppercase tracking-wider mb-1">Correct Answer</span><span class="text-green-300 font-medium">${q.c}</span></div>` : ''}</div><div class="bg-emerald-950/30 p-4 rounded-xl border border-emerald-900/40"><span class="flex items-center gap-2 font-bold text-emerald-400 text-xs uppercase tracking-wider mb-2">Rationale</span><p class="text-sm text-slate-300 leading-relaxed">${q.r}</p></div></div></div>`;
+            });
+
+            if (count === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-8">No questions match this filter.</p>`;
+            }
+        }
+
+        function formatTime(seconds) { 
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const s = (seconds % 60).toString().padStart(2, '0'); 
+            return `${m}:${s}`; 
+        }
+
+        window.selectOption = function(idx) { 
+            if (isSubmitted) return; 
+            answers[currentQ] = questions[currentQ].options[idx]; 
+            saveActiveState(); renderExam(); 
+        }
+        window.changeQ = function(delta) { 
+            if (isSubmitted) return; 
+            const newQ = currentQ + delta; 
+            if (newQ >= 0 && newQ < questions.length) { 
+                currentQ = newQ; saveActiveState(); renderExam(); 
+            } 
+        }
+        window.jumpToQ = function(idx) { 
+            if (isSubmitted) return; 
+            currentQ = idx; saveActiveState(); renderExam(); 
+        }
+        window.toggleFlag = function() {
+            if (isSubmitted) return;
+            flagged[currentQ] = !flagged[currentQ];
+            saveActiveState(); renderExam();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
