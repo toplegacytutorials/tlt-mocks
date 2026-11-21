@@ -134,6 +134,11 @@
                 file: 'intro_lowerlimb.html', color: 'blue' 
             },
             { 
+                id: 'osteo_lowerlimb', title: 'ANATOMY - OSTEOLOGY OF THE LOWER LIMB', desc: '50 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
+                file: 'osteo_lowerlimb.html', color: 'blue' 
+            },
+            { 
                 id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL AND ITS FUNCTIONS', desc: '50 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'Introductory and General Physiology', 
                 file: 'cell_and_function.html', color: 'emerald' 
@@ -231,6 +236,7 @@
                     localStorage.removeItem(`tlt_active_exam_introphs_membpot_${id}`);
                     localStorage.removeItem(`tlt_active_exam_axilla_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphs_final_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_osteo_lowerlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_amino_acids_${id}`);
                 } catch(e) {}
             }
