@@ -129,6 +129,11 @@
                 file: 'axilla.html', color: 'blue' 
             },
             { 
+                id: 'back_of_the_body', title: 'ANATOMY - BACK OF THE BODY AND SCAPULAR REGION', desc: '50 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Upper Limb', 
+                file: 'back of the body.html', color: 'blue' 
+            },
+            { 
                 id: 'intro_lowerlimb', title: 'ANATOMY - INTRO TO LOWER LIMB', desc: '45 Questions • 30 mins', 
                 subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
                 file: 'intro_lowerlimb.html', color: 'blue' 
@@ -237,6 +242,7 @@
                     localStorage.removeItem(`tlt_active_exam_axilla_${id}`);
                     localStorage.removeItem(`tlt_active_exam_introphs_final_${id}`);
                     localStorage.removeItem(`tlt_active_exam_osteo_lowerlimb_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_back_of_the_body_${id}`);
                     localStorage.removeItem(`tlt_active_exam_amino_acids_${id}`);
                 } catch(e) {}
             }
