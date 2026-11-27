@@ -144,6 +144,11 @@
                 file: 'osteo_lowerlimb.html', color: 'blue' 
             },
             { 
+                id: 'frontthigh_ll', title: 'ANATOMY - FRONT OF THE THIGH', desc: '50 Questions • 30 mins', 
+                subject: 'Anatomy', sub: 'Gross Anatomy', topic: 'Lower Limb', 
+                file: 'frontthigh_ll.html', color: 'blue' 
+            },
+            { 
                 id: 'cell_and_function', title: 'PHYSIOLOGY - THE CELL AND ITS FUNCTIONS', desc: '50 Questions • 30 mins', 
                 subject: 'Physiology', sub: 'Introductory and General Physiology', 
                 file: 'cell_and_function.html', color: 'emerald' 
@@ -249,6 +254,7 @@
                     localStorage.removeItem(`tlt_active_exam_osteo_lowerlimb_${id}`);
                     localStorage.removeItem(`tlt_active_exam_back_of_the_body_${id}`);
                     localStorage.removeItem(`tlt_active_exam_blood_overview_${id}`);
+                    localStorage.removeItem(`tlt_active_exam_frontthigh_ll_${id}`);
                     localStorage.removeItem(`tlt_active_exam_amino_acids_${id}`);
                 } catch(e) {}
             }
